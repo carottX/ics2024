@@ -66,6 +66,23 @@ static int cmd_si(char *args){
 	return 0;
 }
 
+static int cmd_info(char *args){
+	char* arg = strtok(NULL, " ");
+	if (arg == NULL){
+		printf("Please specify which to print!\n");
+	}
+	else{
+		if (arg[0] == 'r'){
+			isa_reg_display();
+		}
+		else{
+			/* TODO */
+		}
+	}
+	return 0;
+}
+
+
 static int cmd_help(char *args);
 
 static struct {
@@ -76,7 +93,8 @@ static struct {
   { "help", "Display information about all supported commands", cmd_help },
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
-  { "si", "Single execute of the program", cmd_si}
+  { "si", "Single execute of the program", cmd_si},
+	{ "info", "Print the status of registers or watchpoints", cmd_info}
 
   /* TODO: Add more commands */
 
