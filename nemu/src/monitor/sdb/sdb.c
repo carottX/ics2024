@@ -23,6 +23,7 @@ static int is_batch_mode = false;
 
 void init_regex();
 void init_wp_pool();
+uint8_t* guest_to_host(paddr_t gaddr);
 
 /* We use the `readline' library to provide more flexibility to read from stdin. */
 static char* rl_gets() {
@@ -59,7 +60,7 @@ static int cmd_si(char *args){
 	if (arg == NULL){
 		cpu_exec(1);		
  	}	
-	else{ 
+	else{   
 		int cmd_cnt = strtol(arg, NULL, 10);
 		cpu_exec(cmd_cnt);
 	}		
@@ -78,10 +79,29 @@ static int cmd_info(char *args){
 		else{
 			/* TODO */
 		}
-	}
+	} 
 	return 0;
 }
 
+static int cmd_x(char *args){
+	char* arg1 = strtok(NULL, " ");
+	if (arg1 == NULL) {
+		printf("Missing Arguments\n");
+		return 0;
+	}
+	char* arg2 = strtok(NULL, " ");
+	if (arg2 == NULL) {
+		printf("Missing Arguments\n");
+		return 0;
+	}
+	int byte_cnt = strtol(arg1, NULL, 10);
+	paddr_t addr_id = strtol(arg2, NULL, 16);
+	 for(int i=0;i<byte_cnt;++i){ 
+		word_t dt = *(uint32_t*) guest_to_host(addr_id+i);
+		printf("%-10x:%x\n",addr_id+i,dt);
+	}
+	return 0;
+}
 
 static int cmd_help(char *args);
 
@@ -94,8 +114,8 @@ static struct {
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
   { "si", "Single execute of the program", cmd_si},
-	{ "info", "Print the status of registers or watchpoints", cmd_info}
-
+	{ "info", "Print the status of registers or watchpoints", cmd_info},
+	{ "x", "Query about consective N bytes of memory", cmd_x}
   /* TODO: Add more commands */
 
 };
