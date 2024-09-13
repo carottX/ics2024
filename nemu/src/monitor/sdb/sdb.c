@@ -96,6 +96,10 @@ static int cmd_x(char *args){
 	}
 	int byte_cnt = strtol(arg1, NULL, 10);
 	paddr_t addr_id = strtol(arg2, NULL, 16);
+	if (addr_id < 0x80000000) {
+		printf("Invalid memory address.\n");
+		return 0;
+	}
 	 for(int i=0;i<byte_cnt;++i){ 
 		word_t dt = *(uint32_t*) guest_to_host(addr_id+i);
 		printf("%-10x:%x\n",addr_id+i,dt);
