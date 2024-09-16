@@ -149,6 +149,7 @@ bool check_parentheses(int start, int end){
   for(int i=start;i<=end;++i){
     if(tokens[i].type == TK_PAR_L) left_par ++;
     else if(tokens[i].type == TK_PAR_R) left_par--;
+    printf("LEFT_PAR=%d\n",left_par);
     if(left_par<0) assert(0); // Doenst match!
   }
   assert(left_par==0);
