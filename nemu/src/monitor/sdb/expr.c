@@ -134,10 +134,11 @@ word_t expr(char *e, bool *success) {
 
   /* TODO: Insert codes to evaluate the expression. */
   //TODO();
+  
 	char *ss[] = {"TK_EQ","TK_PAR_L","TK_PAR_R","TK_ADD","TK_SUB","TK_MUL","TK_DIV","TK_NUM"};
 	for(int i=0; i< nr_token; ++i){
     if (tokens[i].type == TK_NOTYPE) printf("NOTYPE\n");
-		printf("Token_id = %s\n", ss[tokens[i].type]);
+		else printf("Token_id = %s\n", ss[tokens[i].type]);
 	}
   return 0;
 }
