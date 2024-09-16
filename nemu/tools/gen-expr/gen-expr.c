@@ -31,8 +31,34 @@ static char *code_format =
 "  return 0; "
 "}";
 
+int buf_size = 0;
+
+static void gen(char c){
+  buf[buf_size++] = c;
+}
+
+static void print_num(int x){
+  if(x>=10) print_num(x/10);
+  gen(x%10+'0');
+}
+
+static void gen_num(){
+  int numg = choose(500);
+  print_num(numg);
+}
+
+static void gen_rand_op(){
+  char tmp[]="+-*/";
+  gen(tmp[choose(4)]);
+}
+
 static void gen_rand_expr() {
-  buf[0] = '\0';
+  switch (choose(3)){
+    case 0: gen_num(); break;
+    case 1: gen('('); gen_rand_expr(); gen(')'); break;
+    default: gen_rand_expr(); gen_rand_op(); gen_rand_expr(); break;
+  }
+  buf[buf_size++] = '\0';
 }
 
 int main(int argc, char *argv[]) {
