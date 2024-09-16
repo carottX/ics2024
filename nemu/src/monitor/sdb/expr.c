@@ -21,8 +21,10 @@
 #include <regex.h>
 
 enum {
-  TK_NOTYPE = 256, TK_EQ,
-
+  TK_EQ,
+	TK_PAR_L, TK_PAR_R,
+	TK_ADD, TK_SUB, TK_MUL, TK_DIV,
+	TK_NUM, TK_NOTYPE = 256
   /* TODO: Add more token types */
 
 };
@@ -37,7 +39,13 @@ static struct rule {
    */
 
   {" +", TK_NOTYPE},    // spaces
-  {"\\+", '+'},         // plus
+  {"\\+", TK_ADD},	        // plus
+	{"\\*", TK_MUL},
+	{"\\(", TK_PAR_L},
+	{"\\)", TK_PAR_R},
+	{"-", TK_SUB},
+	{"/", TK_DIV},
+	{"\\d+", TK_NUM},
   {"==", TK_EQ},        // equal
 };
 
@@ -95,7 +103,13 @@ static bool make_token(char *e) {
          */
 
         switch (rules[i].token_type) {
-          default: TODO();
+					case TK_NUM:
+						strncpy(tokens[nr_token].str, substr_start, substr_len);
+						tokens[nr_token++].type = rules[i].token_type;
+						break;
+					default: 
+						tokens[nr_token].type = rules[i].token_type;
+						nr_token ++ ;
         }
 
         break;
@@ -119,7 +133,11 @@ word_t expr(char *e, bool *success) {
   }
 
   /* TODO: Insert codes to evaluate the expression. */
-  TODO();
-
+  //TODO();
+	char *ss[] = {"TK_EQ","TK_PAR_L","TK_PAR_R","TK_ADD","TK_SUB","TK_MUL","TK_DIV","TK_NUM"};
+	for(int i=0; i< nr_token; ++i){
+    if (tokens[i].type == TK_NOTYPE) printf("NOTYPE\n");
+		printf("Token_id = %s\n", ss[tokens[i].type]);
+	}
   return 0;
 }

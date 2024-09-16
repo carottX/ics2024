@@ -20,6 +20,8 @@ void am_init_monitor();
 void engine_start();
 int is_exit_status_bad();
 
+word_t expr(char* e, bool* suc);
+
 int main(int argc, char *argv[]) {
   /* Initialize the monitor. */
 #ifdef CONFIG_TARGET_AM
@@ -27,6 +29,9 @@ int main(int argc, char *argv[]) {
 #else
   init_monitor(argc, argv);
 #endif
+  bool success = true;
+  char s[] = "123 + 456 * 789 / 3";
+  expr(s,&success);
 
   /* Start engine. */
   engine_start();
