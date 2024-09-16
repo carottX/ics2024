@@ -159,7 +159,13 @@ bool check_parentheses(int start, int end){
     if(left_par<0) assert(0); // Doenst match!
   }
   assert(left_par==0);
-  return (tokens[start].type == TK_PAR_L && tokens[end].type == TK_PAR_R);
+  if(tokens[start].type != TK_PAR_L) return false;
+  for(int i=start;i<=end;++i){
+    if(tokens[i].type == TK_PAR_L) left_par ++;
+    else if(tokens[i].type == TK_PAR_R) left_par--;
+    if(i!=end && !left_par) return false;
+  }
+  return true;
 }
 
 word_t eval(int start, int end){
