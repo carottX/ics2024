@@ -30,7 +30,7 @@ int main(int argc, char *argv[]) {
   init_monitor(argc, argv);
 #endif
   bool success = true;
-  char s[] = "((281)-453-(((480))))-391-2*220+82*((185))-((107))/(184)";
+  char s[] = "((281)-453-(((480))))-391-2*220";
   expr(s,&success);
 
   /* Start engine. */
