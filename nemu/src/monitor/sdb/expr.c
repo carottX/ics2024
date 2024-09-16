@@ -140,6 +140,7 @@ int find_main_op(int start, int end){
       prec = (tokens[i].type == TK_MUL || tokens[i].type == TK_DIV);
     }
   }
+  printf("prec=%d\n",prec);
   assert(lowest != -1);
   return lowest;
 }
