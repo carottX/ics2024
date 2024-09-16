@@ -130,8 +130,13 @@ static bool make_token(char *e) {
 int find_main_op(int start, int end){
   int lowest = -1, prec = -1;
   for(int i = start; i<=end; ++i){
+    int left_par = 0;
+    if(tokens[i].type == TK_PAR_L) left_par ++;
+    else if(tokens[i].type == TK_PAR_R) left_par--;
     if(!is_op(tokens[i].type)) continue;
+    if(left_par) continue;
     if (lowest == -1){
+      
       lowest = i;
       prec = (tokens[i].type == TK_MUL || tokens[i].type == TK_DIV);
     }
