@@ -45,7 +45,7 @@ static struct rule {
 	{"\\)", TK_PAR_R},
 	{"-", TK_SUB},
 	{"/", TK_DIV},
-	{"\\d", TK_NUM},
+	{"[0-9]+", TK_NUM},
   {"==", TK_EQ},        // equal
 };
 
