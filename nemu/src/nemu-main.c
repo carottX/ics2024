@@ -35,6 +35,8 @@ int main(int argc, char *argv[]) {
   static char ex[150];
   static int ans;
   while(fscanf(fp,"%d %s",&ans, ex)){
+    printf("Error! expression = %s\n", ex);
+    printf("ans=%u\n",ans);
     bool suc = true;
     word_t result = expr(ex, &suc);
     if (!suc || result != ans){
