@@ -145,7 +145,7 @@ int find_main_op(int start, int end){
       prec = (tokens[i].type == TK_MUL || tokens[i].type == TK_DIV);
     }
   }
-  printf("prec=%d\n",prec);
+  //printf("prec=%d\n",prec);
   assert(lowest != -1);
   return lowest;
 }
@@ -169,13 +169,13 @@ bool check_parentheses(int start, int end){
 }
 
 word_t eval(int start, int end){
-  printf("CHECKING:\n");
-  for(int i=start;i<=end;++i) {
-    char *ss[] = {"TK_EQ","TK_PAR_L","TK_PAR_R","TK_ADD","TK_SUB","TK_MUL","TK_DIV","TK_NUM"};
-    if(tokens[i].type!=TK_NOTYPE)printf("TYPE=%s\n",ss[tokens[i].type]);
-    else printf("NOTYPE\n");
-  }
-  printf("-----------------\n");
+  //printf("CHECKING:\n");
+  // for(int i=start;i<=end;++i) {
+  //   char *ss[] = {"TK_EQ","TK_PAR_L","TK_PAR_R","TK_ADD","TK_SUB","TK_MUL","TK_DIV","TK_NUM"};
+  //   if(tokens[i].type!=TK_NOTYPE)printf("TYPE=%s\n",ss[tokens[i].type]);
+  //   else printf("NOTYPE\n");
+  // }
+  // printf("-----------------\n");
   if(start > end) {
     Log("Invalid expression.");
     assert(0);
