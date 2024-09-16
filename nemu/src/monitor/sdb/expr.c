@@ -194,6 +194,8 @@ word_t eval(int start, int end){
   }
   else{
     int mid = find_main_op(start, end);
+    print(tokens[mid]);
+    puts("?");
     int val1 = eval(start, mid-1);
     int val2 = eval(mid+1, end);
     switch (tokens[mid].type){
