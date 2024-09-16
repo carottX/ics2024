@@ -80,6 +80,13 @@ typedef struct token {
 static Token tokens[128] __attribute__((used)) = {};
 static int nr_token __attribute__((used))  = 0;
 
+void print(Token t){
+  char *ss[] = {"==","(",")","+","-","*","/",""};
+  if (t.type == TK_NOTYPE) return;
+  if (t.type == TK_NUM) printf("%s",t.str);
+  else printf("%s",ss[t.type]);
+}
+
 static bool make_token(char *e) {
   int position = 0;
   int i;
