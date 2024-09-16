@@ -24,11 +24,12 @@ word_t expr(char* e, bool* suc);
 
 int main(int argc, char *argv[]) {
   /* Initialize the monitor. */
+  /*
 #ifdef CONFIG_TARGET_AM
   am_init_monitor();
 #else
   init_monitor(argc, argv);
-#endif
+#endif*/
   FILE* fp = fopen("/home/carottx/ics2024/nemu/tools/gen-expr/input.txt","r");
   if(fp==NULL) puts("NO");
   static char ex[150];
@@ -36,7 +37,7 @@ int main(int argc, char *argv[]) {
   while(fscanf(fp,"%d %s",&ans, ex)){
     bool suc = true;
     word_t result = expr(ex, &suc);
-    if (!suc || result){
+    if (!suc || result != ans){
       printf("Error! expression = %s\n", ex);
       printf("ans=%u result=%u\n",ans,result);
     }
