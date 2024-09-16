@@ -31,10 +31,10 @@ int main(int argc, char *argv[]) {
 #endif
   bool success = true;
   char s[] = "((281)-453-(((480))))-391-2*220";
-  expr(s,&success);
+  printf("result=%d\n",expr(s,&success));
 
   /* Start engine. */
-  engine_start();
+  // engine_start();
 
   return is_exit_status_bad();
 }

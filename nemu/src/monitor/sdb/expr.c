@@ -29,6 +29,8 @@ enum {
 
 };
 
+#define is_op(x) (x==TK_ADD || x==TK_SUB || x==TK_MUL || x==TK_DIV)
+
 static struct rule {
   const char *regex;
   int token_type;
@@ -125,6 +127,59 @@ static bool make_token(char *e) {
   return true;
 }
 
+int find_main_op(int start, int end){
+  int lowest = -1, prec = -1;
+  for(int i = start; i<=end; ++i){
+    if(!is_op(tokens[i].type)) continue;
+    if (lowest == -1){
+      lowest = i;
+      prec = (tokens[i].type == TK_MUL || tokens[i].type == TK_DIV);
+    }
+    else if(prec >= (tokens[i].type == TK_MUL || tokens[i].type == TK_DIV)){
+      lowest = i;
+      prec = (tokens[i].type == TK_MUL || tokens[i].type == TK_DIV);
+    }
+  }
+  assert(lowest != -1);
+  return lowest;
+}
+
+bool check_parentheses(int start, int end){
+  int left_par = 0;
+  for(int i=start;i<=end;++i){
+    if(tokens[i].type == TK_PAR_L) left_par ++;
+    else if(tokens[i].type == TK_PAR_R) left_par--;
+    if(left_par<0) assert(0); // Doenst match!
+  }
+  assert(left_par==0);
+  return (tokens[start].type == TK_PAR_L && tokens[end].type == TK_PAR_R);
+}
+
+word_t eval(int start, int end){
+  if(start > end) {
+    Log("Invalid expression.");
+    assert(0);
+  }
+  else if (start == end){
+    assert(tokens[start].type == TK_NUM);
+    return strtol(tokens[start].str, NULL, 10);
+  }
+  else if (check_parentheses(start, end)){
+    return eval(start+1, end-1);
+  }
+  else{
+    int mid = find_main_op(start, end);
+    int val1 = eval(start, mid-1);
+    int val2 = eval(mid+1, end);
+    switch (tokens[mid].type){
+      case TK_ADD: return val1+val2;
+      case TK_SUB: return val1-val2;
+      case TK_MUL: return val1*val2;
+      case TK_DIV: return val1/val2;
+      default: assert(0); // Invalid oprand!
+    }
+  }
+}
 
 word_t expr(char *e, bool *success) {
   if (!make_token(e)) {
@@ -134,11 +189,12 @@ word_t expr(char *e, bool *success) {
 
   /* TODO: Insert codes to evaluate the expression. */
   //TODO();
-  
+  /*
 	char *ss[] = {"TK_EQ","TK_PAR_L","TK_PAR_R","TK_ADD","TK_SUB","TK_MUL","TK_DIV","TK_NUM"};
 	for(int i=0; i< nr_token; ++i){
     if (tokens[i].type == TK_NOTYPE) printf("NOTYPE\n");
 		else printf("Token_id = %s\n", ss[tokens[i].type]);
-	}
+	}*/
+  return eval(0,nr_token-1);
   return 0;
 }
