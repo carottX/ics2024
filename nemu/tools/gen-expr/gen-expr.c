@@ -33,6 +33,10 @@ static char *code_format =
 
 int buf_size = 0;
 
+uint32_t choose(uint32_t n){
+  return rand()%n;
+}
+
 static void gen(char c){
   buf[buf_size++] = c;
 }
@@ -48,6 +52,7 @@ static void gen_num(){
 }
 
 static void gen_rand_op(){
+  //printf("doing ranop");
   char tmp[]="+-*/";
   gen(tmp[choose(4)]);
 }
@@ -58,7 +63,6 @@ static void gen_rand_expr() {
     case 1: gen('('); gen_rand_expr(); gen(')'); break;
     default: gen_rand_expr(); gen_rand_op(); gen_rand_expr(); break;
   }
-  buf[buf_size++] = '\0';
 }
 
 int main(int argc, char *argv[]) {
