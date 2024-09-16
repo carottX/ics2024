@@ -216,5 +216,4 @@ word_t expr(char *e, bool *success) {
 		else printf("Token_id = %s\n", ss[tokens[i].type]);
 	}*/
   return eval(0,nr_token-1);
-  return 0;
 }

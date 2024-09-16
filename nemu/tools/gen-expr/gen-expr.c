@@ -52,12 +52,15 @@ static void gen_num(){
 }
 
 static void gen_rand_op(){
-  //printf("doing ranop");
-  char tmp[]="+-*/";
+  static char tmp[]="+-*/";
   gen(tmp[choose(4)]);
 }
 
 static void gen_rand_expr() {
+  if(buf_size >= 100) {
+    gen_num();
+    return;
+  }
   switch (choose(3)){
     case 0: gen_num(); break;
     case 1: gen('('); gen_rand_expr(); gen(')'); break;
@@ -74,7 +77,12 @@ int main(int argc, char *argv[]) {
   }
   int i;
   for (i = 0; i < loop; i ++) {
+    buf_size = 0;
     gen_rand_expr();
+    //printf("%d\n", buf_size);
+    buf[buf_size++] = '\0';
+    //printf("%s\n",buf);
+    
 
     sprintf(code_buf, code_format, buf);
 
@@ -83,7 +91,7 @@ int main(int argc, char *argv[]) {
     fputs(code_buf, fp);
     fclose(fp);
 
-    int ret = system("gcc /tmp/.code.c -o /tmp/.expr");
+    int ret = system("gcc /tmp/.code.c -o /tmp/.expr -w");
     if (ret != 0) continue;
 
     fp = popen("/tmp/.expr", "r");
@@ -92,8 +100,10 @@ int main(int argc, char *argv[]) {
     int result;
     ret = fscanf(fp, "%d", &result);
     pclose(fp);
-
-    if(result>=0)printf("%u %s\n", result, buf);
+    if(result>=0){
+      fprintf(stderr, "OUTPUTING %s\n", buf);
+      printf("%u %s\n", result, buf);
+    }
     else --i;
   }
   return 0;

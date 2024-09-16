@@ -29,9 +29,17 @@ int main(int argc, char *argv[]) {
 #else
   init_monitor(argc, argv);
 #endif
-  bool success = true;
-  char s[] = "((281)-453-(((480))))-391-2*220";
-  printf("result=%d\n",expr(s,&success));
+  FILE* fp = fopen("../tools/gen-expr/input.txt","r");
+  static char ex[130];
+  static int ans;
+  while(fscanf(fp,"%d %s",&ans, ex)){
+    bool suc = true;
+    word_t result = expr(ex, &suc);
+    if (!suc || result){
+      printf("Error! expression = %s\n", ex);
+      printf("ans=%u result=%u\n",ans,result);
+    }
+  }
 
   /* Start engine. */
   // engine_start();
