@@ -24,12 +24,12 @@ word_t expr(char* e, bool* suc);
 
 int main(int argc, char *argv[]) {
   /* Initialize the monitor. */
-  /*
+  
 #ifdef CONFIG_TARGET_AM
   am_init_monitor();
 #else
   init_monitor(argc, argv);
-#endif*/
+#endif
   FILE* fp = fopen("/home/carottx/ics2024/nemu/tools/gen-expr/input.txt","r");
   if(fp==NULL) puts("NO");
   static char ex[150];
