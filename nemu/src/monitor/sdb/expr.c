@@ -178,11 +178,9 @@ bool check_parentheses(int start, int end){
 word_t eval(int start, int end){
   printf("CHECKING:\n");
   for(int i=start;i<=end;++i) {
-    char *ss[] = {"TK_EQ","TK_PAR_L","TK_PAR_R","TK_ADD","TK_SUB","TK_MUL","TK_DIV","TK_NUM"};
-    if(tokens[i].type!=TK_NOTYPE)printf("TYPE=%s\n",ss[tokens[i].type]);
-    else printf("NOTYPE\n");
+    print(tokens[i]);
   }
-  printf("-----------------\n");
+  printf("\n-----------------\n");
   if(start > end) {
     Log("Invalid expression.");
     assert(0);
