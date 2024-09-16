@@ -29,7 +29,7 @@ int main(int argc, char *argv[]) {
 #else
   init_monitor(argc, argv);
 #endif
-  FILE* fp = fopen("../tools/gen-expr/input.txt","r");
+  FILE* fp = fopen("/home/carottx/ics2024/nemu/tools/gen-expr/input.txt","r");
   if(fp==NULL) puts("NO");
   static char ex[150];
   static int ans;
