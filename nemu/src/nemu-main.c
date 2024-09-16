@@ -30,6 +30,7 @@ int main(int argc, char *argv[]) {
   init_monitor(argc, argv);
 #endif
   FILE* fp = fopen("../tools/gen-expr/input.txt","r");
+  if(fp==NULL) puts("NO");
   static char ex[150];
   static int ans;
   while(fscanf(fp,"%d %s",&ans, ex)){
