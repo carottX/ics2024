@@ -79,9 +79,7 @@ int main(int argc, char *argv[]) {
   for (i = 0; i < loop; i ++) {
     buf_size = 0;
     gen_rand_expr();
-    //printf("%d\n", buf_size);
     buf[buf_size++] = '\0';
-    //printf("%s\n",buf);
     
 
     sprintf(code_buf, code_format, buf);
@@ -91,7 +89,7 @@ int main(int argc, char *argv[]) {
     fputs(code_buf, fp);
     fclose(fp);
 
-    int ret = system("gcc /tmp/.code.c -o /tmp/.expr -w");
+    int ret = system("gcc /tmp/.code.c -o /tmp/.expr -Werror");
     if (ret != 0) continue;
 
     fp = popen("/tmp/.expr", "r");
