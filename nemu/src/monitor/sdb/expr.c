@@ -204,6 +204,9 @@ word_t eval(int start, int end){
       case TK_DIV: 
         if (val2 == 0){
           printf("DIV0 ERROR!\n");
+          for(int i=0; i < nr_token; ++i){
+            print(tokens[i]);
+          }
           assert(0);
         }
         return val1/val2;
