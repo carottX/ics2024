@@ -195,15 +195,18 @@ word_t eval(int start, int end){
   }
   else{
     int mid = find_main_op(start, end);
-    print(tokens[mid]);
-    puts("?");
     int val1 = eval(start, mid-1);
     int val2 = eval(mid+1, end);
     switch (tokens[mid].type){
       case TK_ADD: return val1+val2;
       case TK_SUB: return val1-val2;
       case TK_MUL: return val1*val2;
-      case TK_DIV: return val1/val2;
+      case TK_DIV: 
+        if (val2 == 0){
+          printf("DIV0 ERROR!");
+          assert(0);
+        }
+        return val1/val2;
       default: assert(0); // Invalid oprand!
     }
   }
