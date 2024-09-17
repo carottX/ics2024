@@ -90,7 +90,7 @@ int main(int argc, char *argv[]) {
     fclose(fp);
 
     int ret = system("gcc /tmp/.code.c -o /tmp/.expr -Werror");
-    if (ret != 0) continue;
+    if (ret != 0){--i; continue;}
 
     fp = popen("/tmp/.expr", "r");
     assert(fp != NULL);
