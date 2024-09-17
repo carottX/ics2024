@@ -203,8 +203,8 @@ word_t eval(int start, int end){
       case TK_MUL: return val1*val2;
       case TK_DIV: 
         if (val2 == 0){
-          printf("DIV0 ERROR!");
-          //assert(0);
+          printf("DIV0 ERROR!\n");
+          assert(0);
         }
         return val1/val2;
       default: assert(0); // Invalid oprand!
