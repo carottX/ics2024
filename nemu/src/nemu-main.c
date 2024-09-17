@@ -32,7 +32,7 @@ int main(int argc, char *argv[]) {
 #endif
   FILE* fp = fopen("/home/carottx/ics2024/nemu/tools/gen-expr/input.txt","r");
   if(fp==NULL) puts("NO");
-  static char ex[150];
+  static char ex[2000];
   static int ans;
   while(fscanf(fp,"%d%s",&ans, ex) != EOF){
     printf("Error! expression = %s\n", ex);
