@@ -204,7 +204,7 @@ word_t eval(int start, int end){
       case TK_DIV: 
         if (val2 == 0){
           printf("DIV0 ERROR!");
-          assert(0);
+          //assert(0);
         }
         return val1/val2;
       default: assert(0); // Invalid oprand!
