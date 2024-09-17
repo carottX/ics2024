@@ -101,8 +101,8 @@ static bool make_token(char *e) {
         char *substr_start = e + position;
         int substr_len = pmatch.rm_eo;
 
-        Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
-            i, rules[i].regex, position, substr_len, substr_len, substr_start);
+        // Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
+        //     i, rules[i].regex, position, substr_len, substr_len, substr_start);
 
         position += substr_len;
 
@@ -177,11 +177,11 @@ bool check_parentheses(int start, int end){
 }
 
 word_t eval(int start, int end){
-  printf("CHECKING:\n");
-  for(int i=start;i<=end;++i) {
-    print(tokens[i]);
-  }
-  printf("\n-----------------\n");
+  // printf("CHECKING:\n");
+  // for(int i=start;i<=end;++i) {
+  //   print(tokens[i]);
+  // }
+  // printf("\n-----------------\n");
   if(start > end) {
     Log("Invalid expression.");
     assert(0);
