@@ -207,6 +207,7 @@ word_t eval(int start, int end){
           for(int i=0; i < nr_token; ++i){
             print(tokens[i]);
           }
+          puts("");
           assert(0);
         }
         return val1/val2;
