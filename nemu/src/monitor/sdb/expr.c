@@ -213,8 +213,9 @@ int eval(int start, int end){
     assert(0);
   }
   else if (start == end){
-    assert(tokens[start].type == TK_NUM || tokens[start].type == TK_REG);
+    assert(tokens[start].type == TK_NUM || tokens[start].type == TK_REG || tokens[start].type == TK_HEX);
     if(tokens[start].type == TK_NUM) return strtol(tokens[start].str, NULL, 10);
+    else if(tokens[start].type == TK_HEX) return strtol(tokens[start].str, NULL, 16);
     else {
       bool suc = true;
       int ret_val = isa_reg_str2val(tokens[start].str, &suc);
