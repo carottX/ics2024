@@ -63,7 +63,7 @@ WP* new_wp(char* exp){
 
 void free_wp(WP* wp){
   WP* now;
-  WP* pre;
+  WP* pre = NULL;
   for(now = head; now != NULL; now = now->next){
     if (now == wp){
       if (pre != NULL) {

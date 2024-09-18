@@ -77,7 +77,9 @@ static int cmd_info(char *args){
 			isa_reg_display();
 		}
 		else{
-			for(WP* )
+			//for(WP* now = head; now!=NULL; now = now->next){
+      //  
+      //}
 		}
 	} 
 	return 0;

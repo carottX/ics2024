@@ -38,6 +38,7 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 #endif
   if (g_print_step) { IFDEF(CONFIG_ITRACE, puts(_this->logbuf)); }
   IFDEF(CONFIG_DIFFTEST, difftest_step(_this->pc, dnpc));
+  /*
   bool changed = false;
   for(WP* now = head; now!=NULL; now = now->next){
     word_t new_val = expr(now->str);
@@ -51,7 +52,7 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
   if (changed){
     nemu_state.state = NEMU_STOP;
     printf("Watchpoint triggered!\n");
-  }
+  }*/
 }
 
 static void exec_once(Decode *s, vaddr_t pc) {
