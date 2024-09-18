@@ -205,11 +205,11 @@ bool check_parentheses(int start, int end){
 }
 
 int eval(int start, int end){
-  printf("CHECKING: start=%d end=%d\n",start,end);
-  for(int i=start;i<=end;++i) {
-    printf("i=%d,",i);print(tokens[i]);
-  }
-  printf("\n-----------------\n");
+  // printf("CHECKING: start=%d end=%d\n",start,end);
+  // for(int i=start;i<=end;++i) {
+  //   printf("i=%d,",i);print(tokens[i]);
+  // }
+  // printf("\n-----------------\n");
   if(tokens[start].type == TK_NOTYPE) return eval(start+1, end);
   if(tokens[end].type == TK_NOTYPE) return eval(start, end-1);
   if(start > end) {
