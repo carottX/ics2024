@@ -176,6 +176,7 @@ int find_main_op(int start, int end, bool* success){
     }
   }
   *success = (lowest!=-1);
+  if(success) printf("Find main operator success!\n");
   return lowest;
 }
 
