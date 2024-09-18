@@ -109,7 +109,8 @@ static int cmd_x(char *args){
 
 static int cmd_p(char *args){
   bool success = false;
-  return expr(args, &success);
+  printf("Result=%u\n",expr(args, &success));
+  return !success;
 }
 
 static int cmd_help(char *args);
