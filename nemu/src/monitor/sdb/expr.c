@@ -203,7 +203,7 @@ bool check_parentheses(int start, int end){
 }
 
 int eval(int start, int end){
-  printf("CHECKING:\n");
+  printf("CHECKING: start=%d end=%d\n",start,end);
   for(int i=start;i<=end;++i) {
     print(tokens[i]);
   }
