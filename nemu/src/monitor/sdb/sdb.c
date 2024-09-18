@@ -77,7 +77,7 @@ static int cmd_info(char *args){
 			isa_reg_display();
 		}
 		else{
-			/* TODO */
+			for(WP* )
 		}
 	} 
 	return 0;

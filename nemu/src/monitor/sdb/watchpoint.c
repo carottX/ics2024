@@ -20,6 +20,8 @@
 typedef struct watchpoint {
   int NO;
   struct watchpoint *next;
+  char str[128];
+  word_t val;
 
   /* TODO: Add more members if necessary */
 
@@ -33,6 +35,8 @@ void init_wp_pool() {
   for (i = 0; i < NR_WP; i ++) {
     wp_pool[i].NO = i;
     wp_pool[i].next = (i == NR_WP - 1 ? NULL : &wp_pool[i + 1]);
+    wp_pool[i].str[0] = '\0';
+    wp_pool[i].val = 0;
   }
 
   head = NULL;
@@ -40,7 +44,7 @@ void init_wp_pool() {
 }
 
 /* TODO: Implement the functionality of watchpoint */
-WP* new_wp(){
+WP* new_wp(char* exp){
   if(free_ == NULL) {
     printf("No free watchpoints available!\n");
     assert(0);
@@ -48,6 +52,12 @@ WP* new_wp(){
   free_ -> next = head;
   head = free_;
   free_ = free_ -> next;
+  strcpy(head->str, exp);
+  bool suc = true;
+  head->val = expr(exp, &suc);
+  if(!suc){
+    panic("Wrong Expression!");
+  }
   return head;
 }
 
