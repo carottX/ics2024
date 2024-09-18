@@ -20,16 +20,20 @@
  */
 #include <regex.h>
 
+uint8_t* guest_to_host(paddr_t gaddr);
+
 enum {
   TK_EQ,
 	TK_PAR_L, TK_PAR_R,
 	TK_ADD, TK_SUB, TK_MUL, TK_DIV,
-	TK_NUM, TK_NOTYPE = 256
+	TK_NUM, TK_NEQ, TK_REG, TK_HEX, TK_AND,
+  TK_DEREF, TK_NEG,
+  TK_NOTYPE = 256
   /* TODO: Add more token types */
 
 };
 
-#define is_op(x) (x==TK_ADD || x==TK_SUB || x==TK_MUL || x==TK_DIV)
+#define is_op(x) (x==TK_ADD || x==TK_SUB || x==TK_MUL || x==TK_DIV || x == TK_AND || x == TK_NEQ || x == TK_EQ)
 
 static struct rule {
   const char *regex;
@@ -47,6 +51,10 @@ static struct rule {
 	{"\\)", TK_PAR_R},
 	{"-", TK_SUB},
 	{"/", TK_DIV},
+  {"0x[0-9]+", TK_HEX},
+  {"\\$(\\$0|ra|sp|tp|gp|[a-z][0-9]+)", TK_REG},
+  {"!=", TK_NEQ},
+  {"&&", TK_AND},
 	{"[0-9]+", TK_NUM},
   {"==", TK_EQ},        // equal
 };
@@ -117,6 +125,11 @@ static bool make_token(char *e) {
             tokens[nr_token].str[substr_len] = '\0';
 						tokens[nr_token++].type = rules[i].token_type;
 						break;
+          case TK_REG:
+            strncpy(tokens[nr_token].str, substr_start, substr_len);
+            tokens[nr_token].str[substr_len] = '\0';
+						tokens[nr_token++].type = rules[i].token_type;
+            break;
 					default: 
 						tokens[nr_token].type = rules[i].token_type;
 						nr_token ++ ;
@@ -135,7 +148,16 @@ static bool make_token(char *e) {
   return true;
 }
 
-int find_main_op(int start, int end){
+inline int get_prec(int type){
+  if(type == TK_MUL || type == TK_DIV) return 5;
+  if(type == TK_ADD || type == TK_SUB) return 4;
+  if(type == TK_AND) return 3;
+  if(type == TK_EQ || type == TK_NEQ) return 2; 
+  assert(0);
+  return 0;
+}
+
+int find_main_op(int start, int end, bool* success){
   int lowest = -1, prec = -1;
   int left_par = 0;
 
@@ -145,17 +167,15 @@ int find_main_op(int start, int end){
     if(!is_op(tokens[i].type)) continue;
     if(left_par) continue;
     if (lowest == -1){
-      
       lowest = i;
-      prec = (tokens[i].type == TK_MUL || tokens[i].type == TK_DIV);
+      prec = get_prec(tokens[i].type);
     }
-    else if(prec >= (tokens[i].type == TK_MUL || tokens[i].type == TK_DIV)){
+    else if(prec >= get_prec(tokens[i].type)){
       lowest = i;
-      prec = (tokens[i].type == TK_MUL || tokens[i].type == TK_DIV);
+      prec = get_prec(tokens[i].type);
     }
   }
-  //printf("prec=%d\n",prec);
-  assert(lowest != -1);
+  *success = (lowest!=-1);
   return lowest;
 }
 
@@ -164,7 +184,6 @@ bool check_parentheses(int start, int end){
   for(int i=start;i<=end;++i){
     if(tokens[i].type == TK_PAR_L) left_par ++;
     else if(tokens[i].type == TK_PAR_R) left_par--;
-    //printf("LEFT_PAR=%d\n",left_par);
     if(left_par<0) assert(0); // Doenst match!
   }
   assert(left_par==0);
@@ -177,7 +196,7 @@ bool check_parentheses(int start, int end){
   return true;
 }
 
-word_t eval(int start, int end){
+int eval(int start, int end){
   // printf("CHECKING:\n");
   // for(int i=start;i<=end;++i) {
   //   print(tokens[i]);
@@ -188,31 +207,57 @@ word_t eval(int start, int end){
     assert(0);
   }
   else if (start == end){
-    assert(tokens[start].type == TK_NUM);
-    return strtol(tokens[start].str, NULL, 10);
+    assert(tokens[start].type == TK_NUM || tokens[start].type == TK_REG);
+    if(tokens[start].type == TK_NUM) return strtol(tokens[start].str, NULL, 10);
+    else {
+      bool suc = true;
+      int ret_val = isa_reg_str2val(tokens[start].str, &suc);
+      if (!suc) {
+        printf("Invalid register name!\n");
+        assert(0);
+      }
+      return ret_val;
+    }
   }
   else if (check_parentheses(start, end)){
     return eval(start+1, end-1);
   }
   else{
-    int mid = find_main_op(start, end);
-    int val1 = eval(start, mid-1);
-    int val2 = eval(mid+1, end);
-    switch (tokens[mid].type){
-      case TK_ADD: return val1+val2;
-      case TK_SUB: return val1-val2;
-      case TK_MUL: return val1*val2;
-      case TK_DIV: 
-        if (val2 == 0){
-          printf("DIV0 ERROR!\n");
-          for(int i=0; i < nr_token; ++i){
-            print(tokens[i]);
+    bool success = true;
+    int mid = find_main_op(start, end, &success);
+    if (success){
+      int val1 = eval(start, mid-1);
+      int val2 = eval(mid+1, end);
+      switch (tokens[mid].type){
+        case TK_ADD: return val1+val2;
+        case TK_SUB: return val1-val2;
+        case TK_MUL: return val1*val2;
+        case TK_DIV: 
+          if (val2 == 0){
+            printf("DIV0 ERROR!\n");
+            for(int i=0; i < nr_token; ++i){
+              print(tokens[i]);
+            }
+            puts("");
+            assert(0);
           }
-          puts("");
-          assert(0);
+          return val1/val2;
+        default: assert(0); // Invalid oprand!
+      }
+    }
+    else{
+      assert(tokens[start].type == TK_DEREF || tokens[start].type == TK_NEG);
+      if(tokens[start].type == TK_DEREF){
+        int val = eval(start+1, end);
+        if (val < 0x80000000) {
+          printf("Invalid memory address: %u\n", val);
         }
-        return val1/val2;
-      default: assert(0); // Invalid oprand!
+        return 	*(uint32_t*) guest_to_host(val);
+      }
+      else{
+        int val = eval(start+1, end);
+        return -val;
+      }
     }
   }
 }
@@ -231,6 +276,14 @@ word_t expr(char *e, bool *success) {
     if (tokens[i].type == TK_NOTYPE) printf("NOTYPE\n");
 		else printf("Token_id = %s\n", ss[tokens[i].type]);
 	}*/
+  for(int i=0; i < nr_token; ++i){
+    if(tokens[i].type == TK_MUL && (i==0 || is_op(tokens[i-1].type))){
+      tokens[i].type = TK_DEREF;
+    }
+    else if(tokens[i].type == TK_SUB && (i==0 || is_op(tokens[i-1].type))){
+      tokens[i].type = TK_NEG;
+    }
+  }
   return eval(0,nr_token-1);
 }
 
