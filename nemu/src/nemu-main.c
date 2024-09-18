@@ -30,21 +30,21 @@ int main(int argc, char *argv[]) {
 #else
   init_monitor(argc, argv);
 #endif
-  FILE* fp = fopen("/home/carottx/ics2024/nemu/tools/gen-expr/input.txt","r");
-  if(fp==NULL) puts("NO");
-  static char ex[2000];
-  static int ans;
-  while(fscanf(fp,"%d%s",&ans, ex) != EOF){
-    printf("Error! expression = %s\n", ex);
-    printf("ans=%u\n",ans);
-    bool suc = true;
-    word_t result = expr(ex, &suc);
-    if (!suc || result != ans){
-      printf("Error! expression = %s\n", ex);
-      printf("ans=%u result=%u\n",ans,result);
-    }
-  }
-  fclose(fp);
+  // FILE* fp = fopen("/home/carottx/ics2024/nemu/tools/gen-expr/input.txt","r");
+  // if(fp==NULL) puts("NO");
+  // static char ex[2000];
+  // static int ans;
+  // while(fscanf(fp,"%d%s",&ans, ex) != EOF){
+  //   printf("Error! expression = %s\n", ex);
+  //   printf("ans=%u\n",ans);
+  //   bool suc = true;
+  //   word_t result = expr(ex, &suc);
+  //   if (!suc || result != ans){
+  //     printf("Error! expression = %s\n", ex);
+  //     printf("ans=%u result=%u\n",ans,result);
+  //   }
+  // }
+  // fclose(fp);
 
   /* Start engine. */
   engine_start();
