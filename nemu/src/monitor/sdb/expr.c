@@ -89,9 +89,9 @@ static Token tokens[200] __attribute__((used)) = {};
 static int nr_token __attribute__((used))  = 0;
 
 void print(Token t){
-  char *ss[] = {"==","(",")","+","-","*","/",""};
+  char *ss[] = {"==","(",")","+","-","*","/","", "!=","","","&&","*","-"};
   if (t.type == TK_NOTYPE) return;
-  if (t.type == TK_NUM) printf("%s",t.str);
+  if (t.type == TK_NUM || t.type == TK_HEX || t.type == TK_REG) printf("%s",t.str);
   else printf("%s",ss[t.type]);
 }
 
@@ -126,6 +126,11 @@ static bool make_token(char *e) {
 						tokens[nr_token++].type = rules[i].token_type;
 						break;
           case TK_REG:
+            strncpy(tokens[nr_token].str, substr_start, substr_len);
+            tokens[nr_token].str[substr_len] = '\0';
+						tokens[nr_token++].type = rules[i].token_type;
+            break;
+          case TK_HEX:
             strncpy(tokens[nr_token].str, substr_start, substr_len);
             tokens[nr_token].str[substr_len] = '\0';
 						tokens[nr_token++].type = rules[i].token_type;
@@ -176,7 +181,7 @@ int find_main_op(int start, int end, bool* success){
     }
   }
   *success = (lowest!=-1);
-  if(success) printf("Find main operator success!\n");
+  // if(success) printf("Find main operator success!\n");
   return lowest;
 }
 
