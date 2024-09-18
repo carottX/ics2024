@@ -209,6 +209,7 @@ int eval(int start, int end){
   }
   printf("\n-----------------\n");
   if(tokens[start].type == TK_NOTYPE) return eval(start+1, end);
+  if(tokens[end].type == TK_NOTYPE) return eval(start, end-1);
   if(start > end) {
     Log("Invalid expression.");
     assert(0);
