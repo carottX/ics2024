@@ -284,10 +284,10 @@ word_t expr(char *e, bool *success) {
 		else printf("Token_id = %s\n", ss[tokens[i].type]);
 	}*/
   for(int i=0; i < nr_token; ++i){
-    if(tokens[i].type == TK_MUL && (i==0 || is_op(tokens[i-1].type))){
+    if(tokens[i].type == TK_MUL && (i==0 || is_op(tokens[i-1].type) || tokens[i-1].type == TK_NEG || tokens[i-1].type == TK_DEREF)){
       tokens[i].type = TK_DEREF;
     }
-    else if(tokens[i].type == TK_SUB && (i==0 || is_op(tokens[i-1].type))){
+    else if(tokens[i].type == TK_SUB && (i==0 || is_op(tokens[i-1].type) || tokens[i-1].type == TK_NEG || tokens[i-1].type == TK_DEREF)){
       tokens[i].type = TK_NEG;
     }
   }
