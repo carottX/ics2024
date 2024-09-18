@@ -203,11 +203,11 @@ bool check_parentheses(int start, int end){
 }
 
 int eval(int start, int end){
-  // printf("CHECKING:\n");
-  // for(int i=start;i<=end;++i) {
-  //   print(tokens[i]);
-  // }
-  // printf("\n-----------------\n");
+  printf("CHECKING:\n");
+  for(int i=start;i<=end;++i) {
+    print(tokens[i]);
+  }
+  printf("\n-----------------\n");
   if(start > end) {
     Log("Invalid expression.");
     assert(0);
