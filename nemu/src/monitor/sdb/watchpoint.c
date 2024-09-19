@@ -31,7 +31,6 @@ static WP wp_pool[NR_WP] = {};
 static WP *head = NULL, *free_ = NULL;
 
 void init_wp_pool() {
-  printf("INITED!\n");
   int i;
   for (i = 0; i < NR_WP; i ++) {
     wp_pool[i].NO = i;
@@ -39,8 +38,6 @@ void init_wp_pool() {
     wp_pool[i].str[0] = '\0';
     wp_pool[i].val = 0;
   }
-  if((&wp_pool[0])->next!=NULL)printf("NEXT is not NULL\n");
-
   head = NULL;
   free_ = &wp_pool[0];
 }
@@ -55,9 +52,6 @@ WP* new_wp(char* exp){
   head = free_;
   free_ = free_ -> next;
   head -> next = tmp;
-  if(free_ == NULL) {
-    printf("NEXT FREE IS NULL!\n");
-  }
   strcpy(head->str, exp);
   bool suc = true;
   head->val = expr(exp, &suc);
@@ -103,7 +97,7 @@ void WP_monitor(){
     assert(suc);
     if(new_val != now->val){
       changed = true;
-      Log("Watchpoint changed!");
+      printf("Watchpoint changed!\n");
       printf("Watchpoint ID=%d Expression=%s:\n Old value = %u, New value = %u\n",now->NO, now->str, now->val, new_val);
     }
     now->val = new_val;
