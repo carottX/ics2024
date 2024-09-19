@@ -52,6 +52,9 @@ WP* new_wp(char* exp){
   free_ -> next = head;
   head = free_;
   free_ = free_ -> next;
+  if(free_ == NULL) {
+    printf("NEXT FREE IS NULL!\n");
+  }
   strcpy(head->str, exp);
   bool suc = true;
   head->val = expr(exp, &suc);
