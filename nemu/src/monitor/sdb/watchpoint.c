@@ -82,3 +82,28 @@ void free_wp(WP* wp){
   printf("No such watchpoints!\n");
   assert(0);
 }
+
+void WP_display(){
+  for(WP* now = head; now != NULL; now = now->next){
+    printf("ID=%d\t\t\tExpression=%s\n",now->NO,now->str);
+  }
+}
+
+void WP_monitor(){
+  bool changed = false;
+  for(WP* now = head; now!=NULL; now = now->next){
+    bool suc = true;
+    word_t new_val = expr(now->str, &suc);
+    assert(suc);
+    if(new_val != now->val){
+      changed = true;
+      Log("Watchpoint changed!");
+      printf("Watchpoint ID=%d Expression=%s:\n Old value = %u, New value = %u\n",now->NO, now->str, now->val, new_val);
+    }
+    now->val = new_val;
+  }
+  if (changed){
+    nemu_state.state = NEMU_STOP;
+    printf("Watchpoint triggered!\n");
+  }
+}

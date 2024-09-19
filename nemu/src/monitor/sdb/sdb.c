@@ -23,6 +23,7 @@ static int is_batch_mode = false;
 
 void init_regex();
 void init_wp_pool();
+void WP_display();
 uint8_t* guest_to_host(paddr_t gaddr);
 
 /* We use the `readline' library to provide more flexibility to read from stdin. */
@@ -77,9 +78,7 @@ static int cmd_info(char *args){
 			isa_reg_display();
 		}
 		else{
-			//for(WP* now = head; now!=NULL; now = now->next){
-      //  
-      //}
+			WP_display();
 		}
 	} 
 	return 0;
