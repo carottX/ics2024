@@ -39,6 +39,7 @@ void init_wp_pool() {
     wp_pool[i].str[0] = '\0';
     wp_pool[i].val = 0;
   }
+  if((&wp_pool[0])->next!=NULL)printf("NEXT is not NULL\n");
 
   head = NULL;
   free_ = &wp_pool[0];
