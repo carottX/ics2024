@@ -51,7 +51,7 @@ WP* new_wp(char* exp){
     printf("No free watchpoints available!\n");
     assert(0);
   }
-  free_ -> next = head;
+  if(head!=NULL) head -> next = head;
   head = free_;
   free_ = free_ -> next;
   if(free_ == NULL) {
