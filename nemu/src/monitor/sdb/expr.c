@@ -204,7 +204,7 @@ bool check_parentheses(int start, int end){
   return true;
 }
 
-int eval(int start, int end){
+int eval(int start, int end){   
   // printf("CHECKING: start=%d end=%d\n",start,end);
   // for(int i=start;i<=end;++i) {
   //   printf("i=%d,",i);print(tokens[i]);
@@ -253,6 +253,9 @@ int eval(int start, int end){
             assert(0);
           }
           return val1/val2;
+        case TK_EQ: return val1 == val2;
+        case TK_NEQ: return val1 != val2;
+        case TK_AND: return val1 && val2;
         default: assert(0); // Invalid oprand!
       }
     }
