@@ -28,6 +28,7 @@ enum {
 	TK_ADD, TK_SUB, TK_MUL, TK_DIV,
 	TK_NUM, TK_NEQ, TK_REG, TK_HEX, TK_AND,
   TK_DEREF, TK_NEG,
+  TK_MOD, TK_BITAND, TK_NOT_MORE, TK_LESS,
   TK_NOTYPE = 256
   /* TODO: Add more token types */
 
@@ -48,6 +49,10 @@ static struct rule {
   {"\\*", TK_MUL},   
   {"\\+", TK_ADD},	        // plus
   {"\\-", TK_SUB},
+  {"%", TK_MOD},
+  {"&", TK_BITAND},
+  {"<=", TK_NOT_MORE},
+  {"<", TK_LESS},
   {"==", TK_EQ},
   {"!=", TK_NEQ},
   {"&&", TK_AND},
@@ -149,7 +154,7 @@ static bool make_token(char *e) {
 
     if (i == NR_REGEX) {
       printf("no match at position %d\n%s\n%*.s^\n", position, e, position, "");
-      assert(0);
+      // assert(0);
       return false;
     }
   }
@@ -258,6 +263,9 @@ word_t eval(int start, int end){
         case TK_EQ: return val1 == val2;
         case TK_NEQ: return val1 != val2;
         case TK_AND: return val1 && val2;
+        case TK_MOD: return val1 % val2;
+        case TK_BITAND: return val1&val2;
+        // case 
         default: assert(0); // Invalid oprand!
       }
     }
