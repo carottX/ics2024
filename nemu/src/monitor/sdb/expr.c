@@ -44,19 +44,20 @@ static struct rule {
    * Pay attention to the precedence level of different rules.
    */
 
-  {" +", TK_NOTYPE},    // spaces
+  {" +", TK_NOTYPE}, 
+  {"\\*", TK_MUL},   
   {"\\+", TK_ADD},	        // plus
-	{"\\*", TK_MUL},
-	{"\\(", TK_PAR_L},
-	{"\\)", TK_PAR_R},
-	{"-", TK_SUB},
-	{"/", TK_DIV},
-  {"0x[0-9]+", TK_HEX},
-  {"(\\$\\w+)|(\\$\\$0)", TK_REG},
+  {"-", TK_SUB},
+  {"==", TK_EQ},
   {"!=", TK_NEQ},
   {"&&", TK_AND},
-	{"[0-9]+", TK_NUM},
-  {"==", TK_EQ},        // equal
+	{"/", TK_DIV},
+  {"0x[0-9]+", TK_HEX},
+  {"[0-9]+", TK_NUM},
+  {"\\(", TK_PAR_L},
+	{"\\)", TK_PAR_R},
+  {"(\\$\\w+)|(\\$\\$0)", TK_REG}
+        // equal
 };
 
 #define NR_REGEX ARRLEN(rules)
