@@ -29,13 +29,13 @@ enum {
 	TK_NUM, TK_NEQ, TK_REG, TK_HEX, TK_AND,
   TK_DEREF, TK_NEG,
   TK_MOD, TK_BITAND, TK_NOT_MORE, TK_LESS,
-  TK_NOT,
+  TK_NOT, TK_BITOR,
   TK_NOTYPE = 256
   /* TODO: Add more token types */
 
 };
 
-#define is_op(x) (x==TK_ADD || x==TK_SUB || x==TK_MUL || x==TK_DIV || x == TK_AND || x == TK_NEQ || x == TK_EQ || x == TK_MOD || x==TK_BITAND || x==TK_LESS || x==TK_NOT_MORE)
+#define is_op(x) (x==TK_ADD || x==TK_SUB || x==TK_MUL || x==TK_DIV || x == TK_AND || x == TK_NEQ || x == TK_EQ || x == TK_MOD || x==TK_BITAND || x==TK_LESS || x==TK_NOT_MORE || x==TK_BITOR)
 
 static struct rule {
   const char *regex;
@@ -59,6 +59,7 @@ static struct rule {
   {"!", TK_NOT},
   {"&&", TK_AND},
 	{"/", TK_DIV},
+  {"\\|", TK_BITOR},
   {"0x[0-9]+", TK_HEX},
   {"[0-9]+", TK_NUM},
   {"\\(", TK_PAR_L},
@@ -168,7 +169,7 @@ inline int get_prec(int type){
   if(type == TK_MUL || type == TK_DIV || type == TK_MOD) return 5;
   if(type == TK_ADD || type == TK_SUB) return 4;
   if(type == TK_AND) return 3;
-  if(type == TK_BITAND) return 2;
+  if(type == TK_BITAND || type == TK_BITOR) return 2;
   if(type == TK_EQ || type == TK_NEQ || type == TK_LESS || type == TK_NOT_MORE) return 1; 
   assert(0);
   return 0;
