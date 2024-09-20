@@ -48,16 +48,17 @@ WP* new_wp(char* exp){
     printf("No free watchpoints available!\n");
     assert(0);
   }
+  bool suc = true;
+  word_t v = expr(exp, &suc);
+  if(!suc){
+    return NULL;
+  }
   WP* tmp = head;
   head = free_;
   free_ = free_ -> next;
   head -> next = tmp;
   strcpy(head->str, exp);
-  bool suc = true;
-  head->val = expr(exp, &suc);
-  if(!suc){
-    panic("Wrong Expression!");
-  }
+  head->val = v;
   return head;
 }
 
