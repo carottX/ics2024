@@ -47,7 +47,7 @@ static struct rule {
   {" +", TK_NOTYPE}, 
   {"\\*", TK_MUL},   
   {"\\+", TK_ADD},	        // plus
-  {"-", TK_SUB},
+  {"\\-", TK_SUB},
   {"==", TK_EQ},
   {"!=", TK_NEQ},
   {"&&", TK_AND},
@@ -83,7 +83,7 @@ void init_regex() {
 
 typedef struct token {
   int type;
-  char str[32];
+  char str[128];
 } Token;
 
 static Token tokens[65536] __attribute__((used)) = {};
