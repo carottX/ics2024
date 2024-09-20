@@ -204,7 +204,7 @@ bool check_parentheses(int start, int end){
   return true;
 }
 
-int eval(int start, int end){   
+word_t eval(int start, int end){   
   // printf("CHECKING: start=%d end=%d\n",start,end);
   // for(int i=start;i<=end;++i) {
   //   printf("i=%d,",i);print(tokens[i]);
@@ -237,8 +237,8 @@ int eval(int start, int end){
     bool success = true;
     int mid = find_main_op(start, end, &success);
     if (success){
-      int val1 = eval(start, mid-1);
-      int val2 = eval(mid+1, end);
+      word_t val1 = eval(start, mid-1);
+      word_t val2 = eval(mid+1, end);
       switch (tokens[mid].type){
         case TK_ADD: return val1+val2;
         case TK_SUB: return val1-val2;
@@ -262,14 +262,14 @@ int eval(int start, int end){
     else{
       assert(tokens[start].type == TK_DEREF || tokens[start].type == TK_NEG);
       if(tokens[start].type == TK_DEREF){
-        int val = eval(start+1, end);
+        word_t val = eval(start+1, end);
         if (val < 0x80000000) {
           printf("Invalid memory address: %u\n", val);
         }
         return 	*(uint32_t*) guest_to_host(val);
       }
       else{
-        int val = eval(start+1, end);
+        word_t val = eval(start+1, end);
         return -val;
       }
     }
