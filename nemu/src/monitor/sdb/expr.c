@@ -265,6 +265,7 @@ word_t eval(int start, int end){
         word_t val = eval(start+1, end);
         if (val < 0x80000000) {
           printf("Invalid memory address: %u\n", val);
+          return 0;
         }
         return 	*(uint32_t*) guest_to_host(val);
       }
