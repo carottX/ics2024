@@ -51,6 +51,7 @@ WP* new_wp(char* exp){
   bool suc = true;
   word_t v = expr(exp, &suc);
   if(!suc){
+    assert(suc);
     return NULL;
   }
   WP* tmp = head;
