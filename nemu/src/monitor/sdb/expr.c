@@ -52,7 +52,7 @@ static struct rule {
 	{"-", TK_SUB},
 	{"/", TK_DIV},
   {"0x[0-9]+", TK_HEX},
-  {"\\$(\\$0|ra|sp|tp|gp|pc|[a-z][0-9]+)", TK_REG},
+  {"\\$(0|ra|sp|tp|gp|pc|[a-z][0-9]+)", TK_REG},
   {"!=", TK_NEQ},
   {"&&", TK_AND},
 	{"[0-9]+", TK_NUM},
