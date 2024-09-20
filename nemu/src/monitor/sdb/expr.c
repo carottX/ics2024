@@ -298,6 +298,7 @@ word_t expr(char *e, bool *success) {
       tokens[i].type = TK_NEG;
     }
   }
+  *success = true;
   return eval(0,nr_token-1);
 }
 
