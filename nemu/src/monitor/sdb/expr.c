@@ -286,7 +286,7 @@ word_t expr(char *e, bool *success) {
   }
   new_e[size] = '\0';
   if (!make_token(new_e)) {
-      free(new_e);
+    free(new_e);
 
     *success = false;
     return 0;
