@@ -29,6 +29,7 @@ enum {
 	TK_NUM, TK_NEQ, TK_REG, TK_HEX, TK_AND,
   TK_DEREF, TK_NEG,
   TK_MOD, TK_BITAND, TK_NOT_MORE, TK_LESS,
+  TK_NOT,
   TK_NOTYPE = 256
   /* TODO: Add more token types */
 
@@ -55,6 +56,7 @@ static struct rule {
   {"<", TK_LESS},
   {"==", TK_EQ},
   {"!=", TK_NEQ},
+  {"!", TK_NOT},
   {"&&", TK_AND},
 	{"/", TK_DIV},
   {"0x[0-9]+", TK_HEX},
@@ -163,10 +165,11 @@ static bool make_token(char *e) {
 }
 
 inline int get_prec(int type){
-  if(type == TK_MUL || type == TK_DIV) return 5;
+  if(type == TK_MUL || type == TK_DIV || type == TK_MOD) return 5;
   if(type == TK_ADD || type == TK_SUB) return 4;
   if(type == TK_AND) return 3;
-  if(type == TK_EQ || type == TK_NEQ) return 2; 
+  if(type == TK_BITAND) return 2;
+  if(type == TK_EQ || type == TK_NEQ || type == TK_LESS || type == TK_NOT_MORE) return 1; 
   assert(0);
   return 0;
 }
@@ -264,13 +267,15 @@ word_t eval(int start, int end){
         case TK_NEQ: return val1 != val2;
         case TK_AND: return val1 && val2;
         case TK_MOD: return val1 % val2;
+        case TK_LESS: return val1 < val2;
+        case TK_NOT_MORE: return val1 <= val2;
         case TK_BITAND: return val1&val2;
         // case 
         default: assert(0); // Invalid oprand!
       }
     }
     else{
-      assert(tokens[start].type == TK_DEREF || tokens[start].type == TK_NEG);
+      assert(tokens[start].type == TK_DEREF || tokens[start].type == TK_NEG || tokens[start].type == TK_NOT);
       if(tokens[start].type == TK_DEREF){
         word_t val = eval(start+1, end);
         if (val < 0x80000000) {
@@ -278,6 +283,10 @@ word_t eval(int start, int end){
           return 0;
         }
         return 	*(uint32_t*) guest_to_host(val);
+      }
+      else if(tokens[start].type == TK_NOT){
+        word_t val = eval(start+1, end);
+        return !val;
       }
       else{
         word_t val = eval(start+1, end);
