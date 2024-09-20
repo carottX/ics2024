@@ -37,6 +37,10 @@ word_t isa_reg_str2val(const char *s, bool *success) {
       return gpr(idx);
     }
   }
+  if(strcmp("0", s) == 0){
+    *success = true;
+    return gpr(0);
+  }
   if(strcmp("pc", s) == 0){
     *success = true;
     return cpu.pc;
