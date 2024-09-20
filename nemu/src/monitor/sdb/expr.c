@@ -279,7 +279,13 @@ word_t eval(int start, int end){
 }
 
 word_t expr(char *e, bool *success) {
-  if (!make_token(e)) {
+  char* new_e = (char *)malloc( strlen(e) * sizeof(char) );
+  int size = 0;
+  for(int i=0;e[i];++i){
+    if(e[i]!=' ') new_e[size++] = e[i];
+  }
+  new_e[size] = '\0';
+  if (!make_token(new_e)) {
     *success = false;
     return 0;
   }
