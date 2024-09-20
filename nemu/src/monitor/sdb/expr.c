@@ -35,7 +35,7 @@ enum {
 
 };
 
-#define is_op(x) (x==TK_ADD || x==TK_SUB || x==TK_MUL || x==TK_DIV || x == TK_AND || x == TK_NEQ || x == TK_EQ)
+#define is_op(x) (x==TK_ADD || x==TK_SUB || x==TK_MUL || x==TK_DIV || x == TK_AND || x == TK_NEQ || x == TK_EQ || x == TK_MOD || x==TK_BITAND || x==TK_LESS || x==TK_NOT_MORE)
 
 static struct rule {
   const char *regex;
