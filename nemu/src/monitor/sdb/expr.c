@@ -271,6 +271,7 @@ word_t eval(int start, int end){
         case TK_LESS: return val1 < val2;
         case TK_NOT_MORE: return val1 <= val2;
         case TK_BITAND: return val1&val2;
+        case TK_BITOR: return val1 | val2;
         // case 
         default: assert(0); // Invalid oprand!
       }
