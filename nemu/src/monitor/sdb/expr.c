@@ -157,10 +157,11 @@ static bool make_token(char *e) {
 
     if (i == NR_REGEX) {
       printf("no match at position %d\n%s\n%*.s^\n", position, e, position, "");
-      if(e[position]>='a' && e[position]<='z') assert(0);
-      if(e[position]>='A' && e[position]<='Z') assert(0);
-      if(e[position]>='0' && e[position]<='9') assert(0);
-      if(e[position] == '$') assert(0);
+      if(e[position]>='a' && e[position]<='z') {
+        if(e[position+1] >= 'a' && e[position+1]<='z') assert(0);
+        if(e[position+1] >= '0' && e[position+1]<='9') assert(0);
+        assert(0);
+      }
       return false;
     }
   }
