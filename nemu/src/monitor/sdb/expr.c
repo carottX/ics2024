@@ -60,11 +60,11 @@ static struct rule {
   {"&&", TK_AND},
 	{"/", TK_DIV},
   {"\\|", TK_BITOR},
+  {"(\\$\\w+)|(\\$\\$0)", TK_REG},
   {"0x[0-9]+", TK_HEX},
   {"[0-9]+", TK_NUM},
   {"\\(", TK_PAR_L},
-	{"\\)", TK_PAR_R},
-  {"(\\$\\w+)|(\\$\\$0)", TK_REG}
+	{"\\)", TK_PAR_R}
         // equal
 };
 
@@ -94,7 +94,7 @@ typedef struct token {
   char str[128];
 } Token;
 
-static Token tokens[1000000] __attribute__((used)) = {};
+static Token tokens[65536] __attribute__((used)) = {};
 static int nr_token __attribute__((used))  = 0;
 
 void print(Token t){
@@ -157,7 +157,10 @@ static bool make_token(char *e) {
 
     if (i == NR_REGEX) {
       printf("no match at position %d\n%s\n%*.s^\n", position, e, position, "");
-      // assert(0);
+      if(e[position]>='a' && e[position]<='z') assert(0);
+      if(e[position]>='A' && e[position]<='Z') assert(0);
+      if(e[position]>='0' && e[position]<='9') assert(0);
+      if(e[position] == '$') assert(0);
       return false;
     }
   }
