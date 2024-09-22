@@ -160,6 +160,10 @@ static bool make_token(char *e) {
       if(e[position]>='a' && e[position]<='z') {
         if(e[position+1] >= 'a' && e[position+1]<='z') assert(0);
         if(e[position+1] >= '0' && e[position+1]<='9') assert(0);
+        if(e[position+1] == ' ') assert(0);
+        if(e[position+1] == '\0') assert(0);
+        if(position && e[position-1] >= 'a' && e[position-1] <= 'z') assert(0);
+        if(position && e[position-1] >= '0' && e[position-1] <= '9') assert(0);
         assert(0);
       }
       return false;
