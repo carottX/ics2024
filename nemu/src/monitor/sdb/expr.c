@@ -61,7 +61,7 @@ static struct rule {
 	{"/", TK_DIV},
   {"\\|", TK_BITOR},
   {"(\\$\\w+)|(\\$\\$0)", TK_REG},
-  {"0x[0-9]+", TK_HEX},
+  {"0[xX][0-9a-fA-F]+", TK_HEX},
   {"[0-9]+", TK_NUM},
   {"\\(", TK_PAR_L},
 	{"\\)", TK_PAR_R}
