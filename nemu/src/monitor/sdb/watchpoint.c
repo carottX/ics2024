@@ -63,11 +63,11 @@ WP* new_wp(char* exp){
   return head;
 }
 
-void free_wp(WP* wp){
+void free_wp(int id){
   WP* now;
   WP* pre = NULL;
   for(now = head; now != NULL; now = now->next){
-    if (now == wp){
+    if (now->NO == id){
       if (pre != NULL) {
         pre -> next = now -> next;
         now -> next = free_;

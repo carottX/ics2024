@@ -25,6 +25,7 @@ void init_regex();
 void init_wp_pool();
 void WP_display();
 struct WP* new_wp(char* exp);
+void free_wp(int id);
 uint8_t* guest_to_host(paddr_t gaddr);
 
 /* We use the `readline' library to provide more flexibility to read from stdin. */
@@ -120,6 +121,17 @@ static int cmd_w(char *args){
   return 0;
 }
 
+static int cmd_d(char *args){
+  char* arg1 = strtok(NULL, " ");
+	if (arg1 == NULL) {
+		printf("Missing Arguments\n");
+		return 0;
+	}
+  int num = strtol(arg1, NULL, 10);
+  free_wp(num);
+  return 0;
+}
+
 static int cmd_help(char *args);
 
 static struct {
@@ -134,7 +146,8 @@ static struct {
 	{ "info", "Print the status of registers or watchpoints", cmd_info},
 	{ "x", "Query about consective N bytes of memory", cmd_x},
   { "p", "Calculate expression.", cmd_p},
-  { "w", "Add watchpoints", cmd_w}
+  { "w", "Add watchpoints", cmd_w},
+  { "d", "Delete watchpoints", cmd_d}
   /* TODO: Add more commands */
 
 };
