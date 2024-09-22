@@ -244,6 +244,7 @@ word_t eval(int start, int end){
   else{
     bool success = true;
     int mid = find_main_op(start, end, &success);
+    printf("Main OP position = %d\n", mid+1);
     if (success){
       word_t val1 = eval(start, mid-1);
       word_t val2 = eval(mid+1, end);
