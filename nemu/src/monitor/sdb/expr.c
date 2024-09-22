@@ -150,39 +150,12 @@ static bool make_token(char *e) {
 						tokens[nr_token].type = rules[i].token_type;
 						nr_token ++ ;
         }
-
         break;
       }
     }
 
     if (i == NR_REGEX) {
       printf("no match at position %d\n%s\n%*.s^\n", position, e, position, "");
-      if(e[position]=='x') {
-        if(position && e[position-1] == '0' ) {
-          if(position>=2 && e[position-2] >= '0' && e[position-2] <= '9') assert(0);
-          else if(position>=2 && e[position-2] == '$') assert(0);
-          else if(position < 2) assert(0);
-          assert(0);
-        }
-        assert(0);
-      }
-      else if(e[position]>='a' && e[position]<='z'){
-        if(position && e[position-1]=='0'){
-          if(position>=2 && e[position-2] == '$') assert(0);
-          if(position>=2 && e[position-2] >= '0' && e[position-2] <= '9') assert(0);
-          if(position>=2 && e[position-2] >= 'a' && e[position-2] <= 'z') assert(0);
-          assert(0);
-        }
-        else if(position && e[position-1] >= '0' && e[position-1] <='9'){
-          if(position>=2 && e[position-2] == '$') assert(0);
-          if(position>=2 && e[position-2] >= '0' && e[position-2] <= '9') assert(0);
-          if(position>=2 && e[position-2] >= 'a' && e[position-2] <= 'z') assert(0);
-          assert(0);
-        }
-        assert(0);
-      }
-      assert(0);
-
       return false;
     }
   }
