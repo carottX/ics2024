@@ -166,7 +166,7 @@ static bool make_token(char *e) {
         }
         assert(0);
       }
-      else{
+      else if(e[position]>='a' && e[position]<='z'){
         if(position && e[position-1]=='0'){
           if(position>=2 && e[position-2] == '$') assert(0);
           if(position>=2 && e[position-2] >= '0' && e[position-2] <= '9') assert(0);
@@ -181,6 +181,7 @@ static bool make_token(char *e) {
         }
         assert(0);
       }
+      assert(0);
 
       return false;
     }
