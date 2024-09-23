@@ -24,7 +24,7 @@
 
 enum {
   TYPE_I, TYPE_U, TYPE_S, TYPE_J, TYPE_R,
-  TYPE_N, // none
+  TYPE_N, TYPE_B,// none
 };
 
 #define src1R() do { *src1 = R(rs1); } while (0)
@@ -32,9 +32,10 @@ enum {
 #define immI() do { *imm = SEXT(BITS(i, 31, 20), 12); } while(0)
 #define immU() do { *imm = SEXT(BITS(i, 31, 12), 20) << 12; } while(0)
 #define immS() do { *imm = (SEXT(BITS(i, 31, 25), 7) << 5) | BITS(i, 11, 7); } while(0)
-#define immJ() do { uint32_t __x = ((((SEXT(BITS(i,31,31),1) << 8) | BITS(i,19, 12))<<1) | BITS(i, 20, 20)); \
-*imm = ((__x)<<10 | BITS(i,30,21)) << 1;} while(0)
-// #define immR() do { } while(0)
+#define immJ() do { uint64_t __x = ((((SEXT(BITS(i,31,31),1) << 8) | BITS(i,19, 12))<<1) | BITS(i, 20, 20)); \
+*imm = ((__x<<10) | BITS(i,30,21)) << 1;} while(0)
+#define immB() do { uint64_t __x = ((SEXT(BITS(i, 31, 31), 1) << 1) | BITS(i, 7, 7));\
+*imm = (((__x<<6) | BITS(i,30,25)) << 4) | BITS(i,11,8);} while(0)
 
 static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_t *imm, int type) {
   uint32_t i = s->isa.inst.val;
@@ -47,6 +48,7 @@ static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_
     case TYPE_S: src1R(); src2R(); immS(); break;
     case TYPE_J: src1R();          immJ(); break;
     case TYPE_R: src1R(); src2R();         break;
+    case TYPE_B: src1R(); src2R(); immB(); break;
   }
 }
 
@@ -74,6 +76,7 @@ static int decode_exec(Decode *s) {
   INSTPAT("0100000 ????? ????? 000 ????? 01100 11", SUB    , R, R(rd) = src1 - src2);
   INSTPAT("0000000 ????? ????? 001 ????? 01100 11", SLL    , R, R(rd) = src1 << (src2 & 31));
   INSTPAT("0000000 ????? ????? 011 ????? 01100 11", SLTU   , R, R(rd) = (src2 != src1));
+  INSTPAT("??????? ????? ????? 000 ????? 11000 11", BEQ    , B, s->dnpc=((src1 == src2) ? (s->pc + SEXT(imm,12)) : s->snpc));
 
   INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak , N, NEMUTRAP(s->pc, R(10))); // R(10) is $a0
   INSTPAT("??????? ????? ????? ??? ????? ????? ??", inv    , N, INV(s->pc));
