@@ -32,8 +32,8 @@ enum {
 #define immI() do { *imm = SEXT(BITS(i, 31, 20), 12); } while(0)
 #define immU() do { *imm = SEXT(BITS(i, 31, 12), 20) << 12; } while(0)
 #define immS() do { *imm = SEXT(((BITS(i, 31, 25) << 5) | BITS(i, 11, 7)), 12); } while(0)
-#define immJ() do { uint32_t __x = ((((SEXT(BITS(i,31,31),1) << 8) | BITS(i,19, 12))<<1) | BITS(i, 20, 20)); \
-*imm = ((__x<<10) | BITS(i,30,21)) << 1;} while(0)
+#define immJ() do { uint32_t ___x = ((((BITS(i,31,31) << 8) | BITS(i,19, 12))<<1) | BITS(i, 20, 20)); \
+*imm = SEXT(((___x<<10) | BITS(i,30,21)) << 1, 20);} while(0)
 #define immB() do { uint32_t ___x = ((BITS(i, 31, 31) << 1) | BITS(i, 7, 7));\
 *imm = SEXT((((((___x<<6) | BITS(i,30,25)) << 4) | BITS(i,11,8))<<1), 13);} while(0)
 
