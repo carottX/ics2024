@@ -30,7 +30,9 @@ static inline word_t host_read(void *addr, int len) {
 
 static inline void host_write(void *addr, int len, word_t data) {
   switch (len) {
-    case 1: *(uint8_t  *)addr = data; return;
+    case 1: 
+    printf("data=%u data&31=%u\n", data, data&31);
+    *(uint8_t  *)addr = data; return;
     case 2: *(uint16_t *)addr = data; return;
     case 4: *(uint32_t *)addr = data; return;
     IFDEF(CONFIG_ISA64, case 8: *(uint64_t *)addr = data; return);
