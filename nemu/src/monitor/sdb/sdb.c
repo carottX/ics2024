@@ -242,6 +242,8 @@ void sdb_mainloop() {
 }
 
 void init_sdb() {
+  rbuf.read = 0;
+  rbuf.write = 0;
   /* Compile the regular expressions. */
   init_regex();
 
