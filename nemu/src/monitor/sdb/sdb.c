@@ -28,6 +28,28 @@ struct WP* new_wp(char* exp);
 void free_wp(int id);
 uint8_t* guest_to_host(paddr_t gaddr);
 
+#define RING_MAX_SIZE 30
+
+struct iringbuf{
+  char buf[RING_MAX_SIZE][128];
+  int read, write;
+}rbuf;
+
+bool ring_is_full(){
+  return (rbuf.write+1)%RING_MAX_SIZE == rbuf.read;
+}
+void add_inst(const char* s){
+  strcpy(rbuf.buf[rbuf.write], s);
+  if(ring_is_full()) rbuf.read++;
+  rbuf.write++;
+}
+
+void output_ring(){
+  for(int i=rbuf.read; i!=rbuf.write; i=(i+1)%RING_MAX_SIZE){
+    printf("%s\n",rbuf.buf[i]);
+  }
+}
+
 /* We use the `readline' library to provide more flexibility to read from stdin. */
 static char* rl_gets() {
   static char *line_read = NULL;
