@@ -47,7 +47,7 @@ void add_inst(const char* s){
 void output_ring(){
   for(int i=rbuf.read; i!=rbuf.write; i=(i+1)%RING_MAX_SIZE){
     if((i+1)%RING_MAX_SIZE == rbuf.write) printf("--> ");
-    else printf("   ");
+    else printf("    ");
     printf("%s\n",rbuf.buf[i]);
   }
 }
