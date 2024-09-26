@@ -26,6 +26,8 @@
 #define MAX_INST_TO_PRINT 100
 
 void WP_monitor();
+void add_inst(const char* s);
+
 
 CPU_state cpu = {};
 uint64_t g_nr_guest_inst = 0;
@@ -48,7 +50,6 @@ static void exec_once(Decode *s, vaddr_t pc) {
   s->snpc = pc;
   isa_exec_once(s);
   cpu.pc = s->dnpc;
-#ifdef CONFIG_ITRACE
   char *p = s->logbuf;
   p += snprintf(p, sizeof(s->logbuf), FMT_WORD ":", s->pc);
   int ilen = s->snpc - s->pc;
@@ -63,13 +64,10 @@ static void exec_once(Decode *s, vaddr_t pc) {
   space_len = space_len * 3 + 1;
   memset(p, ' ', space_len);
   p += space_len;
-  puts(s->logbuf);
   void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
   disassemble(p, s->logbuf + sizeof(s->logbuf) - p,
       MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, ilen);
-  puts(s->logbuf);
-
-#endif
+  add_inst(s->logbuf);
 }
 
 static void execute(uint64_t n) {
