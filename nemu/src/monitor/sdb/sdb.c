@@ -28,7 +28,7 @@ struct WP* new_wp(char* exp);
 void free_wp(int id);
 uint8_t* guest_to_host(paddr_t gaddr);
 
-#define RING_MAX_SIZE 30
+#define RING_MAX_SIZE 20
 
 struct iringbuf{
   char buf[RING_MAX_SIZE][128];
@@ -46,6 +46,8 @@ void add_inst(const char* s){
 
 void output_ring(){
   for(int i=rbuf.read; i!=rbuf.write; i=(i+1)%RING_MAX_SIZE){
+    if((i+1)%RING_MAX_SIZE == rbuf.write) printf("--> ");
+    else printf("   ");
     printf("%s\n",rbuf.buf[i]);
   }
 }
