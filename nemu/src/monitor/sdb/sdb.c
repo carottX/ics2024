@@ -40,8 +40,8 @@ bool ring_is_full(){
 }
 void add_inst(const char* s){
   strcpy(rbuf.buf[rbuf.write], s);
-  if(ring_is_full()) rbuf.read++;
-  rbuf.write++;
+  if(ring_is_full()) rbuf.read = (rbuf.read+1)%RING_MAX_SIZE;
+  rbuf.write = (rbuf.write+1)%RING_MAX_SIZE;
 }
 
 void output_ring(){
