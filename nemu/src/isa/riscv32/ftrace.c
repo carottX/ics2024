@@ -12,10 +12,10 @@ static int sym_l = 0;
 void trace_func_call(uint32_t pc, uint32_t target){
     for(int i=0; i<sym_l; ++i){
         if(sym[i].addr == target){
-            printf("0x%u:", pc);
+            printf("0x%x:", pc);
             for(int j=0; j<indent*2; ++j) printf(" ");
             ++indent;
-            printf("call [%s@0x%u]\n", sym[i].name, sym[i].addr);
+            printf("call [%s@0x%x]\n", sym[i].name, sym[i].addr);
             return;
         }
     }
