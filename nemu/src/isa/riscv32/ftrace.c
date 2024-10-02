@@ -32,7 +32,7 @@ void trace_func_ret(uint32_t pc, uint32_t target){
             return;
         }
     }
-    printf("[WARNING] Ret addr %u not found at pc=%u\n", target, pc);
+    printf("[WARNING] Ret addr %x not found at pc=%x\n", target, pc);
 }
 
 Symbol* get_sym(const char* filep){
