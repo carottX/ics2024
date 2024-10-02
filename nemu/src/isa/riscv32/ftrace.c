@@ -6,7 +6,7 @@
 #include <cpu/ftrace.h>
 
 static Symbol* sym = NULL;
-static int indent = 0;
+static int indent = 1;
 static int sym_l = 0;
 
 void trace_func_call(uint32_t pc, uint32_t target){
@@ -20,6 +20,19 @@ void trace_func_call(uint32_t pc, uint32_t target){
         }
     }
     printf("[WARNING] Target func addr %u not found at pc=%u\n", target, pc);
+}
+
+void trace_func_ret(uint32_t pc, uint32_t target){
+    for(int i=0; i<sym_l; ++i){
+        if(sym[i].addr == target){
+            printf("0x%x:", pc);
+            for(int j=0; j<indent*2; ++j) printf(" ");
+            --indent;
+            printf("ret [%s]\n", sym[i].name);
+            return;
+        }
+    }
+    printf("[WARNING] Ret addr %u not found at pc=%u\n", target, pc);
 }
 
 Symbol* get_sym(const char* filep){
