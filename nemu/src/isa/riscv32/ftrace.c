@@ -26,8 +26,8 @@ void trace_func_ret(uint32_t pc, uint32_t target){
     for(int i=0; i<sym_l; ++i){
         if(sym[i].addr <= target && sym[i].addr + sym[i].size > target){
             printf("0x%x:", pc);
-            for(int j=0; j<indent*2; ++j) printf(" ");
             --indent;
+            for(int j=0; j<indent*2; ++j) printf(" ");
             printf("ret [%s]\n", sym[i].name);
             return;
         }
