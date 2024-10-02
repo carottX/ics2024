@@ -86,7 +86,7 @@ static int parse_args(int argc, char *argv[]) {
   // }
   int o;
   while ( (o = getopt_long(argc, argv, "-bhle:d:p:", table, NULL)) != -1) {
-    puts(optarg);
+    printf("%s\n",optarg);
     switch (o) {
       case 'b': sdb_set_batch_mode(); break;
       case 'p': sscanf(optarg, "%d", &difftest_port); break;
