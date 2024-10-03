@@ -81,9 +81,9 @@ static int parse_args(int argc, char *argv[]) {
     {"help"     , no_argument      , NULL, 'h'},
     {0          , 0                , NULL,  0 },
   };
-  for(int _=0; _<argc;++_){
-    printf("Processing args:%d %s\n", _, argv[_]);
-  }
+  // for(int _=0; _<argc;++_){
+  //   printf("Processing args:%d %s\n", _, argv[_]);
+  // }
   int o;
   while ( (o = getopt_long(argc, argv, "-bhl:d:p:e:", table, NULL)) != -1) {
     // printf("%s\n",optarg);
