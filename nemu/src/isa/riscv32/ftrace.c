@@ -108,6 +108,5 @@ Symbol* get_sym(const char* filep){
 
 void init_ftrace(const char* filep){
     sym = get_sym(filep);
-    assert(sym!=NULL);
 }
 
