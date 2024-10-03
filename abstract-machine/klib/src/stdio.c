@@ -6,14 +6,15 @@
 
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 
+static char print_buf[1024];
+
 int printf(const char *fmt, ...) {
-  char* tmp = malloc((strlen(fmt)+100)*sizeof(char));
   va_list args;
   va_start(args, fmt);
-  sprintf(tmp, fmt, args);
+  sprintf(print_buf, fmt, args);
   va_end(args);
-  for(int i=0; tmp[i]; ++i){
-    putch(tmp[i]);
+  for(int i=0; print_buf[i]; ++i){
+    putch(print_buf[i]);
   }
   return 0;
 }
