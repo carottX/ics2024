@@ -27,8 +27,8 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
   int width = -1;
   while((c=*(fmt++))){
     if(c=='%' || entered){
+      if(!entered)c=*(fmt++);
       entered = true;
-      c=*(fmt++);
       switch(c){
         case 'd':
           int tmp = va_arg(ap, int);
@@ -70,7 +70,6 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
             }
             fmt--;
           }
-          entered = true;
           break;
       }
     }
