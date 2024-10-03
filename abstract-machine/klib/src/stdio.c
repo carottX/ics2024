@@ -46,6 +46,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
           i += strlen(s);
           break;
         default:
+        assert(0);
           return i; //Error!
       }
     }
