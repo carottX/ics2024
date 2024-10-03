@@ -20,7 +20,7 @@ void trace_func_call(uint32_t pc, uint32_t target){
             return;
         }
     }
-    fprintf(stderr,"[WARNING] Target func addr %u not found at pc=%u\n", target, pc);
+    fprintf(stderr,"[WARNING] Target func addr 0x%x not found at pc=0x%x\n", target, pc);
 }
 
 void trace_func_ret(uint32_t pc, uint32_t target){
