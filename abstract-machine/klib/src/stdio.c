@@ -38,7 +38,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
           }
           int cnt2 = 0;
           cnt = (width==-1?cnt:(cnt>width?cnt:width));
-          putch(padding);
+          if(width>0)putch(width);
           for(int ii=0;ii<cnt;++ii) out[i+ii] = padding;
           while(tmp){
             ++cnt2;
