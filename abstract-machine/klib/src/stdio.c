@@ -27,6 +27,8 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
   char padding = ' ';
   int width = -1;
   while((c=*(fmt++))){
+    putch(c);
+    putch('\n');
     if(c=='%' || entered){
       if(!entered)c=*(fmt++);
       entered = true;
