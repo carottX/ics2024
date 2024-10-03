@@ -27,8 +27,6 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
   char padding = ' ';
   int width = -1;
   while((c=*(fmt++))){
-    putch(c);
-    putch('\n');
     if(c=='%' || entered){
       if(!entered)c=*(fmt++);
       entered = true;
@@ -55,9 +53,6 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
           break;
         case 's':
           char* s = va_arg(ap, char*);
-          putch('!');
-          putstr(s);
-          putch('\n');
           int diff = width-strlen(s);
           for(int ii=0;ii<diff;++ii)out[i+ii] = padding;
           if(diff>0) i+=diff;
