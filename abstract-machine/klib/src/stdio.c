@@ -20,6 +20,7 @@ int printf(const char *fmt, ...) {
 }
 
 int vsprintf(char *out, const char *fmt, va_list ap) {
+  putstr(fmt);
   char c;
   size_t i=0;
   bool entered = true;
@@ -52,7 +53,6 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
           break;
         case 's':
           char* s = va_arg(ap, char*);
-          assert(s);
           putch('!');
           putstr(s);
           putch('\n');
