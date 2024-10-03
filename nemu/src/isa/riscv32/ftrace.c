@@ -10,6 +10,7 @@ static int indent = 1;
 static int sym_l = 0;
 
 void trace_func_call(uint32_t pc, uint32_t target){
+    if(sym == NULL) return;
     for(int i=0; i<sym_l; ++i){
         if(sym[i].addr == target){
             printf("0x%x:", pc);
@@ -23,6 +24,7 @@ void trace_func_call(uint32_t pc, uint32_t target){
 }
 
 void trace_func_ret(uint32_t pc, uint32_t target){
+    if(sym == NULL) return;
     for(int i=0; i<sym_l; ++i){
         if(sym[i].addr <= target && sym[i].addr + sym[i].size > target){
             printf("0x%x:", pc);
@@ -38,7 +40,11 @@ void trace_func_ret(uint32_t pc, uint32_t target){
 Symbol* get_sym(const char* filep){
     Symbol *symbol = NULL;
     FILE* fp = fopen(filep,"rb");
-    assert(fp);
+    // assert(fp);
+    if(!fp){
+        printf("[Warning] Elf file not find, ftrace is unavailable!\n");
+        return NULL;
+    }
     Elf32_Ehdr header;
     if(fread(&header, sizeof(Elf32_Ehdr),1, fp) <= 0) {
         printf("Failed to read the elf head!\n");
