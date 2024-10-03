@@ -5,12 +5,14 @@
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 
 size_t strlen(const char *s) {
+  if(s==NULL) return 0;
   size_t i = 0;
   while(s[i]!='\0')i++;
   return i;
 }
 
 char *strcpy(char *dst, const char *src) {
+  if(dst==NULL || src==NULL) return dst;
   size_t i = 0;
   while(src[i] != '\0') {
     dst[i] = src[i];
@@ -21,6 +23,7 @@ char *strcpy(char *dst, const char *src) {
 }
 
 char *strncpy(char *dst, const char *src, size_t n) {
+  if(dst==NULL || src==NULL) return dst;
   size_t i = 0;
   while(i<n && src[i] != '\0') {
     dst[i] = src[i];
@@ -33,6 +36,7 @@ char *strncpy(char *dst, const char *src, size_t n) {
 }
 
 char *strcat(char *dst, const char *src) {
+  if(dst==NULL || src==NULL) return dst;
   size_t _offset = 0;
   for(; dst[_offset] != '\0'; ++_offset);
   size_t i = 0;
