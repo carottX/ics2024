@@ -52,6 +52,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
           break;
         case 's':
           char* s = va_arg(ap, char*);
+          assert(s);
           putch('!');
           putstr(s);
           putch('\n');
