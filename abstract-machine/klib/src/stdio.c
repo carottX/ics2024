@@ -36,10 +36,11 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
           while(ttmp){
             cnt++, ttmp/=10;
           }
+          if(tmp==0) cnt=1;
           int cnt2 = 0;
           cnt = (width==-1?cnt:(cnt>width?cnt:width));
           for(int ii=0;ii<cnt;++ii) out[i+ii] = padding;
-          while(tmp){
+          while(cnt2<cnt){
             ++cnt2;
             out[i+cnt-cnt2] = tmp%10 + '0';
             tmp/=10;
