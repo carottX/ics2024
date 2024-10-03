@@ -22,8 +22,12 @@ int printf(const char *fmt, ...) {
 int vsprintf(char *out, const char *fmt, va_list ap) {
   char c;
   size_t i=0;
+  bool entered = true;
+  char padding = ' ';
+  int width = -1;
   while((c=*(fmt++))){
-    if(c=='%'){
+    if(c=='%' || entered){
+      entered = true;
       c=*(fmt++);
       switch(c){
         case 'd':
@@ -33,21 +37,41 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
             cnt++, ttmp/=10;
           }
           int cnt2 = 0;
+          cnt = (width==-1?cnt:(cnt>width?cnt:width));
+          for(int ii=0;ii<cnt;++ii) out[i+ii] = padding;
           while(tmp){
             ++cnt2;
             out[i+cnt-cnt2] = tmp%10 + '0';
             tmp/=10;
           }
           i+=cnt;
+          entered = false;
+          padding = ' ';
+          width = -1;
           break;
         case 's':
           char* s = va_arg(ap, char*);
+          int diff = width-strlen(s);
+          for(int ii=0;ii<diff;++ii)out[i+ii] = padding;
+          if(diff>0) i+=diff;
           strcpy(out+i, s);
           i += strlen(s);
+          entered = false;
+          padding = ' ';
+          width = -1;
           break;
         default:
-        assert(0);
-          return i; //Error!
+          if(c=='0') {padding = '0';c=*(fmt++);}
+          if(c>='0'&&c<='9'){
+            width = 0;
+            while(c>='0'&&c<='9'){
+              width = width*10+c-'0';
+              c=*(fmt++);
+            }
+            fmt--;
+          }
+          entered = true;
+          break;
       }
     }
     else{
