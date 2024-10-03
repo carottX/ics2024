@@ -14,7 +14,7 @@ void trace_func_call(uint32_t pc, uint32_t target){
     for(int i=0; i<sym_l; ++i){
         if(sym[i].addr == target){
             fprintf(stderr, "0x%x:", pc);
-            for(int j=0; j<indent*2; ++j) printf(" ");
+            for(int j=0; j<indent*2; ++j) fprintf(stderr," ");
             ++indent;
             fprintf(stderr,"call [%s@0x%x]\n", sym[i].name, sym[i].addr);
             return;
@@ -29,7 +29,7 @@ void trace_func_ret(uint32_t pc, uint32_t target){
         if(sym[i].addr <= target && sym[i].addr + sym[i].size > target){
             fprintf(stderr,"0x%x:", pc);
             --indent;
-            for(int j=0; j<indent*2; ++j) printf(" ");
+            for(int j=0; j<indent*2; ++j) fprintf(stderr," ");
             fprintf(stderr,"ret [%s]\n", sym[i].name);
             return;
         }
