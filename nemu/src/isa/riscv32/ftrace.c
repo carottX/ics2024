@@ -13,28 +13,28 @@ void trace_func_call(uint32_t pc, uint32_t target){
     if(sym == NULL) return;
     for(int i=0; i<sym_l; ++i){
         if(sym[i].addr == target){
-            printf("0x%x:", pc);
+            fprintf(stderr, "0x%x:", pc);
             for(int j=0; j<indent*2; ++j) printf(" ");
             ++indent;
-            printf("call [%s@0x%x]\n", sym[i].name, sym[i].addr);
+            fprintf(stderr,"call [%s@0x%x]\n", sym[i].name, sym[i].addr);
             return;
         }
     }
-    printf("[WARNING] Target func addr %u not found at pc=%u\n", target, pc);
+    fprintf(stderr,"[WARNING] Target func addr %u not found at pc=%u\n", target, pc);
 }
 
 void trace_func_ret(uint32_t pc, uint32_t target){
     if(sym == NULL) return;
     for(int i=0; i<sym_l; ++i){
         if(sym[i].addr <= target && sym[i].addr + sym[i].size > target){
-            printf("0x%x:", pc);
+            fprintf(stderr,"0x%x:", pc);
             --indent;
             for(int j=0; j<indent*2; ++j) printf(" ");
-            printf("ret [%s]\n", sym[i].name);
+            fprintf(stderr,"ret [%s]\n", sym[i].name);
             return;
         }
     }
-    printf("[WARNING] Ret addr %x not found at pc=%x\n", target, pc);
+    fprintf(stderr,"[WARNING] Ret addr %x not found at pc=%x\n", target, pc);
 }
 
 Symbol* get_sym(const char* filep){
