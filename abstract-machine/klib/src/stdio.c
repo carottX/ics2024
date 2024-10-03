@@ -27,7 +27,6 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
       c=*(fmt++);
       switch(c){
         case 'd':
-          putch('!');
           int tmp = va_arg(ap, int);
           int cnt = 0, ttmp = tmp;
           while(ttmp){
