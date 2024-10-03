@@ -35,6 +35,7 @@ int sprintf(char *out, const char *fmt, ...) {
       c=*(fmt++);
       switch(c){
         case 'd':
+          putch('!');
           int tmp = va_arg(argptr, int);
           int cnt = 0, ttmp = tmp;
           while(ttmp){
