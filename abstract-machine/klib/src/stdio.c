@@ -23,7 +23,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
   putstr(fmt);
   char c;
   size_t i=0;
-  bool entered = true;
+  bool entered = false;
   char padding = ' ';
   int width = -1;
   while((c=*(fmt++))){
