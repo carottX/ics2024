@@ -11,7 +11,7 @@ static char print_buf[1024];
 int printf(const char *fmt, ...) {
   va_list args;
   va_start(args, fmt);
-  sprintf(print_buf, fmt, args);
+  vsprintf(print_buf, fmt, args);
   va_end(args);
   for(int i=0; print_buf[i]; ++i){
     putch(print_buf[i]);
@@ -20,23 +20,15 @@ int printf(const char *fmt, ...) {
 }
 
 int vsprintf(char *out, const char *fmt, va_list ap) {
-  panic("Not implemented");
-}
-
-int sprintf(char *out, const char *fmt, ...) {
-  // printf("%s\n",fmt);
-  // putchar(fmt[0]);
-  size_t i = 0;
   char c;
-  va_list argptr;
-  va_start(argptr, fmt);
+  size_t i=0;
   while((c=*(fmt++))){
     if(c=='%'){
       c=*(fmt++);
       switch(c){
         case 'd':
           putch('!');
-          int tmp = va_arg(argptr, int);
+          int tmp = va_arg(ap, int);
           int cnt = 0, ttmp = tmp;
           while(ttmp){
             cnt++, ttmp/=10;
@@ -50,7 +42,7 @@ int sprintf(char *out, const char *fmt, ...) {
           i+=cnt;
           break;
         case 's':
-          char* s = va_arg(argptr, char*);
+          char* s = va_arg(ap, char*);
           strcpy(out+i, s);
           i += strlen(s);
           break;
@@ -64,8 +56,15 @@ int sprintf(char *out, const char *fmt, ...) {
     }
   }
   out[i] = '\0';
+  return i;
+}
+
+int sprintf(char *out, const char *fmt, ...) {
+  va_list argptr;
+  va_start(argptr, fmt);
+  int ret=vsprintf(out, fmt, argptr);
   va_end(argptr);
-  return 0;
+  return ret;
 }
 
 int snprintf(char *out, size_t n, const char *fmt, ...) {
