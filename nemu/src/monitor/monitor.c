@@ -138,7 +138,7 @@ void init_monitor(int argc, char *argv[]) {
   init_sdb();
 
   /* Initialize function tracing.  */
-  init_ftrace(elf_file);
+  IFDEF(CONFIG_FTRACE,init_ftrace(elf_file));
 
   IFDEF(CONFIG_ITRACE, init_disasm());
 

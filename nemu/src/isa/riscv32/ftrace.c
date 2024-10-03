@@ -93,7 +93,7 @@ Symbol* get_sym(const char* filep){
                     strncpy(symbol[func_num].name, name, sizeof(symbol[func_num].name)-1);
                     symbol[func_num].addr = sym.st_value;
                     symbol[func_num].size = sym.st_size;
-                    printf("%s 0x%x %lu\n", symbol[func_num].name, symbol[func_num].addr, symbol[func_num].size);
+                    //printf("%s 0x%x %lu\n", symbol[func_num].name, symbol[func_num].addr, symbol[func_num].size);
                     func_num++;
                 }
             }
