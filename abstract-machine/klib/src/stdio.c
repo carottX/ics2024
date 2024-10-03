@@ -7,7 +7,15 @@
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 
 int printf(const char *fmt, ...) {
-  panic("Not implemented");
+  char* tmp = malloc((strlen(fmt)+100)*sizeof(char));
+  va_list args;
+  va_start(args, fmt);
+  sprintf(tmp, fmt, args);
+  va_end(args);
+  for(int i=0; tmp[i]; ++i){
+    putch(tmp[i]);
+  }
+  return 0;
 }
 
 int vsprintf(char *out, const char *fmt, va_list ap) {
@@ -38,6 +46,21 @@ int sprintf(char *out, const char *fmt, ...) {
             tmp/=10;
           }
           i+=cnt;
+          break;
+        case 'u':
+          unsigned int tmpu = va_arg(argptr, unsigned int);
+          int cntu = 0;
+          unsigned int ttmpu = tmpu;
+          while(ttmpu){
+            cntu++, ttmpu/=10;
+          }
+          int cnt2u = 0;
+          while(tmpu){
+            ++cnt2u;
+            out[i+cntu-cnt2u] = tmpu%10 + '0';
+            tmpu/=10;
+          }
+          i+=cntu;
           break;
         case 's':
           char* s = va_arg(argptr, char*);
