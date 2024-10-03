@@ -20,7 +20,7 @@ int printf(const char *fmt, ...) {
 }
 
 int vsprintf(char *out, const char *fmt, va_list ap) {
-  putstr(fmt);
+  // putstr(fmt);
   char c;
   size_t i=0;
   bool entered = false;
