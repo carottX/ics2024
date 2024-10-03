@@ -48,21 +48,6 @@ int sprintf(char *out, const char *fmt, ...) {
           }
           i+=cnt;
           break;
-        case 'u':
-          unsigned int tmpu = va_arg(argptr, unsigned int);
-          int cntu = 0;
-          unsigned int ttmpu = tmpu;
-          while(ttmpu){
-            cntu++, ttmpu/=10;
-          }
-          int cnt2u = 0;
-          while(tmpu){
-            ++cnt2u;
-            out[i+cntu-cnt2u] = tmpu%10 + '0';
-            tmpu/=10;
-          }
-          i+=cntu;
-          break;
         case 's':
           char* s = va_arg(argptr, char*);
           strcpy(out+i, s);
