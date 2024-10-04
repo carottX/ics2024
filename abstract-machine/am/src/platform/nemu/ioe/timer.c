@@ -2,16 +2,16 @@
 #include <nemu.h>
 #include <klib.h>
 
+uint64_t boot_time;
+
 void __am_timer_init() {
-  outl(RTC_ADDR,0);
-  outl(RTC_ADDR+4,0);
+  boot_time = (uint64_t)inl(RTC_ADDR) + ((uint64_t)inl(RTC_ADDR+4)<<32);
 }
 
 void __am_timer_uptime(AM_TIMER_UPTIME_T *uptime) {
   // printf("%u\n", inl());
-  uint64_t high = (uint64_t)inl(RTC_ADDR+4);
-  uint64_t low = (uint64_t)inl(RTC_ADDR);
-  uptime->us = (high<<32)+low;
+  uint64_t now = (uint64_t)inl(RTC_ADDR)| ((uint64_t)inl(RTC_ADDR+4)<<32);
+  uptime->us = now-boot_time;
   // outl(RTC_ADDR, uptime->us+500);
 }
 
