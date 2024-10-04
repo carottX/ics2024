@@ -3,6 +3,7 @@
 #include <klib-macros.h>
 #include <stdarg.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 
@@ -19,13 +20,17 @@ int printf(const char *fmt, ...) {
   return 0;
 }
 
+// char* 
+
 int vsprintf(char *out, const char *fmt, va_list ap) {
   // putstr(fmt);
+  // assert(0);
   char c;
   size_t i=0;
   bool entered = false;
   char padding = ' ';
   int width = -1;
+  
   while((c=*(fmt++))){
     if(c=='%' || entered){
       if(!entered)c=*(fmt++);
@@ -58,6 +63,13 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
           if(diff>0) i+=diff;
           strcpy(out+i, s);
           i += strlen(s);
+          entered = false;
+          padding = ' ';
+          width = -1;
+          break;
+        case 'c':
+          char cc = va_arg(ap, int);
+          out[i++] = cc;
           entered = false;
           padding = ' ';
           width = -1;
