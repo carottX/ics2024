@@ -74,6 +74,12 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
           padding = ' ';
           width = -1;
           break;
+        case '%':
+          out[i++] = c;
+          entered = false;
+          padding = ' ';
+          width = -1;
+          break;
         default:
           if(c=='0') {padding = '0';c=*(fmt++);}
           if(c>='0'&&c<='9'){
