@@ -30,7 +30,36 @@ enum {
 
 static uint8_t *sbuf = NULL;
 static uint32_t *audio_base = NULL;
-static void audio_play(void *userdata, uint8_t *stream, int len);
+
+static uint32_t audio_read(uint8_t *stream, int len){
+  printf("Reading %d:\n",len);
+  uint32_t count = audio_base[reg_count];
+  int rlen = len;
+  if(count < rlen) rlen = count;
+  int i;
+  uint32_t size = audio_base[reg_sbuf_size];
+  uint32_t writep = audio_base[reg_start];
+  if(writep == size) {audio_base[reg_start] = 0;writep = 0;}
+  uint32_t cnt_t = size-writep;
+  if(cnt_t < rlen) rlen = cnt_t;
+  for(i=0; i<rlen; ++i) stream[i] = sbuf[i+writep];
+  audio_base[reg_start] += rlen;
+  audio_base[reg_count] -= rlen;
+  return rlen;
+}
+
+static void audio_play(void *userdata, uint8_t *stream, int len){
+  int nread = 0;
+  int count = audio_base[reg_count];
+  if(count < nread) nread = count;
+  int b = 0;
+  while(b < nread){
+    b+= audio_read(stream+b, nread-b);
+  }
+  if(len > nread){
+    memset(stream+nread, 0, len-nread);
+  }
+}
 
 static void audio_io_handler(uint32_t offset, int len, bool is_write) {
   assert(offset%4==0);
@@ -62,36 +91,6 @@ static void audio_io_handler(uint32_t offset, int len, bool is_write) {
     break;
     default:
     printf("[Error]Unknown audio register:%d\n", offset/4);
-  }
-}
-
-static uint32_t audio_read(uint8_t *stream, int len){
-  printf("Reading %d:\n",len);
-  uint32_t count = audio_base[reg_count];
-  int rlen = len;
-  if(count < rlen) rlen = count;
-  int i;
-  uint32_t size = audio_base[reg_sbuf_size];
-  uint32_t writep = audio_base[reg_start];
-  if(writep == size) {audio_base[reg_start] = 0;writep = 0;}
-  uint32_t cnt_t = size-writep;
-  if(cnt_t < rlen) rlen = cnt_t;
-  for(i=0; i<rlen; ++i) stream[i] = sbuf[i+writep];
-  audio_base[reg_start] += rlen;
-  audio_base[reg_count] -= rlen;
-  return rlen;
-}
-
-static void audio_play(void *userdata, uint8_t *stream, int len){
-  int nread = 0;
-  int count = audio_base[reg_count];
-  if(count < nread) nread = count;
-  int b = 0;
-  while(b < nread){
-    b+= audio_read(stream+b, nread-b);
-  }
-  if(len > nread){
-    memset(stream+nread, 0, len-nread);
   }
 }
 
