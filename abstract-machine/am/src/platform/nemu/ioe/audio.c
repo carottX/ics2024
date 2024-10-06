@@ -21,7 +21,7 @@ static int try_write(uint8_t* stream, uint32_t len){
   for(i=0; i<wlen; ++i){
     outb((i+count)%size + start, stream[i]);
   }
-  outl(AUDIO_COUNT_ADDR, count+wlen);
+  outl(AUDIO_COUNT_ADDR, inl(AUDIO_COUNT_ADDR)+wlen);
   return wlen;
 }
 
