@@ -38,24 +38,20 @@ static uint32_t audio_read(uint8_t *stream, int len){
   if(count < rlen) rlen = count;
   uint32_t size = audio_base[reg_sbuf_size];
   uint32_t writep = audio_base[reg_start];
-  if(writep == size) {audio_base[reg_start] = 0;writep = 0;}
   uint32_t cnt_t = size-writep;
-  if(cnt_t < rlen) rlen = cnt_t;
-  SDL_MixAudio(stream,sbuf+writep,rlen, SDL_MIX_MAXVOLUME);
+  if(cnt_t >= rlen) SDL_MixAudio(stream, sbuf+writep, rlen, SDL_MIX_MAXVOLUME);
+  else {
+    SDL_MixAudio(stream, sbuf+writep, cnt_t, SDL_MIX_MAXVOLUME);
+    SDL_MixAudio(stream+cnt_t, sbuf, rlen-cnt_t, SDL_MIX_MAXVOLUME);
+  }
   audio_base[reg_start] += rlen;
+  audio_base[reg_start] %= size;
   audio_base[reg_count] -= rlen;
   return rlen;
 }
 
 static void audio_play(void *userdata, uint8_t *stream, int len){
-  int nread = len;
-  int count = audio_base[reg_count];
-  if(count < nread) nread = count;
-  int b = 0;
-  while(b < nread){
-    printf("%d %d\n",b,nread);
-    b += audio_read(stream+b, nread-b);
-  }
+  int nread = audio_read(stream, len);
   // printf("nread=%d len=%d\n",nread,len);
   printf("start=%d count=%d\n",audio_base[reg_start],audio_base[reg_count]);
   if(len > nread){
