@@ -49,7 +49,7 @@ static uint32_t audio_read(uint8_t *stream, int len){
 
 static void audio_play(void *userdata, uint8_t *stream, int len){
   printf("HELLO?");
-  int nread = 0;
+  int nread = len;
   int count = audio_base[reg_count];
   if(count < nread) nread = count;
   int b = 0;
