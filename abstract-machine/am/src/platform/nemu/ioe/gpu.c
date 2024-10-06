@@ -22,7 +22,14 @@ void __am_gpu_config(AM_GPU_CONFIG_T *cfg) {
 
 void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
   if (ctl->sync) {
+    int ww = io_read(AM_GPU_CONFIG).width/32;  
     outl(SYNC_ADDR, 1);
+    uint32_t* px = ctl->pixels;
+    for(int i=0; i<ctl->w; ++i){
+      for(int j=0; j<ctl->h; ++j){
+        outl(FB_ADDR+ww*(ctl->y+j)+i, px[j*ctl->w+i]);
+      }
+    }
   }
 }
 
