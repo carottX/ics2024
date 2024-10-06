@@ -20,7 +20,7 @@ static int try_write(uint8_t* stream, uint32_t len){
   printf("start=%d count=%d wlen=%d size=%d\n",first,count, wlen, size);
   if(wlen == 0) return 0;
   for(i=0; i<wlen; ++i){
-    outb((first+i)%size + start, stream[i]);
+    outb((first+i+count)%size + start, stream[i]);
   }
   outl(AUDIO_COUNT_ADDR, count+wlen);
   return wlen;
