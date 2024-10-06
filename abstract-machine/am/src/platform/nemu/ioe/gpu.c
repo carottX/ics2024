@@ -31,11 +31,11 @@ void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
   if (ctl->sync) {  
     outl(SYNC_ADDR, 1);
   }
-  int hh = io_read(AM_GPU_CONFIG).height;  
+  int ww = io_read(AM_GPU_CONFIG).width;  
   uint32_t* px = ctl->pixels;
   for(int i=0; i<ctl->w; ++i){
     for(int j=0; j<ctl->h; ++j){
-      outl((uintptr_t)FB_ADDR+(hh*(ctl->x+i)+ctl->y+j)*sizeof(uint32_t), px[j*ctl->w+i]);
+      outl((uintptr_t)FB_ADDR+(ww*(ctl->y+j)+ctl->x+i)*sizeof(uint32_t), px[j*ctl->w+i]);
     }
   }
 }
