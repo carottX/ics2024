@@ -72,13 +72,13 @@ static inline void update_screen() {
 #endif
 
 void vga_update_screen() {
-  // TODO: call `update_screen()` when the sync register is non-zero,
+  // NODO: call `update_screen()` when the sync register is non-zero,
   // then zero out the sync register
-  IFDEF(CONFIG_TARGET_AM,bool sync = io_read(AM_GPU_STATUS).ready;\
-  if(sync) {\
-    update_screen();\
-    io_write(AM_GPU_STATUS, false);\
-  })
+  bool sync = vgactl_port_base[1];
+  if(sync){
+    update_screen();
+    vgactl_port_base[1] = 0;
+  }
 }
 
 void init_vga() {
