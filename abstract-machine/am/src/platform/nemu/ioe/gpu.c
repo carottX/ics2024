@@ -26,7 +26,7 @@ void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
     int ww = io_read(AM_GPU_CONFIG).width/32;  
     outl(SYNC_ADDR, 1);
     uint32_t* px = ctl->pixels;
-    printf("%d %d\n", ctl->w, ctl->h);
+    printf("%d %d %d %d\n", ctl->x, ctl->y, ctl->w, ctl->h);
     for(int i=0; i<ctl->w; ++i){
       for(int j=0; j<ctl->h; ++j){
         outl((uintptr_t)FB_ADDR+ww*(ctl->y+j)+i, px[j*ctl->w+i]);
