@@ -21,7 +21,6 @@ static int try_write(uint8_t* stream, uint32_t len){
   if(wlen == 0) return 0;
   for(i=0; i<wlen; ++i){
     uint32_t p = start+(i+count+first)%size;
-    // printf("Writing to %u \n",p);
     outb(p, stream[i]);
   }
   outl(AUDIO_COUNT_ADDR, inl(AUDIO_COUNT_ADDR)+wlen);
