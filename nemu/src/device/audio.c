@@ -41,8 +41,9 @@ static void audio_read(uint8_t *stream, int len){
   uint32_t cnt_t = size-writep;
   if(cnt_t >= rlen) SDL_MixAudio(stream, sbuf+writep, rlen, SDL_MIX_MAXVOLUME);
   else {
+    printf("HELLO?\n");
     SDL_MixAudio(stream, sbuf+writep, cnt_t, SDL_MIX_MAXVOLUME);
-    SDL_MixAudio(stream+cnt_t, sbuf+cnt_t, rlen-cnt_t, SDL_MIX_MAXVOLUME);
+    SDL_MixAudio(stream+cnt_t, sbuf, rlen-cnt_t, SDL_MIX_MAXVOLUME);
   }
   audio_base[reg_start] += rlen;
   audio_base[reg_start] %= size;
