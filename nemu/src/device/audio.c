@@ -36,13 +36,12 @@ static uint32_t audio_read(uint8_t *stream, int len){
   uint32_t count = audio_base[reg_count];
   int rlen = len;
   if(count < rlen) rlen = count;
-  int i;
   uint32_t size = audio_base[reg_sbuf_size];
   uint32_t writep = audio_base[reg_start];
   if(writep == size) {audio_base[reg_start] = 0;writep = 0;}
   uint32_t cnt_t = size-writep;
   if(cnt_t < rlen) rlen = cnt_t;
-  for(i=0; i<rlen; ++i) stream[i] = sbuf[i+writep];
+  SDL_MixAudio(stream,sbuf+writep,rlen, SDL_MIX_MAXVOLUME);
   audio_base[reg_start] += rlen;
   audio_base[reg_count] -= rlen;
   return rlen;
