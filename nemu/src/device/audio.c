@@ -42,14 +42,12 @@ static uint32_t audio_read(uint8_t *stream, int len){
   uint32_t cnt_t = size-writep;
   if(cnt_t < rlen) rlen = cnt_t;
   SDL_MixAudio(stream,sbuf+writep,rlen, SDL_MIX_MAXVOLUME);
-  // for(int i=0;i<rlen;++i) stream[i] = sbuf[writep+i];
   audio_base[reg_start] += rlen;
   audio_base[reg_count] -= rlen;
   return rlen;
 }
 
 static void audio_play(void *userdata, uint8_t *stream, int len){
-  // printf("HELLO?");
   int nread = len;
   int count = audio_base[reg_count];
   if(count < nread) nread = count;
@@ -59,6 +57,7 @@ static void audio_play(void *userdata, uint8_t *stream, int len){
     b += audio_read(stream+b, nread-b);
   }
   // printf("nread=%d len=%d\n",nread,len);
+  printf("start=%d count=%d\n",audio_base[reg_start],audio_base[reg_count]);
   if(len > nread){
     memset(stream+nread, 0, len-nread);
   }
