@@ -26,6 +26,7 @@ static int try_write(uint8_t* stream, uint32_t len){
 }
 
 static void audio_write(uint8_t* stream, int len){
+  printf("Writing %d\n",len);
   int b = 0;
   while(b < len){
     b+=try_write(stream+b, len-b);
