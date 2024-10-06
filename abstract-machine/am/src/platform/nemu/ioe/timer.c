@@ -5,12 +5,12 @@
 uint64_t boot_time;
 
 void __am_timer_init() {
-  boot_time = (uint64_t)inl(RTC_ADDR) + ((uint64_t)inl(RTC_ADDR+4)<<32);
+  boot_time = ((uint64_t)inl(RTC_ADDR+4)<<32)+inl(RTC_ADDR);
 }
 
 void __am_timer_uptime(AM_TIMER_UPTIME_T *uptime) {
   // printf("%u\n", inl());
-  uint64_t now = (uint64_t)inl(RTC_ADDR)| ((uint64_t)inl(RTC_ADDR+4)<<32);
+  uint64_t now = ((uint64_t)inl(RTC_ADDR+4)<<32) | inl(RTC_ADDR);
   uptime->us = now-boot_time;
   // outl(RTC_ADDR, uptime->us+500);
 }
