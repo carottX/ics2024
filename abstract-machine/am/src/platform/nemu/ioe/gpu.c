@@ -16,9 +16,11 @@ void __am_gpu_init() {
 
 void __am_gpu_config(AM_GPU_CONFIG_T *cfg) {
   printf("?");
+  int width = inl(VGACTL_ADDR)>>16;
+  int height = inl(VGACTL_ADDR)&0xffff;
   *cfg = (AM_GPU_CONFIG_T) {
     .present = true, .has_accel = false,
-    .width = 0, .height = 0,
+    .width = width, .height = height,
     .vmemsz = 0
   };
 }
