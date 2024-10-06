@@ -32,7 +32,7 @@ static uint8_t *sbuf = NULL;
 static uint32_t *audio_base = NULL;
 
 static uint32_t audio_read(uint8_t *stream, int len){
-  printf("Reading %d:\n",len);
+  // printf("Reading %d:\n",len);
   uint32_t count = audio_base[reg_count];
   int rlen = len;
   if(count < rlen) rlen = count;
@@ -53,7 +53,7 @@ static uint32_t audio_read(uint8_t *stream, int len){
 static void audio_play(void *userdata, uint8_t *stream, int len){
   int nread = audio_read(stream, len);
   // printf("nread=%d len=%d\n",nread,len);
-  printf("start=%d count=%d\n",audio_base[reg_start],audio_base[reg_count]);
+  // printf("start=%d count=%d\n",audio_base[reg_start],audio_base[reg_count]);
   if(len > nread){
     memset(stream+nread, 0, len-nread);
   }
@@ -70,7 +70,7 @@ static void audio_io_handler(uint32_t offset, int len, bool is_write) {
     case reg_sbuf_size:
     break;
     case reg_start:
-    printf("Changed start!\n");
+    // printf("Changed start!\n");
     break;
     case reg_count:
     break;
