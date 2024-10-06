@@ -41,8 +41,10 @@ static void audio_io_handler(uint32_t offset, int len, bool is_write) {
     case reg_channels:
     case reg_samples:
     case reg_sbuf_size:
-    case reg_count:
     case reg_start:
+    break;
+    case reg_count:
+    printf("Counted!\n");
     break;
     case reg_init:
     SDL_AudioSpec s = {};
