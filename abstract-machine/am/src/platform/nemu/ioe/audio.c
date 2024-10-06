@@ -46,7 +46,6 @@ void __am_audio_ctrl(AM_AUDIO_CTRL_T *ctrl) {
   outl(AUDIO_CHANNELS_ADDR, ctrl->channels);
   outl(AUDIO_FREQ_ADDR, ctrl->freq);
   __am_audio_init();
-
 }
 
 void __am_audio_status(AM_AUDIO_STATUS_T *stat) {
@@ -55,5 +54,5 @@ void __am_audio_status(AM_AUDIO_STATUS_T *stat) {
 
 void __am_audio_play(AM_AUDIO_PLAY_T *ctl) {
   int len = ctl->buf.end - ctl->buf.start;
-  audio_write(ctl->buf.end, len);
+  audio_write(ctl->buf.start, len);
 }
