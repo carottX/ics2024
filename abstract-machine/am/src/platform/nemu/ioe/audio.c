@@ -16,7 +16,7 @@ static int try_write(uint8_t* stream, uint32_t len){
   uint32_t size = inl(AUDIO_SBUF_SIZE_ADDR);
   uint32_t start = AUDIO_SBUF_ADDR;
   if(count+wlen > size) wlen = size-count;
-  printf("count=%d wlen=%d size=%d\n",count, wlen, size);
+  // printf("count=%d wlen=%d size=%d\n",count, wlen, size);
   if(wlen == 0) return 0;
   for(i=0; i<wlen; ++i){
     outb((i+count)%size + start, stream[i]);
@@ -34,7 +34,6 @@ static void audio_write(uint8_t* stream, int len){
 }
 
 void __am_audio_init() {
-  outl(AUDIO_INIT_ADDR,1);
 }
 
 void __am_audio_config(AM_AUDIO_CONFIG_T *cfg) {
@@ -46,7 +45,7 @@ void __am_audio_ctrl(AM_AUDIO_CTRL_T *ctrl) {
   outl(AUDIO_SAMPLES_ADDR, ctrl->samples);
   outl(AUDIO_CHANNELS_ADDR, ctrl->channels);
   outl(AUDIO_FREQ_ADDR, ctrl->freq);
-  __am_audio_init();
+  outl(AUDIO_INIT_ADDR,1);
 }
 
 void __am_audio_status(AM_AUDIO_STATUS_T *stat) {
