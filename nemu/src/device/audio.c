@@ -48,12 +48,13 @@ static uint32_t audio_read(uint8_t *stream, int len){
 }
 
 static void audio_play(void *userdata, uint8_t *stream, int len){
-  printf("HELLO?");
+  // printf("HELLO?");
   int nread = 0;
   int count = audio_base[reg_count];
   if(count < nread) nread = count;
   int b = 0;
   while(b < nread){
+    printf("%d %d\n",b,nread);
     b+= audio_read(stream+b, nread-b);
   }
   if(len > nread){
@@ -85,7 +86,6 @@ static void audio_io_handler(uint32_t offset, int len, bool is_write) {
     s.userdata = NULL;
     int ret = SDL_InitSubSystem(SDL_INIT_AUDIO);
     if (ret == 0) {
-      printf("SHIT!\n");
       SDL_OpenAudio(&s, NULL);
       SDL_PauseAudio(0);
     }
