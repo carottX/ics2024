@@ -28,7 +28,7 @@ void __am_gpu_config(AM_GPU_CONFIG_T *cfg) {
 
 void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
   if (ctl->sync) {
-    int ww = io_read(AM_GPU_CONFIG).width/32;  
+    int ww = io_read(AM_GPU_CONFIG).width;  
     outl(SYNC_ADDR, 1);
     uint32_t* px = ctl->pixels;
     // printf("%d %d %d %d\n", ctl->x, ctl->y, ctl->w, ctl->h);
