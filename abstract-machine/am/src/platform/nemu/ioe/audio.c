@@ -16,6 +16,7 @@ static int try_write(uint8_t* stream, uint32_t len){
   uint32_t size = inl(AUDIO_SBUF_SIZE_ADDR);
   uint32_t first = inl(AUDIO_START_ADDR);
   uint32_t start = AUDIO_SBUF_ADDR;
+  printf("count=%d wlen=%d size=%d\n",count, wlen, size);
   if(count+wlen > size) wlen = size-count;
   if(wlen == 0) return 0;
   for(i=0; i<wlen; ++i){
