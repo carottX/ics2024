@@ -85,6 +85,7 @@ static void audio_io_handler(uint32_t offset, int len, bool is_write) {
     s.userdata = NULL;
     int ret = SDL_InitSubSystem(SDL_INIT_AUDIO);
     if (ret == 0) {
+      printf("SHIT!\n");
       SDL_OpenAudio(&s, NULL);
       SDL_PauseAudio(0);
     }
