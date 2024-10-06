@@ -28,13 +28,12 @@ void __am_gpu_config(AM_GPU_CONFIG_T *cfg) {
 
 void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
   if (ctl->sync) {
-    int ww = io_read(AM_GPU_CONFIG).width;  
+    int hh = io_read(AM_GPU_CONFIG).height;  
     outl(SYNC_ADDR, 1);
     uint32_t* px = ctl->pixels;
-    // printf("%d %d %d %d\n", ctl->x, ctl->y, ctl->w, ctl->h);
     for(int i=0; i<ctl->w; ++i){
       for(int j=0; j<ctl->h; ++j){
-        outl((uintptr_t)FB_ADDR+ww*(ctl->x+i)+j, px[j*ctl->w+i]);
+        outl((uintptr_t)FB_ADDR+hh*(ctl->x+i)+j, px[i*ctl->h+j]);
       }
     }
   }
