@@ -56,6 +56,26 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
           padding = ' ';
           width = -1;
           break;
+        case 'u':
+          uint32_t tmpu = va_arg(ap, uint32_t);
+          uint32_t cntu = 0, ttmpu = tmpu;
+          while(ttmpu){
+            cntu++, ttmpu/=10;
+          }
+          if(tmpu==0) cntu=1;
+          uint32_t cnt2u = 0;
+          cntu = (width==-1?cntu:(cntu>width?cntu:width));
+          for(int ii=0;ii<cntu;++ii) out[i+ii] = padding;
+          while(cnt2u<cntu){
+            ++cnt2u;
+            out[i+cntu-cnt2u] = tmpu%10 + '0';
+            tmpu/=10;
+          }
+          i+=cntu;
+          entered = false;
+          padding = ' ';
+          width = -1;
+          break;
         case 's':
           char* s = va_arg(ap, char*);
           int diff = width-strlen(s);
