@@ -42,7 +42,7 @@ static uint32_t audio_read(uint8_t *stream, int len){
   if(cnt_t >= rlen) SDL_MixAudio(stream, sbuf+writep, rlen, SDL_MIX_MAXVOLUME);
   else {
     SDL_MixAudio(stream, sbuf+writep, cnt_t, SDL_MIX_MAXVOLUME);
-    SDL_MixAudio(stream+cnt_t, sbuf+cnt_t, rlen-cnt_t, SDL_MIX_MAXVOLUME);
+    SDL_MixAudio(stream+cnt_t, sbuf, rlen-cnt_t, SDL_MIX_MAXVOLUME);
   }
   audio_base[reg_start] += rlen;
   audio_base[reg_start] %= size;
@@ -75,6 +75,7 @@ static void audio_io_handler(uint32_t offset, int len, bool is_write) {
     case reg_count:
     break;
     case reg_init:
+    if(audio_base[reg_init] == 1){
     SDL_AudioSpec s = {};
     s.freq = audio_base[reg_freq];
     s.format = AUDIO_S16SYS;
@@ -87,7 +88,7 @@ static void audio_io_handler(uint32_t offset, int len, bool is_write) {
       SDL_OpenAudio(&s, NULL);
       SDL_PauseAudio(0);
     }
-    audio_base[reg_init] = 0;
+    audio_base[reg_init] = 0;}
     break;
     default:
     printf("[Error]Unknown audio register:%d\n", offset/4);
