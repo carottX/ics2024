@@ -34,6 +34,7 @@ static void audio_play(void *userdata, uint8_t *stream, int len);
 
 static void audio_io_handler(uint32_t offset, int len, bool is_write) {
   assert(offset%4==0);
+  printf("%d\n", audio_base[reg_count]);
   // printf("0x%x %d %d\n",offset, len, is_write);
   switch(offset/4){
     case reg_freq:
