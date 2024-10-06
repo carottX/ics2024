@@ -19,8 +19,9 @@ static int try_write(uint8_t* stream, uint32_t len){
   // printf("count=%d wlen=%d size=%d\n",count, wlen, size);
   if(wlen == 0) return 0;
   for(i=0; i<wlen; ++i){
-    printf("Writing to 0x%x\n",start+(i+count)%size);
-    outb(start+(i+count)%size, stream[i]);
+    uint32_t p = start+(i+count)%size;
+    printf("Writing to 0x%x \n",p);
+    outb(p, stream[i]);
   }
   outl(AUDIO_COUNT_ADDR, inl(AUDIO_COUNT_ADDR)+wlen);
   return wlen;
