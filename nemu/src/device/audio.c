@@ -38,8 +38,7 @@ static void audio_read(uint8_t *stream, int len){
   uint32_t size = audio_base[reg_sbuf_size];
   uint32_t writep = audio_base[reg_start];
   uint32_t cnt_t = size-writep;
-  memset(stream+rlen,0,len-rlen);
-
+  memset(stream,0,len);
   if(cnt_t >= rlen) {
     SDL_MixAudio(stream, sbuf+writep, rlen, SDL_MIX_MAXVOLUME);
   }
