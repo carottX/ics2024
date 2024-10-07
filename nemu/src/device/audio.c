@@ -32,16 +32,16 @@ static uint8_t *sbuf = NULL;
 static uint32_t *audio_base = NULL;
 
 static void audio_read(uint8_t *stream, int len){
-  SDL_memset(stream,0,len);
   uint32_t count = audio_base[reg_count];
   int rlen = len;
   if(count < rlen) rlen = count;
   uint32_t size = audio_base[reg_sbuf_size];
   uint32_t writep = audio_base[reg_start];
   uint32_t cnt_t = size-writep;
+  SDL_memset(stream+rlen,0,len-rlen);
+
   if(cnt_t >= rlen) {
     SDL_MixAudio(stream, sbuf+writep, rlen, SDL_MIX_MAXVOLUME);
-    // memcpy(stream, sbuf+writep, rlen);
   }
   else {
     // printf("len=%d count=%d size=%d writep=%d cnt_t=%d\n",len, count,size,writep,cnt_t);
@@ -52,12 +52,6 @@ static void audio_read(uint8_t *stream, int len){
   }
   audio_base[reg_start] += rlen;
   if(audio_base[reg_start]>size)audio_base[reg_start] -= size;
-      printf("?");
-
-  if(cnt_t < rlen){
-    printf("?");
-    assert(audio_base[reg_start] == rlen-cnt_t);
-  }
   audio_base[reg_count] -= rlen;
   // if(len > rlen){
   //   memset(stream+rlen, 0, len-rlen);
