@@ -32,7 +32,7 @@ static uint8_t *sbuf = NULL;
 static uint32_t *audio_base = NULL;
 
 static void audio_read(uint8_t *stream, int len){
-  memset(stream,0,len);
+  SDL_memset(stream,0,len);
   uint32_t count = audio_base[reg_count];
   int rlen = len;
   if(count < rlen) rlen = count;
@@ -93,7 +93,6 @@ static void audio_io_handler(uint32_t offset, int len, bool is_write) {
       SDL_OpenAudio(&s, NULL);
       SDL_PauseAudio(0);
     }
-    // audio_base[reg_count] = 0;
     audio_base[reg_init] = 0;}
     break;
     default:
