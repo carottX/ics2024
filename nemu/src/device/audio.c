@@ -52,6 +52,8 @@ static void audio_read(uint8_t *stream, int len){
   }
   audio_base[reg_start] += rlen;
   if(audio_base[reg_start]>size)audio_base[reg_start] -= size;
+      printf("?");
+
   if(cnt_t < rlen){
     printf("?");
     assert(audio_base[reg_start] == rlen-cnt_t);
