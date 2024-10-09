@@ -63,6 +63,8 @@ LINKAGE   = $(OBJS) \
     $(addsuffix /build/, $(addprefix $(AM_HOME)/, $(LIBS))), \
     $(LIBS) ))
 
+$(info LINKAGE)
+
 
 ## 3. General Compilation Flags
 
