@@ -18,6 +18,7 @@ idx = data.find(str.encode(placeholder))
 if idx == -1:
     print("Error: placeholder not found!\n")
     exit(1)
+print(idx)
 fp.seek(idx)
 mainargs_pad = str.encode(mainargs)+ ((max_len - len(mainargs)) * str.encode("\0"))
 if len(mainargs_pad) != max_len:
