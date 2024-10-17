@@ -15,8 +15,6 @@
 
 #include <isa.h>
 
-extern void __am_asm_trap(void);
-
 
 word_t isa_raise_intr(word_t NO, vaddr_t epc) {
   /* TODO: Trigger an interrupt/exception with ``NO''.
