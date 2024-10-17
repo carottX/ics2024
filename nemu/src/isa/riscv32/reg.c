@@ -27,7 +27,11 @@ void isa_reg_display() {
 	for(int idx = 0; idx < 32; ++idx){
 		printf("%-20s%-20x%-20u\n", reg_name(idx), gpr(idx), gpr(idx)); 
 	}
-  printf("%-20s%-20x%-20u\n", "pc", cpu.pc, cpu.pc); 
+  printf("%-20s%-20x%-20u\n", "pc", cpu.pc, cpu.pc);
+  printf("%-20s%-20x%-20u\n", "mepc", cpu.mepc, cpu.mepc); 
+  printf("%-20s%-20x%-20u\n", "mstatus", cpu.mstatus, cpu.mstatus); 
+  printf("%-20s%-20x%-20u\n", "mcause", cpu.mcause, cpu.mcause); 
+
 }
 
 word_t isa_reg_str2val(const char *s, bool *success) {
