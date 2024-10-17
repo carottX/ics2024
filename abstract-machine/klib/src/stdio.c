@@ -40,8 +40,10 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
           int tmp = va_arg(ap, int);
           int cnt = 0, ttmp = tmp;
           while(ttmp){
+            putch(ttmp%10);
             cnt++, ttmp/=10;
           }
+          putch('\n');
           if(tmp==0) cnt=1;
           int cnt2 = 0;
           cnt = (width==-1?cnt:(cnt>width?cnt:width));
