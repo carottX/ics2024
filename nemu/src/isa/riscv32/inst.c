@@ -57,19 +57,11 @@ static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_
   }
 }
 
-void change_csr(int imm, int src1){
-  if(imm == 0x300) cpu.mstatus = src1; 
-  else if(imm == 0x341) cpu.mepc = src1; 
-  else if(imm == 0x342) cpu.mcause = src1; 
-  else if(imm == 0x305) cpu.mtvec = src1;
-  else assert(0);
-}
-
-void change_csr_2(int imm, int src1){
-  if(imm == 0x300) cpu.mstatus |= src1; 
-  else if(imm == 0x341) cpu.mepc |= src1; 
-  else if(imm == 0x342) cpu.mcause |= src1; 
-  else if(imm == 0x305) cpu.mtvec |= src1;
+vaddr_t* read_csr(int imm){
+  if(imm == 0x300) return &cpu.mstatus;
+  else if(imm == 0x341) return &cpu.mepc; 
+  else if(imm == 0x342) return &cpu.mcause;
+  else if(imm == 0x305) return &cpu.mtvec;
   else assert(0);
 }
 
@@ -143,8 +135,8 @@ static int decode_exec(Decode *s) {
   INSTPAT("??????? ????? ????? 100 ????? 11000 11", BLT    , B, s->dnpc=(((int32_t)src1 < (int32_t)src2) ? (s->pc + imm) : s->dnpc));
   INSTPAT("??????? ????? ????? 110 ????? 11000 11", bltu   , B, s->dnpc=(((uint32_t)src1 < (uint32_t)src2) ? (s->pc + imm) : s->dnpc));
 
-  INSTPAT("??????? ????? ????? 001 ????? 11100 11", csrrw  , I, assert(rd == 0); change_csr(imm, src1););
-  INSTPAT("??????? ????? ????? 010 ????? 11100 11", csrrs  , I, assert(rd == 0); change_csr_2(imm, src1););
+  INSTPAT("??????? ????? ????? 001 ????? 11100 11", csrrw  , I, if(rd) R(rd) = *read_csr(imm); *read_csr(imm) = src1;);
+  INSTPAT("??????? ????? ????? 010 ????? 11100 11", csrrs  , I, if(rd) R(rd) = *read_csr(imm); (*read_csr(imm)) |= src1;);
   INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall  , N, s->dnpc=isa_raise_intr(isa_reg_str2val("a7",NULL),s->pc);); // R(10) is $a0
 
   INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak , N, NEMUTRAP(s->pc, R(10))); // R(10) is $a0
