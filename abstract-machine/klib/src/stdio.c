@@ -38,12 +38,15 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
       switch(c){
         case 'd':
           int tmp = va_arg(ap, int);
+          bool is_neg = false;
+          if(tmp < 0) tmp = -tmp, is_neg = true;
+          if(is_neg) out[i++] = '-';
           int cnt = 0, ttmp = tmp;
           while(ttmp){
-            putch(ttmp%10);
+            // putch(ttmp%10);
             cnt++, ttmp/=10;
           }
-          putch('\n');
+          // putch('\n');
           if(tmp==0) cnt=1;
           int cnt2 = 0;
           cnt = (width==-1?cnt:(cnt>width?cnt:width));
