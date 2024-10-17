@@ -23,7 +23,7 @@ int printf(const char *fmt, ...) {
 // char* 
 
 int vsprintf(char *out, const char *fmt, va_list ap) {
-  // putstr(fmt);
+  putstr(fmt);
   // assert(0);
   char c;
   size_t i=0;
