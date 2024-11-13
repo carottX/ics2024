@@ -71,13 +71,13 @@ enum{
 
 void PrintEtrace(int type, int imm, int src1){
   static const char *type_name[4] = {"csrrw", "csrrs", "ecall", "mret"};
-  static const char *csr_name[4] = {"mstatus","mepc ","mcause","mtvec"};
+  static const char *csr_name[5] = {"mstatus","mepc ","mcause","mtvec", "xxxxx"};
   int csr_id = 0;
   if(imm == 0x300) csr_id = 0;
   else if(imm == 0x341) csr_id = 1;
   else if(imm == 0x342) csr_id = 2;
   else if(imm == 0x305) csr_id = 3;
-  else assert(0);
+  else csr_id = 4;
   printf("Name\t\t\t | CSR\t\t\t | rs1\t\t\n%s\t\t\t | %s\t\t | %d\n",type_name[type],csr_name[csr_id],(type == EtraceRet || type == EtraceCall ? -1 : src1));
 }
 
