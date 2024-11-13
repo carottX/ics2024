@@ -65,6 +65,22 @@ vaddr_t* read_csr(int imm){
   else assert(0);
 }
 
+enum{
+  EtraceR, EtraceW, EtraceRet, EtraceCall 
+}EtraceType;
+
+void PrintEtrace(int type, int imm, int src1){
+  static const char *type_name[4] = {"csrrw", "csrrs", "ecall", "mret"};
+  static const char *csr_name[4] = {"mstatus","mepc ","mcause","mtvec"};
+  int csr_id = 0;
+  if(imm == 0x300) csr_id = 0;
+  else if(imm == 0x341) csr_id = 1;
+  else if(imm == 0x342) csr_id = 2;
+  else if(imm == 0x305) csr_id = 3;
+  else assert(0);
+  printf("Name\t\t\t | CSR\t\t\t | rs1\t\t\n%s\t\t\t | %s\t\t | %d\n",type_name[type],csr_name[csr_id],(type == EtraceRet || type == EtraceCall ? -1 : src1));
+}
+
 static int decode_exec(Decode *s) {
   int rd = 0;
   word_t src1 = 0, src2 = 0, imm = 0;
@@ -135,11 +151,10 @@ static int decode_exec(Decode *s) {
   INSTPAT("??????? ????? ????? 100 ????? 11000 11", BLT    , B, s->dnpc=(((int32_t)src1 < (int32_t)src2) ? (s->pc + imm) : s->dnpc));
   INSTPAT("??????? ????? ????? 110 ????? 11000 11", bltu   , B, s->dnpc=(((uint32_t)src1 < (uint32_t)src2) ? (s->pc + imm) : s->dnpc));
 
-  INSTPAT("??????? ????? ????? 001 ????? 11100 11", csrrw  , I, if(rd) R(rd) = *read_csr(imm); *read_csr(imm) = src1;);
-  INSTPAT("??????? ????? ????? 010 ????? 11100 11", csrrs  , I, if(rd) R(rd) = *read_csr(imm); (*read_csr(imm)) |= src1;);
-  INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall  , N, s->dnpc=isa_raise_intr(isa_reg_str2val("a7",NULL),s->pc);); // R(10) is $a0
-
-  INSTPAT("0011000 00010 00000 000 00000 11100 11", mret   , I, s->dnpc=cpu.mepc; );
+  INSTPAT("??????? ????? ????? 001 ????? 11100 11", csrrw  , I, if(rd) R(rd) = *read_csr(imm); *read_csr(imm) = src1; PrintEtrace(EtraceW, imm, src1););
+  INSTPAT("??????? ????? ????? 010 ????? 11100 11", csrrs  , I, if(rd) R(rd) = *read_csr(imm); (*read_csr(imm)) |= src1; PrintEtrace(EtraceR, imm, src1););
+  INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall  , N, s->dnpc=isa_raise_intr(isa_reg_str2val("a7",NULL),s->pc); PrintEtrace(EtraceCall, imm, -1);); // R(10) is $a0
+  INSTPAT("0011000 00010 00000 000 00000 11100 11", mret   , I, s->dnpc=cpu.mepc; PrintEtrace(EtraceCall, imm, -1););
 
   INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak , N, NEMUTRAP(s->pc, R(10))); // R(10) is $a0
   INSTPAT("??????? ????? ????? ??? ????? ????? ??", inv    , N, INV(s->pc));
