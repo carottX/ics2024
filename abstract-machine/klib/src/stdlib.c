@@ -35,6 +35,7 @@ void *malloc(size_t size) {
   static bool reset = false;
   printf("SIZE=%d\n",size);
   printf("HEAP SIZE=%d\n",heap.end-heap.start);
+  printf("reset=%d\n",reset);
   if(!reset){
     reset = true;
     addr = heap.start;
