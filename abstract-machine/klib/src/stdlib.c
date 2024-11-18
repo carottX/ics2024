@@ -31,23 +31,10 @@ int atoi(const char* nptr) {
 
 
 void *malloc(size_t size) {
-  static uint8_t* addr;
-  static int malloc_reset = 0;
-  printf("SIZE=%d\n",size);
-  printf("HEAP SIZE=%d\n",heap.end-heap.start);
-  printf("reset=%d\n",malloc_reset);
-  if(!malloc_reset){
-    malloc_reset = 1;
-    addr = heap.start;
-  }
-    printf("HEAP SIZE=%d\n",(uint8_t*)heap.end-addr);
-
-  size = (size_t)ROUNDUP(size, 8);
-  addr += size;
-      printf("1:%d 2:%d\n",(uint8_t*)addr>=(uint8_t*)heap.start,(uint8_t*)addr<(uint8_t*)heap.end);
-
-  assert((uint8_t*)addr>=(uint8_t*)heap.start && (uint8_t*)addr<(uint8_t*)heap.end);
-  return addr-size;
+    static size_t tot_size = 0;
+    void* tmp = heap.start + tot_size;
+    tot_size += size;
+    return tmp;
 }
 
 void free(void *ptr) {
