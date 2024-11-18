@@ -37,7 +37,7 @@ void *malloc(size_t size) {
   printf("HEAP SIZE=%d\n",heap.end-heap.start);
   printf("reset=%d\n",malloc_reset);
   if(!malloc_reset){
-    malloc_reset = true;
+    malloc_reset = 1;
     addr = heap.start;
   }
     printf("HEAP SIZE=%d\n",(uint8_t*)heap.end-addr);
