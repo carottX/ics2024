@@ -38,6 +38,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
       *(uint8_t*)(heap.start + seg_viraddr + j) = 0;
     }
   }
+  printf("!!!\n");
   free(file);
   return 0;
 }
