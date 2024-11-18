@@ -33,7 +33,7 @@ static uint8_t* addr;
 static bool reset=false;
 
 void *malloc(size_t size) {
-  printf("%d\n",size);
+  printf("SIZE=%d\n",size);
   if(!reset){
     reset = true;
     addr = heap.start;
