@@ -39,10 +39,12 @@ void *malloc(size_t size) {
     reset = true;
     addr = heap.start;
   }
-    // printf("HEAP SIZE=%d\n",(uint8_t*)heap.end-addr);
+    printf("HEAP SIZE=%d\n",(uint8_t*)heap.end-addr);
 
   size = (size_t)ROUNDUP(size, 8);
   addr += size;
+      printf("HEAP SIZE=%d\n",(uint8_t*)heap.end-addr);
+
   assert((uint8_t*)addr>=(uint8_t*)heap.start && (uint8_t*)addr<(uint8_t*)heap.end);
   return addr-size;
 }
