@@ -29,10 +29,10 @@ int atoi(const char* nptr) {
   return x;
 }
 
-static uint8_t* addr;
-static bool reset=false;
 
 void *malloc(size_t size) {
+  static uint8_t* addr;
+  static bool reset = false;
   printf("SIZE=%d\n",size);
   printf("HEAP SIZE=%d\n",heap.end-heap.start);
   if(!reset){
