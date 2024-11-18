@@ -36,6 +36,31 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
       if(!entered)c=*(fmt++);
       entered = true;
       switch(c){
+        case 'p':
+        out[i++] = '0';
+        out[i++] = 'x';
+        case 'x':
+          uintptr_t addr = va_arg(ap, uintptr_t);
+          int cntx = 0;
+          uintptr_t tmp_t=addr;
+          if(tmp_t == 0) cntx = 1;
+          while(tmp_t > 0) {
+            cntx++;
+            tmp_t /= 16;
+          }
+          tmp_t = addr;
+          int cnt2x = 0;
+          while(cnt2x < cntx) {
+            ++cnt2x;
+            if(tmp_t%16 < 10)out[i+cntx-cnt2x] = '0' + tmp_t%16;
+            else out[i+cntx-cnt2x] = 'a' + tmp_t%16 - 10;
+            tmp_t/=16;
+          }
+          i+=cntx;
+          entered = false;
+          padding = ' ';
+          width = -1;
+          break;
         case 'd':
           int tmp = va_arg(ap, int);
           bool is_neg = false;
