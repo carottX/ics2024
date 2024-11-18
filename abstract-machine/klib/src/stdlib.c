@@ -43,7 +43,7 @@ void *malloc(size_t size) {
 
   size = (size_t)ROUNDUP(size, 8);
   addr += size;
-      printf("HEAP SIZE=%d\n",(uint8_t*)heap.end-addr);
+      printf("1:%d 2:%d\n",(uint8_t*)addr>=(uint8_t*)heap.start,(uint8_t*)addr<(uint8_t*)heap.end);
 
   assert((uint8_t*)addr>=(uint8_t*)heap.start && (uint8_t*)addr<(uint8_t*)heap.end);
   return addr-size;
