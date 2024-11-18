@@ -34,6 +34,7 @@ size_t tot_size;
 
 void *malloc(size_t size) {
     printf("tot_size = %u\n", tot_size);
+    printf("tot_size addr = %p\n", &tot_size);
     // printf("0 should be= %u\n", 0);
     void* tmp = heap.start + tot_size;
     tot_size += size;
