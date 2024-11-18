@@ -91,7 +91,7 @@ void WP_display(){
   }
 }
 
-void WP_monitor(){
+void WP_monitor(vaddr_t dnpc){
   bool changed = false;
   for(WP* now = head; now!=NULL; now = now->next){
     bool suc = true;
@@ -100,6 +100,7 @@ void WP_monitor(){
     if(new_val != now->val){
       changed = true;
       printf("Watchpoint changed!\n");
+      printf("pc=0x%x\n",dnpc);
       printf("Watchpoint ID=%d Expression=%s:\n Old value = %u, New value = %u\n",now->NO, now->str, now->val, new_val);
     }
     now->val = new_val;

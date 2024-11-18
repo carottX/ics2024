@@ -25,7 +25,7 @@
  */
 #define MAX_INST_TO_PRINT 100
 
-void WP_monitor();
+void WP_monitor(vaddr_t dnpc);
 void add_inst(const char* s);
 void output_ring();
 
@@ -43,7 +43,7 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 #endif
   if (g_print_step) { IFDEF(CONFIG_ITRACE, puts(_this->logbuf)); }
   IFDEF(CONFIG_DIFFTEST, difftest_step(_this->pc, dnpc));
-  IFDEF(CONFIG_WATCHPOINT, WP_monitor());
+  IFDEF(CONFIG_WATCHPOINT, WP_monitor(dnpc));
 }
 
 static void exec_once(Decode *s, vaddr_t pc) {
