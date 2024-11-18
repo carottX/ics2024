@@ -14,10 +14,10 @@ size_t ramdisk_read(void *buf, size_t offset, size_t len);
 
 static uintptr_t loader(PCB *pcb, const char *filename) {
   size_t RamSize = get_ramdisk_size();
-  void* file = malloc(RamSize);
+  // void* file = malloc(RamSize);
   // ramdisk_read(file, 0, RamSize);
   printf("RAMSIZE=%d\n",RamSize);
-  free(file);
+  // free(file);
   return 0;
 }
 
