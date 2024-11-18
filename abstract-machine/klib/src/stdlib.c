@@ -30,8 +30,9 @@ int atoi(const char* nptr) {
 }
 
 
+size_t tot_size;
+
 void *malloc(size_t size) {
-    static size_t tot_size = 0;
     printf("tot_size = %u\n", tot_size);
     // printf("0 should be= %u\n", 0);
     void* tmp = heap.start + tot_size;
