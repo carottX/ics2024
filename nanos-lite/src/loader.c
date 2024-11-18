@@ -16,7 +16,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
   size_t RamSize = get_ramdisk_size();
   void* file = malloc(RamSize);
   // ramdisk_read(file, 0, RamSize);
-  printf("%d\n",RamSize);
+  printf("RAMSIZE=%d\n",RamSize);
   free(file);
   return 0;
 }
