@@ -32,6 +32,7 @@ int atoi(const char* nptr) {
 
 void *malloc(size_t size) {
     static size_t tot_size = 0;
+    printf("%u\n",tot_size);
     void* tmp = heap.start + tot_size;
     tot_size += size;
     return tmp;
