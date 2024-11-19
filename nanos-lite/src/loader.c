@@ -30,7 +30,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
     Elf_Phdr *seg_header = malloc(sizeof(Elf_Phdr));
     ramdisk_read(seg_header, ph_offset + i*entry_size, entry_size);
     if(seg_header->p_type != PT_LOAD) continue;
-    printf("LOADED!\n");
+    // printf("LOADED!\n");
     size_t seg_offset = seg_header->p_offset;
     size_t seg_viraddr = seg_header->p_vaddr;
     size_t seg_file_size = seg_header->p_filesz;
