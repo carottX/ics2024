@@ -108,7 +108,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
           break;
         case 's':
           char* s = va_arg(ap, char*);
-          putstr(s);
+          // putstr(s);
           int diff = width-strlen(s);
           for(int ii=0;ii<diff;++ii)out[i+ii] = padding;
           if(diff>0) i+=diff;
