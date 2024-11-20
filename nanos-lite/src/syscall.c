@@ -48,10 +48,16 @@ void sys_sbrk(Context* c){
 }
 
 void sys_read(Context* c){
+   #ifdef STRACE
+  printf("SYSCALL NAME=read\n" );
+  #endif
   c->GPRx = fs_read(c->GPR2, (void *)c->GPR3, c->GPR4);
 }
 
 void sys_write(Context* c){
+  #ifdef STRACE
+  printf("SYSCALL NAME=write\n" );
+  #endif
   if(c->GPR2 == 1 || c->GPR2 == 2){
     uint8_t* buf = (uint8_t*)c->GPR3;
     int len = c->GPR4;
@@ -62,14 +68,23 @@ void sys_write(Context* c){
 }
 
 void sys_lseek(Context* c){
+  #ifdef STRACE
+  printf("SYSCALL NAME=lseek\n" );
+  #endif
   c->GPRx = fs_lseek(c->GPR2, c->GPR3, c->GPR4);
 }
 
 void sys_open(Context* c){
+  #ifdef STRACE
+  printf("SYSCALL NAME=open\n" );
+  #endif
   c->GPRx = fs_open((void*)c->GPR2, c->GPR3, c->GPR4);
 }
 
 void sys_close(Context* c){
+  #ifdef STRACE
+  printf("SYSCALL NAME=close\n" );
+  #endif
   c->GPRx = fs_close(c->GPR2);
 }
 
