@@ -2,17 +2,17 @@
 #include <assert.h>
 
 int main() {
-  printf("Entering file-test....\n");
+  // printf("Entering file-test....\n");
   FILE *fp = fopen("/share/files/num", "r+");
-  printf("Passed 0th!\n");
+  // printf("Passed 0th!\n");
   assert(fp);
-  printf("Passed 1st!\n");
+  // printf("Passed 1st!\n");
 
   fseek(fp, 0, SEEK_END);
   long size = ftell(fp);
-  printf("size=%d\n",size);
+  // printf("size=%d\n",size);
   assert(size == 5000);
-  printf("Passed 2nd!\n");
+  // printf("Passed 2nd!\n");
 
   fseek(fp, 500 * 5, SEEK_SET);
   int i, n;
@@ -21,7 +21,7 @@ int main() {
     assert(n == i + 1);
   }
 
-  printf("Passed 3rd!\n");
+  // printf("Passed 3rd!\n");
 
   fseek(fp, 0, SEEK_SET);
   for (i = 0; i < 500; i ++) {
