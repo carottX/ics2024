@@ -30,6 +30,7 @@ void sys_exit(Context* c){
   #ifdef STRACE
   printf("SYSCALL NAME=exit\n" );
   #endif
+  printf("exit=%d\n", c->GPR2);
   halt(c->GPR2);
 }
 
@@ -38,7 +39,7 @@ void sys_write(Context* c){
   printf("SYSCALL NAME=write\n" );
   #endif
   int fd = c->GPR2;
-  printf("fd = %d len = %d\n", fd, c->GPR4);
+  // printf("fd = %d len = %d\n", fd, c->GPR4);
   if(fd == 1 || fd == 2) {
     uint8_t* buf = (uint8_t*)c->GPR3;
     int len = c->GPR4;
