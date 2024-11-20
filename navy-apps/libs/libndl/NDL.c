@@ -63,6 +63,7 @@ void NDL_OpenCanvas(int *w, int *h) {
   readnum(hh);
   screen_h = hh;
   screen_w = ww;
+  printf("ww=%d hh=%d\n",ww,hh);
   if(*w == 0 && *h == 0) *w = ww, *h = hh;
 }
 
