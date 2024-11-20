@@ -52,7 +52,13 @@ void sys_read(Context* c){
 }
 
 void sys_write(Context* c){
-  c->GPRx = fs_write(c->GPR2, (void *)c->GPR3, c->GPR4);
+  if(c->GPR2 == 1 || c->GPR2 == 2){
+    uint8_t* buf = (uint8_t*)c->GPR3;
+    int len = c->GPR4;
+    for(int i=0; i<len; ++i) putch(*(buf+i));
+    c->GPRx=len;
+  }
+  else c->GPRx = fs_write(c->GPR2, (void *)c->GPR3, c->GPR4);
 }
 
 void sys_lseek(Context* c){
