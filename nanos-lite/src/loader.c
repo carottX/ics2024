@@ -9,12 +9,19 @@
 # define Elf_Phdr Elf32_Phdr
 #endif
 
+int fs_open(const char *pathname, int flags, int mode);
+size_t fs_read(int fd, void *buf, size_t len);
+size_t fs_write(int fd, const void *buf, size_t len);
+size_t fs_lseek(int fd, size_t offset, int whence);
+int fs_close(int fd);
+
 size_t get_ramdisk_size();
 size_t ramdisk_read(void *buf, size_t offset, size_t len);
 
 static uintptr_t loader(PCB *pcb, const char *filename) {
+  int fd = fs_open(filename, 0, 0);
   Elf_Ehdr* elf = malloc(sizeof(Elf_Ehdr));
-  ramdisk_read(elf, 0, sizeof(Elf_Ehdr));
+  fs_read(fd, elf, sizeof(Elf_Ehdr));
 
   if(elf->e_ident[EI_MAG0] != ELFMAG0 ||
      elf->e_ident[EI_MAG1] != ELFMAG1 ||
@@ -39,6 +46,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
     memset((void*)seg_viraddr+seg_file_size, 0, seg_mem_size-seg_file_size);
   }
   // printf("!!!\n");
+  fs_close(fd);
   return elf->e_entry;
 }
 
