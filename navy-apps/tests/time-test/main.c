@@ -1,8 +1,9 @@
 #include <stdio.h>
 #include <assert.h>
 #include <sys/time.h>
+#include <NDL.h>
 
-uint32_t NDL_GetTicks();
+// uint32_t NDL_GetTicks();
 
 void test_gettimeofday(){
   struct timeval tv;
