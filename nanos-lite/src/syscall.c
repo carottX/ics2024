@@ -50,3 +50,10 @@ void sys_write(Context* c){
     c->GPRx = -1;
   }
 }
+
+void sys_sbrk(Context* c){
+  #ifdef STRACE
+  printf("SYSCALL NAME=sbrk\n" );
+  #endif
+  c->GPRx = 0;
+}

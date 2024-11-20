@@ -71,8 +71,12 @@ int _write(int fd, void *buf, size_t count) {
   return 0;
 }
 
+extern char end;
+
 void *_sbrk(intptr_t increment) {
-  return (void *)-1;
+  static void* brk_addr = &end;
+  brk_addr += increment;
+  return brk_addr - increment; 
 }
 
 int _read(int fd, void *buf, size_t count) {
