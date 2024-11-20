@@ -3,6 +3,7 @@
 typedef size_t (*ReadFn) (void *buf, size_t offset, size_t len);
 typedef size_t (*WriteFn) (const void *buf, size_t offset, size_t len);
 size_t ramdisk_read(void *buf, size_t offset, size_t len);
+size_t ramdisk_write(const void *buf, size_t offset, size_t len);
 
 typedef struct {
   char *name;
@@ -52,6 +53,20 @@ size_t fs_read(int fd, void *buf, size_t len){
   size_t ret = ramdisk_read(buf, file_table[fd].disk_offset + file_table[fd].p_offset, len);
   file_table[fd].p_offset += ret;
   return ret;
+}
+
+size_t fs_write(int fd, const void *buf, size_t len){
+  assert(file_table[fd].size >= len);
+  size_t ret = ramdisk_write(buf, file_table[fd].disk_offset + file_table[fd].p_offset, len);
+  file_table[fd].p_offset += ret;
+  return ret;
+}
+
+size_t fs_lseek(int fd,int offset, int whence){
+  if(whence == SEEK_CUR) return file_table[fd].p_offset += offset;
+  if(whence == SEEK_END) return file_table[fd].p_offset = file_table[fd].size + offset;
+  if(whence == SEEK_SET) return file_table[fd].p_offset = offset;
+  panic("Invalid whence!");
 }
 
 size_t fs_close(int fd){
