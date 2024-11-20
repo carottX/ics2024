@@ -21,16 +21,19 @@ void test_gettimeofday(){
 }
 
 void test_ndltick(){
-  int ms = 500;
-  NDL_Init(0);
-  while(1){
-    while(NDL_GetTicks() < ms);
-    printf("ms = %d\n",ms);
-    ms += 500;
+    uint32_t last_tick = NDL_GetTicks();
+  while (1) {
+    uint32_t tick = NDL_GetTicks();
+    if (tick - last_tick >= 500) {
+      printf("Hello world!\n");
+      last_tick = tick;
+    }
   }
+  // return 0;
 }
 
 int main() {
+  NDL_Init(0);
   test_ndltick();
   return 0;
 }
