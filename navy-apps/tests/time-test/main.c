@@ -24,9 +24,9 @@ void test_ndltick(){
   int ms = 500;
   NDL_Init(0);
   while(1){
-    // while(NDL_GetTicks() < ms) ;
+    while(NDL_GetTicks() < ms);
+    printf("ms = %d\n",ms);
     ms += 500;
-    printf("ms = %d\n",NDL_GetTicks());
   }
 }
 
