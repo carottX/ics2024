@@ -4,6 +4,7 @@
 int main() {
   printf("Entering file-test....\n");
   FILE *fp = fopen("/share/files/num", "r+");
+  printf("Passed 0th!\n");
   assert(fp);
   printf("Passed 1st!\n");
 
