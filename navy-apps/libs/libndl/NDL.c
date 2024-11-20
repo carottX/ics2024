@@ -67,7 +67,7 @@ void NDL_OpenCanvas(int *w, int *h) {
   printf("ww=%d hh=%d\n",ww,hh);
   if(*w == 0 && *h == 0) *w = ww, *h = hh;
   start_x = (screen_w - ww) / 2;
-  start_y = (screen_y - yy) / 2;
+  start_y = (screen_h - hh) / 2;
 }
 
 void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h) {
