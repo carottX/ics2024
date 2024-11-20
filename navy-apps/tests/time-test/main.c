@@ -25,7 +25,7 @@ void test_ndltick(){
   while (1) {
     uint32_t tick = NDL_GetTicks();
     if (tick - last_tick >= 500) {
-      printf("Hello world!\n");
+      printf("%u!\n",tick);
       last_tick = tick;
     }
   }
