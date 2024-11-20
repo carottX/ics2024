@@ -4,6 +4,7 @@ typedef size_t (*ReadFn) (void *buf, size_t offset, size_t len);
 typedef size_t (*WriteFn) (const void *buf, size_t offset, size_t len);
 size_t ramdisk_read(void *buf, size_t offset, size_t len);
 size_t ramdisk_write(const void *buf, size_t offset, size_t len);
+size_t serial_write(const void *buf, size_t offset, size_t len);
 
 int min(int x, int y){if(x<y) return x; return y;}
 
@@ -31,8 +32,8 @@ size_t invalid_write(const void *buf, size_t offset, size_t len) {
 /* This is the information about all files in disk. */
 static Finfo file_table[] __attribute__((used)) = {
   [FD_STDIN]  = {"stdin", 0, 0, invalid_read, invalid_write},
-  [FD_STDOUT] = {"stdout", 0, 0, invalid_read, invalid_write},
-  [FD_STDERR] = {"stderr", 0, 0, invalid_read, invalid_write},
+  [FD_STDOUT] = {"stdout", 0, 0, invalid_read, serial_write},
+  [FD_STDERR] = {"stderr", 0, 0, invalid_read, serial_write},
 #include "files.h"
 };
 
@@ -58,8 +59,10 @@ size_t fs_read(int fd, void *buf, size_t len){
 }
 
 size_t fs_write(int fd, const void *buf, size_t len){
-  len = min(len, file_table[fd].size - file_table[fd].p_offset);
-  size_t ret = ramdisk_write(buf, file_table[fd].disk_offset + file_table[fd].p_offset, len);
+  WriteFn WriteFunc = ramdisk_write;
+  if(file_table[fd].read != NULL) WriteFunc = file_table[fd].write;
+  else len = min(len, file_table[fd].size - file_table[fd].p_offset);
+  size_t ret = WriteFunc(buf, file_table[fd].disk_offset + file_table[fd].p_offset, len);
   file_table[fd].p_offset += ret;
   return ret;
 }
