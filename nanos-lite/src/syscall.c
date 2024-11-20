@@ -37,10 +37,10 @@ void sys_write(Context* c){
   #ifdef STRACE
   printf("SYSCALL NAME=write\n" );
   #endif
-  int fd = c->GPR1;
+  int fd = c->GPR2;
   if(fd == 1 || fd == 2) {
-    uint8_t* buf = (uint8_t*)c->GPR2;
-    int len = c->GPR3;
+    uint8_t* buf = (uint8_t*)c->GPR3;
+    int len = c->GPR4;
     for(int i=0; i<len; ++i) putch(*(buf+i));
     c->GPRx=len;
   }
