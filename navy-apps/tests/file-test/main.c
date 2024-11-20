@@ -2,13 +2,15 @@
 #include <assert.h>
 
 int main() {
+  printf("Entering file-test....\n");
   FILE *fp = fopen("/share/files/num", "r+");
   assert(fp);
-  printf("Passed first!\n");
+  printf("Passed 1st!\n");
 
   fseek(fp, 0, SEEK_END);
   long size = ftell(fp);
   assert(size == 5000);
+  printf("Passed 2nd!\n");
 
   fseek(fp, 500 * 5, SEEK_SET);
   int i, n;
