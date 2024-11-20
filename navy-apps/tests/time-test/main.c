@@ -2,7 +2,9 @@
 #include <assert.h>
 #include <sys/time.h>
 
-int main() {
+uint32_t NDL_GetTicks();
+
+void test_gettimeofday(){
   struct timeval tv;
   // struct timezone tz;
   gettimeofday(&tv, NULL);
@@ -15,4 +17,18 @@ int main() {
     ms += 500;
     printf("ms = %d\n", ms);
   }
+}
+
+void test_ndltick(){
+  int ms = 500;
+  while(1){
+    while(NDL_GetTicks() < ms) ;
+    ms += 500;
+    printf("ms = %d\n",ms);
+  }
+}
+
+int main() {
+  test_ndltick();
+  return 0;
 }
