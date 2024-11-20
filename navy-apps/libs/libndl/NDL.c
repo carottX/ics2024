@@ -10,6 +10,9 @@ static int fbdev = -1;
 static int screen_w = 0, screen_h = 0;
 // static uint64_t ndl_sec = 0, ndl_usec = 0;
 
+#define strip() for(;i < 1024 && (buf[i] ==' ' || buf[i] == '\n' ); ++i);
+#define readnum(x) for(; i<1024 && buf[i] >= '0' && buf[i] <= '9'; ++i) x = x*10 + buf[i] - '0';
+
 uint32_t NDL_GetTicks() {
   static struct timeval tv;
   gettimeofday(&tv, NULL);
@@ -39,6 +42,28 @@ void NDL_OpenCanvas(int *w, int *h) {
     }
     close(fbctl);
   }
+  char* buf = malloc(1024);
+  int fd = open("/proc/dispinfo",0,0);
+  read(fd, buf, 1024);
+  int i = 0;
+  strip();
+  if(strncmp(buf+i, "WIDTH", 5) != 0) return;
+  i+=5;
+  strip();
+  if(buf[i] != ':') return;
+  ++i;strip();
+  int ww = 0, hh = 0;
+  readnum(ww);
+  strip();
+  if(strncmp(buf+i, "HEIGHT", 6) != 0) return;
+  i+=6;
+  strip();
+  if(buf[i] != ':') return;
+  ++i;strip();
+  readnum(hh);
+  screen_h = hh;
+  screen_w = ww;
+  if(*w == 0 && *h == 0) *w = ww, *h = hh;
 }
 
 void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h) {
