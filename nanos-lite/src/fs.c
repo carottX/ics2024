@@ -10,7 +10,7 @@ typedef struct {
   size_t disk_offset;
   ReadFn read;
   WriteFn write;
-  // size_t p_offset;
+  size_t p_offset;
 } Finfo;
 
 enum {FD_STDIN, FD_STDOUT, FD_STDERR, FD_FB};
@@ -39,18 +39,28 @@ int fs_open(const char *pathname, int flags, int mode){
   // printf("pathname=%s\n",pathname);
   int n = ARRLEN(file_table);
   for(int i=0; i<n; ++i){
-    if(strcmp(file_table[i].name, pathname) == 0) return i;
+    if(strcmp(file_table[i].name, pathname) == 0) {
+      file_table[i].p_offset = 0;
+      return i;
+    }
   }
   panic("Cannot find file of name", printf("%s", pathname));
 }
 
 size_t fs_read(int fd, void *buf, size_t len){
   assert(file_table[fd].size >= len);
-  return ramdisk_read(buf, file_table[fd].disk_offset, len);
+  size_t ret = ramdisk_read(buf, file_table[fd].disk_offset + file_table[fd].p_offset, len);
+  file_table[fd].p_offset += ret;
+  return ret;
 }
 
 size_t fs_close(int fd){
+  file_table[fd].p_offset = 0;
   return 0;
+}
+
+size_t GetFileSize(int fd){
+  return file_table[fd].size;
 }
 
 void init_fs() {

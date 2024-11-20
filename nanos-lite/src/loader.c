@@ -15,14 +15,16 @@ size_t fs_write(int fd, const void *buf, size_t len);
 size_t fs_lseek(int fd, size_t offset, int whence);
 int fs_close(int fd);
 
-size_t get_ramdisk_size();
+size_t GetFileSize(int fd);
 size_t ramdisk_read(void *buf, size_t offset, size_t len);
 
 static uintptr_t loader(PCB *pcb, const char *filename) {
   int fd = fs_open(filename, 0, 0);
   printf("fd=%d\n",fd);
+  void* file = malloc(GetFileSize(fd));
   Elf_Ehdr* elf = malloc(sizeof(Elf_Ehdr));
-  fs_read(fd, elf, sizeof(Elf_Ehdr));
+  fs_read(fd, file, GetFileSize(fd));
+  memcpy(elf, file, sizeof(Elf_Ehdr));
 
   if(elf->e_ident[EI_MAG0] != ELFMAG0 ||
      elf->e_ident[EI_MAG1] != ELFMAG1 ||
@@ -36,14 +38,14 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
   size_t ph_num = elf->e_phnum;
   for(int i=0; i<ph_num; ++i){
     Elf_Phdr *seg_header = malloc(sizeof(Elf_Phdr));
-    ramdisk_read(seg_header, ph_offset + i*entry_size, entry_size);
+    memcpy(seg_header, file+ph_offset+entry_size*i, sizeof(Elf_Phdr));
     if(seg_header->p_type != PT_LOAD) continue;
     // printf("LOADED!\n");
     size_t seg_offset = seg_header->p_offset;
     size_t seg_viraddr = seg_header->p_vaddr;
     size_t seg_file_size = seg_header->p_filesz;
     size_t seg_mem_size = seg_header->p_memsz;
-    ramdisk_read((void *)seg_viraddr, seg_offset, seg_mem_size);
+    memcpy((void*)seg_viraddr, file+seg_offset,seg_mem_size);
     memset((void*)seg_viraddr+seg_file_size, 0, seg_mem_size-seg_file_size);
   }
   // printf("!!!\n");
