@@ -7,6 +7,8 @@ size_t ramdisk_write(const void *buf, size_t offset, size_t len);
 size_t serial_write(const void *buf, size_t offset, size_t len);
 size_t events_read(void *buf, size_t offset, size_t len);
 size_t dispinfo_read(void *buf, size_t offset, size_t len);
+size_t fb_write(const void *buf, size_t offset, size_t len);
+
 
 int min(int x, int y){if(x<y) return x; return y;}
 
@@ -38,6 +40,7 @@ static Finfo file_table[] __attribute__((used)) = {
   [FD_STDERR] = {"stderr", 0, 0, invalid_read, serial_write},
   [3]         = {"/dev/events",0,0, events_read, invalid_write},
   [4]         = {"/proc/dispinfo",0,0, dispinfo_read, invalid_write},
+  [5]         = {"/dev/fb",0,0,invalid_read,fb_write},
 #include "files.h"
 };
 
@@ -93,5 +96,8 @@ size_t GetFileSize(int fd){
 }
 
 void init_fs() {
-  // TODO: initialize the size of /dev/fb
+  AM_GPU_CONFIG_T ev = io_read(AM_GPU_CONFIG);
+  int width = ev.width;
+  int height = ev.height;
+  file_table[5].size = width * height * sizeof(uint32_t);
 }
