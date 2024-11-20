@@ -30,7 +30,7 @@ void sys_exit(Context* c){
   #ifdef STRACE
   printf("SYSCALL NAME=exit\n" );
   #endif
-  printf("exit=%d\n", c->GPR2);
+  // printf("exit=%d\n", c->GPR2);
   halt(c->GPR2);
 }
 

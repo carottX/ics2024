@@ -45,12 +45,14 @@ void add_inst(const char* s){
 }
 
 void output_ring(){
+  #ifdef CONFIG_ITRACE
   printf("Past %d instructions:\n", RING_MAX_SIZE);
   for(int i=rbuf.read; i!=rbuf.write; i=(i+1)%RING_MAX_SIZE){
     if((i+1)%RING_MAX_SIZE == rbuf.write) printf("--> ");
     else printf("    ");
     printf("%s\n",rbuf.buf[i]);
   }
+  #endif
 }
 
 /* We use the `readline' library to provide more flexibility to read from stdin. */
