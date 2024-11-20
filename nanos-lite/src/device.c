@@ -27,7 +27,7 @@ size_t events_read(void *buf, size_t offset, size_t len) {
   assert(len >= 3);
   AM_INPUT_KEYBRD_T kbd = io_read(AM_INPUT_KEYBRD);
   if(kbd.keycode == AM_KEY_NONE) return 0;
-  printf("SUCCESS\n");
+  // printf("SUCCESS\n");
   if(kbd.keydown) strcpy(buf, "kd ");
   else strcpy(buf,"ku ");
   buf += 3;
