@@ -31,6 +31,16 @@ static Finfo file_table[] __attribute__((used)) = {
 #include "files.h"
 };
 
+#define ARRLEN(a) (sizeof(a) / sizeof(a[0]))
+
+int fs_open(const char *pathname, int flags, int mode){
+  int n = ARRLEN(file_table);
+  for(int i=0; i<n; ++i){
+    if(strcmp(file_table[i].name, pathname) == 0) return i;
+  }
+  panic("Cannot find file of name", printf("%s", pathname));
+}
+
 void init_fs() {
   // TODO: initialize the size of /dev/fb
 }
