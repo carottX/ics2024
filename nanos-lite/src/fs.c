@@ -39,7 +39,7 @@ static Finfo file_table[] __attribute__((used)) = {
 #define ARRLEN(a) (sizeof(a) / sizeof(a[0]))
 
 int fs_open(const char *pathname, int flags, int mode){
-  // printf("pathname=%s\n",pathname);
+  printf("pathname=%s\n",pathname);
   int n = ARRLEN(file_table);
   for(int i=0; i<n; ++i){
     if(strcmp(file_table[i].name, pathname) == 0) {
