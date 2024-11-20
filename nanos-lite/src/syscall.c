@@ -38,6 +38,7 @@ void sys_write(Context* c){
   printf("SYSCALL NAME=write\n" );
   #endif
   int fd = c->GPR2;
+  printf("fd = %d\n", fd);
   if(fd == 1 || fd == 2) {
     uint8_t* buf = (uint8_t*)c->GPR3;
     int len = c->GPR4;
