@@ -65,10 +65,11 @@ size_t fs_write(int fd, const void *buf, size_t len){
 }
 
 size_t fs_lseek(int fd,int offset, int whence){
-  if(whence == SEEK_CUR) return file_table[fd].p_offset += offset;
-  if(whence == SEEK_END) return file_table[fd].p_offset = file_table[fd].size + offset;
-  if(whence == SEEK_SET) return file_table[fd].p_offset = offset;
-  panic("Invalid whence!");
+  if(whence == SEEK_CUR) file_table[fd].p_offset += offset;
+  if(whence == SEEK_END) file_table[fd].p_offset = file_table[fd].size + offset;
+  if(whence == SEEK_SET) file_table[fd].p_offset = offset;
+  return file_table[fd].p_offset;
+  // panic("Invalid whence!");
 }
 
 size_t fs_close(int fd){
