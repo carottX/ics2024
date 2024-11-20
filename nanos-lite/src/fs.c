@@ -5,6 +5,8 @@ typedef size_t (*WriteFn) (const void *buf, size_t offset, size_t len);
 size_t ramdisk_read(void *buf, size_t offset, size_t len);
 size_t ramdisk_write(const void *buf, size_t offset, size_t len);
 
+int min(int x, int y){if(x<y) return x; return y;}
+
 typedef struct {
   char *name;
   size_t size;
@@ -49,14 +51,14 @@ int fs_open(const char *pathname, int flags, int mode){
 }
 
 size_t fs_read(int fd, void *buf, size_t len){
-  assert(file_table[fd].size >= len);
+  len = min(len, file_table[fd].size - file_table[fd].p_offset);
   size_t ret = ramdisk_read(buf, file_table[fd].disk_offset + file_table[fd].p_offset, len);
   file_table[fd].p_offset += ret;
   return ret;
 }
 
 size_t fs_write(int fd, const void *buf, size_t len){
-  assert(file_table[fd].size >= len);
+  len = min(len, file_table[fd].size - file_table[fd].p_offset);
   size_t ret = ramdisk_write(buf, file_table[fd].disk_offset + file_table[fd].p_offset, len);
   file_table[fd].p_offset += ret;
   return ret;
