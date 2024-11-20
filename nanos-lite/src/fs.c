@@ -51,6 +51,7 @@ int fs_open(const char *pathname, int flags, int mode){
     }
   }
   panic("Cannot find file of name", printf("%s", pathname));
+  return 114514;
 }
 
 size_t fs_read(int fd, void *buf, size_t len){
