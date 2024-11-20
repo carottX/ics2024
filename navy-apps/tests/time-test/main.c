@@ -22,7 +22,7 @@ void test_gettimeofday(){
 
 void test_ndltick(){
   int ms = 500;
-  NDL_Init();
+  NDL_Init(0);
   while(1){
     while(NDL_GetTicks() < ms) ;
     ms += 500;
