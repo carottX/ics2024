@@ -8,6 +8,7 @@
 static int evtdev = -1;
 static int fbdev = -1;
 static int screen_w = 0, screen_h = 0;
+static int start_x = 0, start_y = 0;
 // static uint64_t ndl_sec = 0, ndl_usec = 0;
 
 #define strip() for(;i < 1024 && (buf[i] ==' ' || buf[i] == '\n' ); ++i);
@@ -65,12 +66,14 @@ void NDL_OpenCanvas(int *w, int *h) {
   screen_w = ww;
   printf("ww=%d hh=%d\n",ww,hh);
   if(*w == 0 && *h == 0) *w = ww, *h = hh;
+  start_x = (screen_w - ww) / 2;
+  start_y = (screen_y - yy) / 2;
 }
 
 void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h) {
   int fd = open("/dev/fb",0,0);
   for(int i=0; i<h; ++i){
-    lseek(fd, (screen_w * (y+i) + x)*4, SEEK_SET);
+    lseek(fd, (screen_w * (y+i+start_y) + x + start_x)*4, SEEK_SET);
     write(fd, pixels + i * w, 4*w);
   }
 }
