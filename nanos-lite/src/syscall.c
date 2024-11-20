@@ -1,5 +1,7 @@
 #include <common.h>
 #include "syscall.h"
+#include <sys/time.h>
+
 
 int fs_open(const char *pathname, int flags, int mode);
 size_t fs_read(int fd, void *buf, size_t len);
@@ -22,23 +24,6 @@ void sys_exit(Context* c){
   // printf("exit=%d\n", c->GPR2);
   halt(c->GPR2);
 }
-
-// void sys_write(Context* c){
-//   #ifdef STRACE
-//   printf("SYSCALL NAME=write\n" );
-//   #endif
-//   int fd = c->GPR2;
-//   // printf("fd = %d len = %d\n", fd, c->GPR4);
-//   if(fd == 1 || fd == 2) {
-//     uint8_t* buf = (uint8_t*)c->GPR3;
-//     int len = c->GPR4;
-//     for(int i=0; i<len; ++i) putch(*(buf+i));
-//     c->GPRx=len;
-//   }
-//   else {
-//     c->GPRx = -1;
-//   }
-// }
 
 void sys_sbrk(Context* c){
   #ifdef STRACE
@@ -82,6 +67,14 @@ void sys_close(Context* c){
   c->GPRx = fs_close(c->GPR2);
 }
 
+void sys_gettimeofday(Context* c){
+  struct timeval* tv = (void *)c->GPR2;
+  uint64_t us = io_read(AM_TIMER_UPTIME).us;
+  tv->tv_sec = us/1000000;
+  tv->tv_usec = us%1000000;
+  c->GPRx = 0;
+}
+
 void do_syscall(Context *c) {
   uintptr_t a[4];
   a[0] = c->GPR1;
@@ -96,6 +89,7 @@ void do_syscall(Context *c) {
     case 4: sys_write(c); break;
     case 7: sys_close(c); break;
     case 8: sys_lseek(c); break;
+    case SYS_gettimeofday: sys_gettimeofday(c); break;
     default: panic("Unhandled syscall ID = %d", a[0]);
   }
   #ifdef STRACE
