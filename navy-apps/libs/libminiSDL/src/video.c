@@ -44,7 +44,7 @@ void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
     uint32_t* tmp = malloc(sizeof(uint32_t) * w * h);
     for(int i=0; i<h; ++i){
       for(int j=0; j<w; ++j){
-        tmp[i*w + j] = (uint32_t*)s->pixels[(i+y) * s->w + j + x];
+        tmp[i*w + j] = ((uint32_t*)s->pixels)[(i+y) * s->w + j + x];
       }
     }
     NDL_DrawRect(tmp, x, y, w, h);
