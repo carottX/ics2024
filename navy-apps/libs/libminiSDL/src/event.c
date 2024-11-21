@@ -20,7 +20,7 @@ int SDL_PollEvent(SDL_Event *ev) {
 int SDL_WaitEvent(SDL_Event *event) {
   char buf[16];
   while(NDL_PollEvent(buf, 16) == 0);
-  puts(buf);
+  printf(buf);
   if(strncmp(buf, "kd", 2) == 0) event->type = SDL_KEYDOWN;
   else event->type = SDL_KEYUP;
   for(int i = 0; i < sizeof(keyname)/sizeof(keyname[0]); ++i){
