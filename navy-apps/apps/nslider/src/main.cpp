@@ -24,8 +24,9 @@ void render() {
   sprintf(fname, path, cur);
   SDL_Surface *slide = SDL_LoadBMP(fname);
   assert(slide);
-  printf("BITS=%d\n", slide->format->BitsPerPixel);
+  printf("BITS123=%d\n", slide->format->BitsPerPixel);
       printf("!!!\n");
+      // stdflush
 
   SDL_BlitSurface(slide, NULL, screen, NULL);
     printf("!\n");
