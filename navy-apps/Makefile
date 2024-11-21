@@ -172,7 +172,7 @@ APPS = nslider nplayer
 TESTS = dummy hello file-test time-test event-test bmp-test
 
 fsimg: $(addprefix apps/, $(APPS)) $(addprefix tests/, $(TESTS))
-	-for t in $^;  do $(MAKE) -s -C $(NAVY_HOME)/$$t install | echo $$t; done
+	-for t in $^;  do $(MAKE) -s -C $(NAVY_HOME)/$$t install; done
 
 RAMDISK = build/ramdisk.img
 RAMDISK_H = build/ramdisk.h
