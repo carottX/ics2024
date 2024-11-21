@@ -33,7 +33,7 @@ void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
   }
   if(s -> format -> BitsPerPixel == 8){
     uint32_t* tmp = malloc(sizeof(uint32_t) * w * h);
-
+    memset(tmp, 0, sizeof(tmp));
     for(int i=0; i<h; ++i){
       for(int j=0; j<w; ++j){
         SDL_Color color = s->format->palette->colors[s->pixels[(i+y) * s->w + j + x]];
@@ -44,6 +44,8 @@ void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
     free(tmp);
   }else{
     uint32_t* tmp = malloc(sizeof(uint32_t) * w * h);
+      memset(tmp, 0, sizeof(tmp));
+
     for(int i=0; i<h; ++i){
       for(int j=0; j<w; ++j){
         tmp[i*w + j] = (uint32_t*)s->pixels[(i+y) * s->w + j + x];
