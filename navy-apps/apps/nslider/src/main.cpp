@@ -52,6 +52,7 @@ int main() {
   render();
 
   while (1) {
+    printf("HELLO!\n");
     SDL_Event e;
     SDL_WaitEvent(&e);
 
