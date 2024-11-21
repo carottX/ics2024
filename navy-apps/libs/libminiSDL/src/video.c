@@ -7,7 +7,7 @@
 void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_Rect *dstrect) {
   assert(dst && src);
   assert(dst->format->BitsPerPixel == src->format->BitsPerPixel);
-  printf("??");
+  // printf("??");
   int dest_x = 0, dest_y = 0;
   if(dstrect != NULL) dest_x = dstrect->x, dest_y = dstrect->y;
   int start_x = 0, start_y = 0;
@@ -44,11 +44,11 @@ void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
     free(tmp);
   }else{
     uint32_t* tmp = malloc(sizeof(uint32_t) * w * h);
-      memset(tmp, 0, sizeof(tmp));
+    memset(tmp, 0, sizeof(tmp));
 
     for(int i=0; i<h; ++i){
       for(int j=0; j<w; ++j){
-        tmp[i*w + j] = (uint32_t*)s->pixels[(i+y) * s->w + j + x];
+        tmp[i*w + j] = ((uint32_t*)s->pixels)[(i+y) * s->w + j + x];
       }
     }
     NDL_DrawRect(tmp, x, y, w, h);
