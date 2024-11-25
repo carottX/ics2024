@@ -20,18 +20,20 @@ SDL_Surface* IMG_Load(const char *filename) {
     return NULL;
   }
   int sz = lseek(fd, 0, SEEK_END);
-  printf("size=%d\n",sz);
+  // printf("size=%d\n",sz);
   if(sz == -1){
     printf("Error when getting the file size!\n");
     return NULL;
   }
   void* buf = SDL_malloc(sz);
-  if(read(fd, buf, sz) == -1) {
+  int tmp = read(fd, buf, sz);
+  printf("Read ret = %d\n",tmp);
+  if(tmp == -1) {
     printf("Error when reading the file!\n");
     return NULL;
   }
   SDL_Surface* ret = STBIMG_LoadFromMemory(buf, sz);
-  printf("Error:%s\n",SDL_GetError());
+  // printf("Error:%s\n",SDL_GetError());
   close(fd);
   free(buf);
   return ret;
