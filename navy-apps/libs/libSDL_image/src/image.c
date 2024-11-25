@@ -30,6 +30,7 @@ SDL_Surface* IMG_Load(const char *filename) {
     return NULL;
   }
   SDL_Surface* ret = STBIMG_LoadFromMemory(buf, sz);
+  printf("Error:%s\n",SDL_GetError());
   close(fd);
   free(buf);
   return ret;
