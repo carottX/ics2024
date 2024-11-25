@@ -25,6 +25,7 @@ SDL_Surface* IMG_Load(const char *filename) {
     printf("Error when getting the file size!\n");
     return NULL;
   }
+  lseek(fd, 0, SEEK_SET);
   void* buf = SDL_malloc(sz);
   int tmp = read(fd, buf, sz);
   printf("Read ret = %d\n",tmp);
