@@ -28,7 +28,7 @@ SDL_Surface* IMG_Load(const char *filename) {
   lseek(fd, 0, SEEK_SET);
   void* buf = SDL_malloc(sz);
   int tmp = read(fd, buf, sz);
-  printf("Read ret = %d\n",tmp);
+  // printf("Read ret = %d\n",tmp);
   if(tmp == -1) {
     printf("Error when reading the file!\n");
     return NULL;
