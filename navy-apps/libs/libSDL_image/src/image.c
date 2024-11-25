@@ -20,6 +20,7 @@ SDL_Surface* IMG_Load(const char *filename) {
     return NULL;
   }
   int sz = lseek(fd, 0, SEEK_END);
+  printf("size=%d\n",sz);
   if(sz == -1){
     printf("Error when getting the file size!\n");
     return NULL;
