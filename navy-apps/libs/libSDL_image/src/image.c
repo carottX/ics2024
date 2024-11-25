@@ -14,6 +14,8 @@ SDL_Surface* IMG_Load_RW(SDL_RWops *src, int freesrc) {
 }
 
 SDL_Surface* IMG_Load(const char *filename) {
+    // printf("LOADing:%s\n",filename);
+
   int fd = open(filename);
   if(fd == -1){
     printf("Error when opening the file!\n");
@@ -37,6 +39,7 @@ SDL_Surface* IMG_Load(const char *filename) {
   // printf("Error:%s\n",SDL_GetError());
   close(fd);
   free(buf);
+  printf("LOAD FINI\n");
   return ret;
 }
 
