@@ -7,9 +7,14 @@
 #define SDL_STBIMAGE_IMPLEMENTATION
 #include "SDL_stbimage.h"
 
+#include <assert.h>
+
+#define TODO() assert(0);
+
 SDL_Surface* IMG_Load_RW(SDL_RWops *src, int freesrc) {
   assert(src->type == RW_TYPE_MEM);
   assert(freesrc == 0);
+  TODO();
   return NULL;
 }
 
@@ -44,10 +49,12 @@ SDL_Surface* IMG_Load(const char *filename) {
 }
 
 int IMG_isPNG(SDL_RWops *src) {
+  TODO();
   return 0;
 }
 
 SDL_Surface* IMG_LoadJPG_RW(SDL_RWops *src) {
+  TODO();
   return IMG_Load_RW(src, 0);
 }
 

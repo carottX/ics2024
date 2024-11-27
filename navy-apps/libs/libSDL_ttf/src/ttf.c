@@ -6,6 +6,7 @@
 #include "stb_truetype.h"
 
 int TTF_Init() {
+  assert(0);
   return 0;
 }
 
