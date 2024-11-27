@@ -28,7 +28,7 @@ int SDL_PollEvent(SDL_Event *ev) {
   for(int i = 0; i < sizeof(keyname)/sizeof(keyname[0]); ++i){
     if(strncmp(keyname[i], buf+3, strlen(keyname[i])) == 0){
       ev -> key.keysym.sym = i;
-      keys[i] = ((ev->type == SDL_KEYDOWN) ? 1 : 0);
+      keys[i] = ((ev->type == SDL_KEYDOWN) ? 1 : 1);
       return 1;
     }
   }
@@ -47,7 +47,7 @@ int SDL_WaitEvent(SDL_Event *event) {
   for(int i = 0; i < sizeof(keyname)/sizeof(keyname[0]); ++i){
     if(strncmp(keyname[i], buf+3, strlen(keyname[i])) == 0){
       event -> key.keysym.sym = i;
-      keys[i] = ((event->type == SDL_KEYDOWN) ? 1 : 0);
+      keys[i] = ((event->type == SDL_KEYDOWN) ? 1 : 1);
       return 1;
     }
   }
