@@ -55,6 +55,7 @@ int SDL_PeepEvents(SDL_Event *ev, int numevents, int action, uint32_t mask) {
 }
 
 uint8_t* SDL_GetKeyState(int *numkeys) {
+  printf("HELLO?\n");
   size_t sz = sizeof(keyname) / sizeof(keyname[0]);
   uint8_t* ret = malloc(sizeof(uint8_t) * (numkeys == NULL ? sz : *numkeys));
   SDL_Event tmp;
