@@ -56,9 +56,10 @@ uint8_t* SDL_GetKeyState(int *numkeys) {
   printf("HELLO?\n");
   size_t sz = sizeof(keyname) / sizeof(keyname[0]);
   uint8_t* ret = malloc(sizeof(uint8_t) * (numkeys == NULL ? sz : *numkeys));
-  if(ret == NULL) printf("WTF?\n");
   SDL_Event tmp;
   SDL_PollEvent(&tmp);
   for(int i=0; i<sz; ++i) if(tmp.key.keysym.sym == i && tmp.type == SDL_KEYDOWN) ret[i] = 1; else ret = 0;
+  if(ret == NULL) printf("WTF?\n");
+
   return ret;
 }
