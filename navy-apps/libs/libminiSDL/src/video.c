@@ -6,7 +6,6 @@
 #include <stdio.h>
 
 void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_Rect *dstrect) {
-    printf("FUCK1!\n");
 
   assert(dst && src);
   assert(dst->format->BitsPerPixel == src->format->BitsPerPixel);
@@ -25,12 +24,10 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
       else dst->pixels[(dest_y+i) * dst->w + dest_x + j] = src->pixels[(start_y + i) * src->w + start_x + j];
     }
   }
-  printf("FUCK1fini\n");
 }
 
 
 void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
-  printf("FUCK2!\n");
   int x=0, y=0, w=dst->w, h=dst->h;
   if(dstrect != NULL) {
     w = dstrect -> w;
@@ -51,7 +48,6 @@ void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
 }
 
 void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
-    printf("FUCK3!\n");
 
   if(x == 0 && y == 0 && w == 0 && h == 0) {
     w = s->w, h = s->h;
@@ -79,7 +75,6 @@ void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
     NDL_DrawRect(tmp, x, y, w, h);
     free(tmp);
   }
-  printf("FUCK3fini\n");
 }
 
 // APIs below are already implemented.
