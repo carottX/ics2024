@@ -77,7 +77,7 @@ size_t fs_read(int fd, void *buf, size_t len){
 size_t fs_write(int fd, const void *buf, size_t len){
   // if(fd == FD_STDOUT) panic("?");
   WriteFn WriteFunc = ramdisk_write;
-  if(file_table[fd].write != NULL){ WriteFunc = file_table[fd].write; panic("?");}
+  if(file_table[fd].write != NULL){ WriteFunc = file_table[fd].write;}
   else len = min(len, file_table[fd].size - file_table[fd].p_offset);
   size_t ret = WriteFunc(buf, file_table[fd].disk_offset + file_table[fd].p_offset, len);
   file_table[fd].p_offset += ret;
