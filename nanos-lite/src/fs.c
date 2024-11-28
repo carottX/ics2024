@@ -8,6 +8,9 @@ size_t serial_write(const void *buf, size_t offset, size_t len);
 size_t events_read(void *buf, size_t offset, size_t len);
 size_t dispinfo_read(void *buf, size_t offset, size_t len);
 size_t fb_write(const void *buf, size_t offset, size_t len);
+size_t sb_write(const void *buf, size_t offset, size_t len);
+size_t sbctl_write(const void *buf, size_t offset, size_t len);
+size_t sbctl_read(void *buf, size_t offset, size_t len);
 
 
 int min(int x, int y){if(x<y) return x; return y;}
@@ -41,6 +44,8 @@ static Finfo file_table[] __attribute__((used)) = {
   [3]         = {"/dev/events",0,0, events_read, invalid_write},
   [4]         = {"/proc/dispinfo",0,0, dispinfo_read, invalid_write},
   [5]         = {"/dev/fb",0,0,invalid_read,fb_write},
+  [6]         = {"/dev/sb",0,0,invalid_read,sb_write},
+  [7]         = {"/dev/sbctl",0,0,sbctl_read,sbctl_write},
 #include "files.h"
 };
 
