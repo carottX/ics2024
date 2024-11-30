@@ -68,7 +68,7 @@ int fs_open(const char *pathname, int flags, int mode){
 size_t fs_read(int fd, void *buf, size_t len){
   static int counter = 0;
   printf("FSREAD fd=%d len=%d\n count = %d\n",fd,len,counter);
-  counter++;
+  if(fd == 64)counter++;
   ReadFn ReadFunc = ramdisk_read;
   if(file_table[fd].read != NULL) ReadFunc = file_table[fd].read;
   else len = min(len, (int)file_table[fd].size - (int)file_table[fd].p_offset);
