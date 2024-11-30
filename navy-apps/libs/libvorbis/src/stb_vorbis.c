@@ -3242,6 +3242,7 @@ static int start_decoder(vorb *f)
    if (!start_packet(f))                            return FALSE;
 
    if (!next_segment(f))                            return FALSE;
+   printf("BREAK\n");
 
    if (get8_packet(f) != VORBIS_packet_comment)            return error(f, VORBIS_invalid_setup);
    for (i=0; i < 6; ++i) header[i] = get8_packet(f);
