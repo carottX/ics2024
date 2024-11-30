@@ -67,6 +67,7 @@ int fs_open(const char *pathname, int flags, int mode){
 
 size_t fs_read(int fd, void *buf, size_t len){
   static int counter = 0;
+  memset(buf, 0, len);
   printf("FSREAD fd=%d len=%d\n count = %d\n",fd,len,counter);
   if(fd == 64)counter++;
   ReadFn ReadFunc = ramdisk_read;
