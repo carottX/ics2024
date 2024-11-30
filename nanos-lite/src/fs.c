@@ -87,7 +87,7 @@ size_t fs_write(int fd, const void *buf, size_t len){
 
 size_t fs_lseek(int fd,int offset, int whence){
   printf("lseek fd=%d offset=%d whence=%d\n",fd,offset,whence);
-  printf("poffset = %d\n", file_table[fd].p_offset);
+  printf("name=%s poffset = %d\n", file_table[fd].name,file_table[fd].p_offset);
   if(whence == SEEK_CUR) file_table[fd].p_offset += offset;
   if(whence == SEEK_END) file_table[fd].p_offset = file_table[fd].size + offset;
   if(whence == SEEK_SET) file_table[fd].p_offset = offset;
