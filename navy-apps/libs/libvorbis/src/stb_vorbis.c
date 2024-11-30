@@ -4705,11 +4705,11 @@ stb_vorbis * stb_vorbis_open_memory(const unsigned char *data, int len, int *err
    p.stream_start = (uint8 *) p.stream;
    p.stream_len = len;
    p.push_mode = FALSE;
-   printf("HELLO?\n");
+   // printf("HELLO?\n");
 
    if (start_decoder(&p)) {
       f = vorbis_alloc(&p);
-      printf("HELLO?\n");
+      // printf("HELLO?\n");
       if (f) {
          *f = p;
          vorbis_pump_first_frame(f);
