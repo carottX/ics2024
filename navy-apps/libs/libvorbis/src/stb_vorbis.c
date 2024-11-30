@@ -3251,6 +3251,8 @@ static int start_decoder(vorb *f)
    len = get32_packet(f);
    f->vendor = (char*)setup_malloc(f, sizeof(char) * (len+1));
    if (f->vendor == NULL)                           return error(f, VORBIS_outofmem);
+      printf("BREAK\n");
+
    for(i=0; i < len; ++i) {
       f->vendor[i] = get8_packet(f);
    }
