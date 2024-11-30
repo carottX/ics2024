@@ -8,6 +8,7 @@
 #include <fixedptc.h>
 
 #define MUSIC_PATH "/share/music/little-star.ogg"
+// #define MUSIC_PATH "/home/carottx/ics2024/navy-apps/fsimg/share/music/little-star.ogg"
 #define SAMPLES 4096
 #define FPS 10
 #define W 400

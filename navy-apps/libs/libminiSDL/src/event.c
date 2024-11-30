@@ -14,6 +14,8 @@ static const char *keyname[] = {
 
 static uint8_t keys[1024];
 
+void CallBackHelper();
+
 int SDL_PushEvent(SDL_Event *ev) {
   TODO();
   return 0;
@@ -33,8 +35,7 @@ int SDL_PollEvent(SDL_Event *ev) {
       return 1;
     }
   }
-    // printf("POLL FINI\n");
-
+  CallBackHelper();
   return 0;
 }
 
@@ -53,6 +54,8 @@ int SDL_WaitEvent(SDL_Event *event) {
       return 1;
     }
   }
+    CallBackHelper();
+
   return 0;
 }
 
