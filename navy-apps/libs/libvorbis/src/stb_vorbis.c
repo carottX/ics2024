@@ -235,6 +235,7 @@ typedef   signed int    int32;
 #endif
 
 typedef fixedpt codetype;
+// typedef double fixedpt;
 
 // @NOTE
 //
