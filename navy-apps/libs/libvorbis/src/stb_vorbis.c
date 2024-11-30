@@ -3230,6 +3230,7 @@ static int start_decoder(vorb *f)
       if (log1 < 6 || log1 > 13)                       return error(f, VORBIS_invalid_setup);
       if (log0 > log1)                                 return error(f, VORBIS_invalid_setup);
    }
+   printf("BREAK\n");
 
    // framing_flag
    x = get8(f);
