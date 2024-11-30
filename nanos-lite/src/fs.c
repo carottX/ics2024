@@ -65,7 +65,7 @@ int fs_open(const char *pathname, int flags, int mode){
   return 114514;
 }
 
-uint32_t fs_read(int fd, void *buf, size_t len){
+size_t fs_read(int fd, void *buf, size_t len){
   // printf("FSREAD fd=%d\n",fd);
   ReadFn ReadFunc = ramdisk_read;
   if(file_table[fd].read != NULL) ReadFunc = file_table[fd].read;
@@ -75,7 +75,7 @@ uint32_t fs_read(int fd, void *buf, size_t len){
   return ret;
 }
 
-uint32_t fs_write(int fd, const void *buf, size_t len){
+size_t fs_write(int fd, const void *buf, size_t len){
   // if(fd == FD_STDOUT) panic("?");
   WriteFn WriteFunc = ramdisk_write;
   if(file_table[fd].write != NULL){ WriteFunc = file_table[fd].write;}
@@ -87,16 +87,14 @@ uint32_t fs_write(int fd, const void *buf, size_t len){
 
 uint32_t fs_lseek(int fd,int offset, int whence){
   printf("lseek fd=%d offset=%d whence=%d\n",fd,offset,whence);
-  // printf("name=%s poffset = %d\n", file_table[fd].name,file_table[fd].p_offset);
+  printf("name=%s poffset = %d\n", file_table[fd].name,file_table[fd].p_offset);
   if(whence == SEEK_CUR) file_table[fd].p_offset += offset;
   if(whence == SEEK_END) file_table[fd].p_offset = file_table[fd].size + offset;
   if(whence == SEEK_SET) file_table[fd].p_offset = offset;
-  printf("name=%s poffset = %d\n", file_table[fd].name,file_table[fd].p_offset);
-
   return file_table[fd].p_offset;
 }
 
-uint32_t fs_close(int fd){
+size_t fs_close(int fd){
   file_table[fd].p_offset = 0;
   return 0;
 }
