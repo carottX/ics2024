@@ -84,11 +84,11 @@ int main(int argc, char *argv[]) {
   FILE *fp = fopen(MUSIC_PATH, "r");
   assert(fp);
   fseek(fp, 0, SEEK_END);
-  size_t size = 114514;
-  // size_t size = ftell(fp);
+  // size_t size = 114514;
+  size_t size = ftell(fp);
   void *buf = malloc(size);
   assert(size);
-  printf("size = %d\n");
+  printf("size = %d\n",size);
   fseek(fp, 0, SEEK_SET);
   int ret = fread(buf, size, 1, fp);
   assert(ret == 1);
