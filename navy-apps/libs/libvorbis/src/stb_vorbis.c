@@ -3272,6 +3272,7 @@ static int start_decoder(vorb *f)
       }
       f->comment_list[i][len] = (char)'\0';
    }
+   printf("BREAK\n");
 
    // framing_flag
    x = get8_packet(f);
