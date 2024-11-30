@@ -88,8 +88,8 @@ size_t fs_lseek(int fd,int offset, int whence){
   if(whence == SEEK_CUR) file_table[fd].p_offset += offset;
   if(whence == SEEK_END) file_table[fd].p_offset = file_table[fd].size + offset;
   if(whence == SEEK_SET) file_table[fd].p_offset = offset;
+  printf("lseed fd=%d offset=%d whence=%d\n",fd,offset,whence);
   return file_table[fd].p_offset;
-  // panic("Invalid whence!");
 }
 
 size_t fs_close(int fd){
