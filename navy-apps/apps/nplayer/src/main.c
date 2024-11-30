@@ -87,12 +87,12 @@ int main(int argc, char *argv[]) {
   size_t size = ftell(fp);
   void *buf = malloc(size);
   assert(size);
-  printf("size = %d\n",size);
   fseek(fp, 0, SEEK_SET);
   int ret = fread(buf, size, 1, fp);
   assert(ret == 1);
   fclose(fp);
-  
+  printf("file size = %d\n",size);
+
   int error;
   v = stb_vorbis_open_memory(buf, size, &error, NULL);
   assert(v);

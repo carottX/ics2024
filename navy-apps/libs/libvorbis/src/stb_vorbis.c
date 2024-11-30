@@ -3176,16 +3176,16 @@ static int start_decoder(vorb *f)
    f->first_decode = TRUE;
 
    if (!start_page(f))                              return FALSE;
-   printf("BREAK\n");
+   // printf("BREAK\n");
    // validate page flag
    if (!(f->page_flag & PAGEFLAG_first_page))       return error(f, VORBIS_invalid_first_page);
    if (f->page_flag & PAGEFLAG_last_page)           return error(f, VORBIS_invalid_first_page);
    if (f->page_flag & PAGEFLAG_continued_packet)    return error(f, VORBIS_invalid_first_page);
    // check for expected packet length
-      printf("BREAK\n");
+      // printf("BREAK\n");
 
    if (f->segment_count != 1)                       return error(f, VORBIS_invalid_first_page);
-      printf("BREAK\n");
+      // printf("BREAK\n");
 
    if (f->segments[0] != 30) {
       // check for the Ogg skeleton fishead identifying header to refine our error
@@ -3202,7 +3202,7 @@ static int start_decoder(vorb *f)
       else
                                                     return error(f, VORBIS_invalid_first_page);
    }
-   printf("BREAK\n");
+   // printf("BREAK\n");
 
    // read packet
    // check packet header
@@ -3214,7 +3214,7 @@ static int start_decoder(vorb *f)
    f->channels = get8(f); if (!f->channels)         return error(f, VORBIS_invalid_first_page);
    if (f->channels > STB_VORBIS_MAX_CHANNELS)       return error(f, VORBIS_too_many_channels);
    f->sample_rate = get32(f); if (!f->sample_rate)  return error(f, VORBIS_invalid_first_page);
-      printf("BREAK\n");
+      // printf("BREAK\n");
 
    get32(f); // bitrate_maximum
    get32(f); // bitrate_nominal
@@ -3230,7 +3230,7 @@ static int start_decoder(vorb *f)
       if (log1 < 6 || log1 > 13)                       return error(f, VORBIS_invalid_setup);
       if (log0 > log1)                                 return error(f, VORBIS_invalid_setup);
    }
-   printf("BREAK\n");
+   // printf("BREAK\n");
 
    // framing_flag
    x = get8(f);
@@ -3242,7 +3242,7 @@ static int start_decoder(vorb *f)
    if (!start_packet(f))                            return FALSE;
 
    if (!next_segment(f))                            return FALSE;
-   printf("BREAK\n");
+   // printf("BREAK\n");
 
    if (get8_packet(f) != VORBIS_packet_comment)            return error(f, VORBIS_invalid_setup);
    for (i=0; i < 6; ++i) header[i] = get8_packet(f);
@@ -3251,7 +3251,7 @@ static int start_decoder(vorb *f)
    len = get32_packet(f);
    f->vendor = (char*)setup_malloc(f, sizeof(char) * (len+1));
    if (f->vendor == NULL)                           return error(f, VORBIS_outofmem);
-      printf("BREAK\n");
+      // printf("BREAK\n");
 
    for(i=0; i < len; ++i) {
       f->vendor[i] = get8_packet(f);
@@ -3272,7 +3272,7 @@ static int start_decoder(vorb *f)
       }
       f->comment_list[i][len] = (char)'\0';
    }
-   printf("BREAK\n");
+   // printf("BREAK\n");
 
    // framing_flag
    x = get8_packet(f);
