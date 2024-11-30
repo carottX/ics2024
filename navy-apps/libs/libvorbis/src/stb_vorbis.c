@@ -4694,6 +4694,7 @@ stb_vorbis * stb_vorbis_open_memory(const unsigned char *data, int len, int *err
    p.push_mode = FALSE;
    if (start_decoder(&p)) {
       f = vorbis_alloc(&p);
+      printf("HELLO?\n");
       if (f) {
          *f = p;
          vorbis_pump_first_frame(f);

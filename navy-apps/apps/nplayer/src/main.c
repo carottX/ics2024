@@ -84,7 +84,6 @@ int main(int argc, char *argv[]) {
   FILE *fp = fopen(MUSIC_PATH, "r");
   assert(fp);
   fseek(fp, 0, SEEK_END);
-  // size_t size = 114514;
   size_t size = ftell(fp);
   void *buf = malloc(size);
   assert(size);
@@ -93,7 +92,7 @@ int main(int argc, char *argv[]) {
   int ret = fread(buf, size, 1, fp);
   assert(ret == 1);
   fclose(fp);
-
+  
   int error;
   v = stb_vorbis_open_memory(buf, size, &error, NULL);
   assert(v);
