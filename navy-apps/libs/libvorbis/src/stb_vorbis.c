@@ -3176,12 +3176,17 @@ static int start_decoder(vorb *f)
    f->first_decode = TRUE;
 
    if (!start_page(f))                              return FALSE;
+   printf("BREAK\n");
    // validate page flag
    if (!(f->page_flag & PAGEFLAG_first_page))       return error(f, VORBIS_invalid_first_page);
    if (f->page_flag & PAGEFLAG_last_page)           return error(f, VORBIS_invalid_first_page);
    if (f->page_flag & PAGEFLAG_continued_packet)    return error(f, VORBIS_invalid_first_page);
    // check for expected packet length
+      printf("BREAK\n");
+
    if (f->segment_count != 1)                       return error(f, VORBIS_invalid_first_page);
+      printf("BREAK\n");
+
    if (f->segments[0] != 30) {
       // check for the Ogg skeleton fishead identifying header to refine our error
       if (f->segments[0] == 64 &&
@@ -3197,6 +3202,7 @@ static int start_decoder(vorb *f)
       else
                                                     return error(f, VORBIS_invalid_first_page);
    }
+   printf("BREAK\n");
 
    // read packet
    // check packet header
@@ -3208,6 +3214,8 @@ static int start_decoder(vorb *f)
    f->channels = get8(f); if (!f->channels)         return error(f, VORBIS_invalid_first_page);
    if (f->channels > STB_VORBIS_MAX_CHANNELS)       return error(f, VORBIS_too_many_channels);
    f->sample_rate = get32(f); if (!f->sample_rate)  return error(f, VORBIS_invalid_first_page);
+      printf("BREAK\n");
+
    get32(f); // bitrate_maximum
    get32(f); // bitrate_nominal
    get32(f); // bitrate_minimum
@@ -4692,7 +4700,7 @@ stb_vorbis * stb_vorbis_open_memory(const unsigned char *data, int len, int *err
    p.stream_start = (uint8 *) p.stream;
    p.stream_len = len;
    p.push_mode = FALSE;
-         printf("HELLO?\n");
+   printf("HELLO?\n");
 
    if (start_decoder(&p)) {
       f = vorbis_alloc(&p);
