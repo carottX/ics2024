@@ -69,7 +69,7 @@
  */
 
 #ifndef FIXEDPT_BITS
-#define FIXEDPT_BITS	32
+#define FIXEDPT_BITS	64
 #endif
 
 #include <stdint.h>
