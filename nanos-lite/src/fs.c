@@ -69,7 +69,7 @@ size_t fs_read(int fd, void *buf, size_t len){
   printf("FSREAD fd=%d len=%d\n",fd,len);
   ReadFn ReadFunc = ramdisk_read;
   if(file_table[fd].read != NULL) ReadFunc = file_table[fd].read;
-  else len = min(len, file_table[fd].size - file_table[fd].p_offset);
+  else len = min(len, (int)file_table[fd].size - (int)file_table[fd].p_offset);
   size_t ret = ReadFunc(buf, file_table[fd].disk_offset + file_table[fd].p_offset, len);
   file_table[fd].p_offset += ret;
   return ret;
