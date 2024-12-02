@@ -60,9 +60,9 @@ void sys_write(Context* c){
 }
 
 void sys_lseek(Context* c){
-  #ifdef STRACE
-  printf("SYSCALL NAME=lseek\n" );
-  #endif
+  // #ifdef STRACE
+  // printf("SYSCALL NAME=lseek\n" );
+  // #endif
   c->GPRx = fs_lseek(c->GPR2, c->GPR3, c->GPR4);
 }
 
