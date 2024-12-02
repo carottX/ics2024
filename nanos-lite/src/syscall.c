@@ -16,7 +16,7 @@ void sys_execve(Context* c){
   #ifdef STRACE
   printf("SYSCALL NAME=execve\n" );
   #endif
-  printf("name=%s\n",(const char*)c->GPR2);
+  printf("TRIED? name=%s\n",(const char*)c->GPR2);
   naive_uload(NULL, (const char*)c->GPR2);
 }
 
