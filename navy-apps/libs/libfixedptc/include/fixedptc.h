@@ -84,6 +84,8 @@ typedef	int64_t	fixedptd;
 typedef	uint32_t fixedptu;
 typedef	uint64_t fixedptud;
 #elif FIXEDPT_BITS == 64
+typedef __int128 __int128_t;
+typedef unsigned __int128 __uint128_t;
 typedef int64_t fixedpt;
 typedef	__int128_t fixedptd;
 typedef	uint64_t fixedptu;
@@ -93,7 +95,7 @@ typedef	__uint128_t fixedptud;
 #endif
 
 #ifndef FIXEDPT_WBITS
-#define FIXEDPT_WBITS	24
+#define FIXEDPT_WBITS 24
 #endif
 
 #if FIXEDPT_WBITS >= FIXEDPT_BITS

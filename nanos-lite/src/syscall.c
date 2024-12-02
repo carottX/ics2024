@@ -1,13 +1,21 @@
 #include <common.h>
 #include "syscall.h"
 #include <sys/time.h>
-
+#include <proc.h>
 
 int fs_open(const char *pathname, int flags, int mode);
 size_t fs_read(int fd, void *buf, size_t len);
 size_t fs_write(int fd, const void *buf, size_t len);
 size_t fs_lseek(int fd, size_t offset, int whence);
 int fs_close(int fd);
+void naive_uload(PCB *pcb, const char *filename);
+
+void sys_execve(Context* c){
+  #ifdef STRACE
+  printf("SYSCALL NAME=execve\n" );
+  #endif
+  naive_uload(NULL, (const char*)c->GPR2);
+}
 
 void sys_yield(Context *c){
   #ifdef STRACE
@@ -22,7 +30,9 @@ void sys_exit(Context* c){
   printf("SYSCALL NAME=exit\n" );
   #endif
   // printf("exit=%d\n", c->GPR2);
-  halt(c->GPR2);
+  // halt(c->GPR2);
+  c->GPR2 = (uintptr_t)"/bin/menu";
+  sys_execve(c);
 }
 
 void sys_sbrk(Context* c){
@@ -89,6 +99,7 @@ void do_syscall(Context *c) {
     case 4: sys_write(c); break;
     case 7: sys_close(c); break;
     case 8: sys_lseek(c); break;
+    case SYS_execve: sys_execve(c); break;
     case SYS_gettimeofday: sys_gettimeofday(c); break;
     default: panic("Unhandled syscall ID = %d", a[0]);
   }

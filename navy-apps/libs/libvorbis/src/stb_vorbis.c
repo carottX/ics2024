@@ -1,5 +1,6 @@
 #include <vorbis.h>
 #include <fixedptc.h>
+
 // global configuration settings (e.g. set these in the project/makefile),
 // or just set them in this file at the top (although ideally the first few
 // should be visible when the header file is compiled too, although it's not
@@ -71,73 +72,7 @@
 //     sets the log size of the binary-search acceleration table. this
 //     is used in similar fashion to the fast-huffman size to set initial
 //     parameters for the binary search
-
-// STB_VORBIS_FAST_HUFFMAN_INT
-//     The fast huffman tables are much more efficient if they can be
-//     stored as 16-bit results instead of 32-bit results. This restricts
-//     the codebooks to having only 65535 possible outcomes, though.
-//     (At least, accelerated by the huffman table.)
-#ifndef STB_VORBIS_FAST_HUFFMAN_INT
-#define STB_VORBIS_FAST_HUFFMAN_SHORT
-#endif
-
-// STB_VORBIS_NO_HUFFMAN_BINARY_SEARCH
-//     If the 'fast huffman' search doesn't succeed, then stb_vorbis falls
-//     back on binary searching for the correct one. This requires storing
-//     extra tables with the huffman codes in sorted order. Defining this
-//     symbol trades off space for speed by forcing a linear search in the
-//     non-fast case, except for "sparse" codebooks.
-// #define STB_VORBIS_NO_HUFFMAN_BINARY_SEARCH
-
-// STB_VORBIS_DIVIDES_IN_RESIDUE
-//     stb_vorbis precomputes the result of the scalar residue decoding
-//     that would otherwise require a divide per chunk. you can trade off
-//     space for time by defining this symbol.
-// #define STB_VORBIS_DIVIDES_IN_RESIDUE
-
-// STB_VORBIS_DIVIDES_IN_CODEBOOK
-//     vorbis VQ codebooks can be encoded two ways: with every case explicitly
-//     stored, or with all elements being chosen from a small range of values,
-//     and all values possible in all elements. By default, stb_vorbis expands
-//     this latter kind out to look like the former kind for ease of decoding,
-//     because otherwise an integer divide-per-vector-element is required to
-//     unpack the index. If you define STB_VORBIS_DIVIDES_IN_CODEBOOK, you can
-//     trade off storage for speed.
-//#define STB_VORBIS_DIVIDES_IN_CODEBOOK
-
-#ifdef STB_VORBIS_CODEBOOK_SHORTS
-#error "STB_VORBIS_CODEBOOK_SHORTS is no longer supported as it produced incorrect results for some input formats"
-#endif
-
-// STB_VORBIS_DIVIDE_TABLE
-//     this replaces small integer divides in the floor decode loop with
-//     table lookups. made less than 1% difference, so disabled by default.
-
-// STB_VORBIS_NO_INLINE_DECODE
-//     disables the inlining of the scalar codebook fast-huffman decode.
-//     might save a little codespace; useful for debugging
-// #define STB_VORBIS_NO_INLINE_DECODE
-
-// STB_VORBIS_NO_DEFER_FLOOR
-//     Normally we only decode the floor without synthesizing the actual
-//     full curve. We can instead synthesize the curve immediately. This
-//     requires more memory and is very likely slower, so I don't think
-//     you'd ever want to do it except for debugging.
-// #define STB_VORBIS_NO_DEFER_FLOOR
-
-
-
-
-//////////////////////////////////////////////////////////////////////////////
-
-#ifdef STB_VORBIS_NO_PULLDATA_API
-   #define STB_VORBIS_NO_INTEGER_CONVERSION
-   #define STB_VORBIS_NO_STDIO
-#endif
-
-#if defined(STB_VORBIS_NO_CRT) && !defined(STB_VORBIS_NO_STDIO)
-   #define STB_VORBIS_NO_STDIO 1
-#endif
+  // printf("error=%d\n",error);
 
 #ifndef STB_VORBIS_NO_INTEGER_CONVERSION
 #ifndef STB_VORBIS_NO_FAST_SCALED_FLOAT
@@ -209,7 +144,6 @@
 #if STB_VORBIS_FAST_HUFFMAN_LENGTH > 24
 #error "Value of STB_VORBIS_FAST_HUFFMAN_LENGTH outside of allowed range"
 #endif
-
 
 #if 0
 #include <crtdbg.h>
