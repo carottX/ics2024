@@ -106,7 +106,7 @@ void do_syscall(Context *c) {
     case SYS_gettimeofday: sys_gettimeofday(c); break;
     default: panic("Unhandled syscall ID = %d", a[0]);
   }
-  #ifdef STRACE
-  printf("Return Value=%d\n", c->GPRx);
-  #endif
+  // #ifdef STRACE
+  // printf("Return Value=%d\n", c->GPRx);
+  // #endif
 }
