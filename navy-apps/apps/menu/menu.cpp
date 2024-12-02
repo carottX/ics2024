@@ -99,7 +99,7 @@ int main(int argc, char *argv[], char *envp[]) {
       case SDLK_LEFT: prev(); break;
       case SDLK_RIGHT: next(); break;
     }
-    fprintf(stderr,"i=%d\n",i);
+    // fprintf(stderr,"i=%d\n",i);
 
     if (i != -1 && i <= i_max) {
       i += page * 10;
@@ -113,7 +113,7 @@ int main(int argc, char *argv[], char *envp[]) {
       execve(exec_argv[0], (char**)exec_argv, (char**)envp);
       fprintf(stderr, "\033[31m[ERROR]\033[0m Exec %s failed.\n\n", exec_argv[0]);
     } else {
-      fprintf(stderr, "Choose a number between %d and %d\n\n", 0, i_max);
+      fprintf(stderr, "Choose a number between %d and %d i=%d\n\n", 0, i_max,i);
     }
   }
   return -1;
