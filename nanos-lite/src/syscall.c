@@ -30,9 +30,9 @@ void sys_exit(Context* c){
   printf("SYSCALL NAME=exit\n" );
   #endif
   // printf("exit=%d\n", c->GPR2);
-  halt(c->GPR2);
-  // c->GPR2 = (uintptr_t)"/bin/menu";
-  // sys_execve(c);
+  // halt(c->GPR2);
+  c->GPR2 = (uintptr_t)"/bin/menu";
+  sys_execve(c);
 }
 
 void sys_sbrk(Context* c){
