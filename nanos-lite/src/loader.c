@@ -20,7 +20,7 @@ size_t ramdisk_read(void *buf, size_t offset, size_t len);
 
 static uintptr_t loader(PCB *pcb, const char *filename) {
   int fd = fs_open(filename, 0, 0);
-  // printf("fd=%d\n",fd);
+  printf("fd=%d\n",fd);
   void* file = malloc(GetFileSize(fd));
   Elf_Ehdr* elf = malloc(sizeof(Elf_Ehdr));
   fs_read(fd, file, GetFileSize(fd));
