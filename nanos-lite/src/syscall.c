@@ -91,9 +91,9 @@ void sys_gettimeofday(Context* c){
 void do_syscall(Context *c) {
   uintptr_t a[4];
   a[0] = c->GPR1;
-  #ifdef STRACE
-  printf("SYSCALL ID=%d\n", a[0]);
-  #endif
+  // #ifdef STRACE
+  // printf("SYSCALL ID=%d\n", a[0]);
+  // #endif
   switch (a[0]) {
     case 0: sys_exit(c); break;
     case 1: sys_yield(c); break;
