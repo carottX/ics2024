@@ -3,7 +3,7 @@
 #include <sys/time.h>
 #include <proc.h>
 
-#define STRACE
+// #define STRACE
 
 int fs_open(const char *pathname, int flags, int mode);
 size_t fs_read(int fd, void *buf, size_t len);
@@ -18,6 +18,7 @@ void sys_execve(Context* c){
   #endif
   printf("TRIED? name=%s\n",(const char*)c->GPR2);
   naive_uload(NULL, (const char*)c->GPR2);
+  c->GPRx = 0;
 }
 
 void sys_yield(Context *c){
@@ -48,41 +49,44 @@ void sys_sbrk(Context* c){
 }
 
 void sys_read(Context* c){
-  //  #ifdef STRACE
-  // printf("SYSCALL NAME=read\n" );
-  // #endif
+   #ifdef STRACE
+  printf("SYSCALL NAME=read %d\n", c->GPR2 );
+  #endif
   c->GPRx = fs_read(c->GPR2, (void *)c->GPR3, c->GPR4);
 }
 
 void sys_write(Context* c){
-  // #ifdef STRACE
-  // printf("SYSCALL NAME=write\n" );
-  // #endif
+  #ifdef STRACE
+  printf("SYSCALL NAME=write %d\n",c->GPR2 );
+  #endif
   c->GPRx = fs_write(c->GPR2, (void *)c->GPR3, c->GPR4);
 }
 
 void sys_lseek(Context* c){
-  // #ifdef STRACE
-  // printf("SYSCALL NAME=lseek\n" );
-  // #endif
+  #ifdef STRACE
+  printf("SYSCALL NAME=lseek\n" );
+  #endif
   c->GPRx = fs_lseek(c->GPR2, c->GPR3, c->GPR4);
 }
 
 void sys_open(Context* c){
-  // #ifdef STRACE
-  // printf("SYSCALL NAME=open\n" );
-  // #endif
+  #ifdef STRACE
+  printf("SYSCALL NAME=open\n" );
+  #endif
   c->GPRx = fs_open((char*)c->GPR2, c->GPR3, c->GPR4);
 }
 
 void sys_close(Context* c){
-  // #ifdef STRACE
-  // printf("SYSCALL NAME=close\n" );
-  // #endif
+  #ifdef STRACE
+  printf("SYSCALL NAME=close\n" );
+  #endif
   c->GPRx = fs_close(c->GPR2);
 }
 
 void sys_gettimeofday(Context* c){
+  #ifdef STRACE
+  printf("SYSCALL NAME=gettimeofday\n" );
+  #endif
   struct timeval* tv = (void *)c->GPR2;
   uint64_t us = io_read(AM_TIMER_UPTIME).us;
   tv->tv_sec = us/1000000;
@@ -93,22 +97,22 @@ void sys_gettimeofday(Context* c){
 void do_syscall(Context *c) {
   uintptr_t a[4];
   a[0] = c->GPR1;
-  // #ifdef STRACE
-  // printf("SYSCALL ID=%d\n", a[0]);
-  // #endif
+  #ifdef STRACE
+  printf("SYSCALL ID=%d\n", a[0]);
+  #endif
   switch (a[0]) {
-    case 0: sys_exit(c); break;
-    case 1: sys_yield(c); break;
-    case 2: sys_open(c); break;
-    case 3: sys_read(c); break;
-    case 4: sys_write(c); break;
-    case 7: sys_close(c); break;
-    case 8: sys_lseek(c); break;
+    case SYS_exit: sys_exit(c); break;
+    case SYS_yield: sys_yield(c); break;
+    case SYS_open: sys_open(c); break;
+    case SYS_read: sys_read(c); break;
+    case SYS_write: sys_write(c); break;
+    case SYS_close: sys_close(c); break;
+    case SYS_lseek: sys_lseek(c); break;
     case SYS_execve: sys_execve(c); break;
     case SYS_gettimeofday: sys_gettimeofday(c); break;
     default: panic("Unhandled syscall ID = %d", a[0]);
   }
-  // #ifdef STRACE
-  // printf("Return Value=%d\n", c->GPRx);
-  // #endif
+  #ifdef STRACE
+  printf("Return Value=%d\n", c->GPRx);
+  #endif
 }
