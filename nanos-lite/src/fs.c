@@ -55,7 +55,7 @@ int fs_open(const char *pathname, int flags, int mode){
   // printf("pathname=%s\n",pathname);
   int n = ARRLEN(file_table);
   for(int i=0; i<n; ++i){
-    if(strcmp(file_table[i].name, pathname) == 0) {
+    if(strncmp(file_table[i].name, pathname, strlen(file_table[i].name)) == 0) {
       if(i>7) printf("%s size=%d\n",pathname, file_table[i].size);
       file_table[i].p_offset = 0;
       return i;
