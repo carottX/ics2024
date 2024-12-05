@@ -69,8 +69,8 @@ size_t sb_write(const void* buf, size_t offset, size_t len){
   printf("sb_write\n");
   void* bufstart = io_read(AM_AUDIO_PLAY).buf.start;
   printf("bufstart=%d\n",(intptr_t)bufstart);
-  for(int i=0; i<len; ++i) printf("%d ",((uint8_t*)buf)[i]);
-  printf("\n");
+  // for(int i=0; i<len; ++i) printf("%d ",((uint8_t*)buf)[i]);
+  // printf("\n");
   memcpy(bufstart, buf, len);
   printf("sb_write end\n");
   return len;
