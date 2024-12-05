@@ -69,7 +69,7 @@ size_t sb_write(const void* buf, size_t offset, size_t len){
   printf("sb_write len=%d\n",len);
   Area sbuf;
   sbuf.start = (void*)buf;
-  sbuf.end = (void*)buf + 4096;
+  sbuf.end = (void*)buf + len;
   io_write(AM_AUDIO_PLAY, sbuf);
   // void* bufstart = io_read(AM_AUDIO_PLAY).buf.start;
   // printf("bufstart=%d\n buf=%d\n",(intptr_t)bufstart,(intptr_t)buf);

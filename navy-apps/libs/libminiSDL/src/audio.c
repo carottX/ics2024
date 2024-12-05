@@ -24,6 +24,7 @@ void CallBackHelper() {
 
     NDL_PlayAudio(stream, spec.samples * spec.channels * sz);
     free(stream);
+    printf("CALLBACK\n");
     last_callback = NDL_GetTicks();
   }
 }
