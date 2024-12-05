@@ -10,6 +10,7 @@ static uint32_t last_callback = 0;
 static bool paused = false;
 
 void CallBackHelper() {
+  printf("!!!!?\n");
   if(spec.callback == NULL || paused) return;
   printf("samples=%d\n",spec.samples);
   uint32_t interval = spec.samples*1000;
