@@ -37,7 +37,7 @@ int SDL_OpenAudio(SDL_AudioSpec *desired, SDL_AudioSpec *obtained) {
     *obtained = *desired;
   }
   printf("BeforeHelper\n");
-  //CallBackHelper();
+  CallBackHelper();
   return 0;
 }
 
