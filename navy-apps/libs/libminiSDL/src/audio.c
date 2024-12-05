@@ -11,6 +11,7 @@ static bool paused = false;
 
 void CallBackHelper() {
   if(spec.callback == NULL || paused) return;
+  printf("samples=%d\n",spec.samples);
   uint32_t interval = spec.samples*1000 / spec.freq;
   if(NDL_GetTicks() - last_callback >= interval * 2) {
     printf("CALLBACK\n");
