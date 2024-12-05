@@ -32,7 +32,7 @@ int SDL_PollEvent(SDL_Event *ev) {
   for(int i = 0; i < sizeof(keyname)/sizeof(keyname[0]); ++i){
     if(strncmp(keyname[i], buf+3, strlen(buf)) == 0){
       ev -> key.keysym.sym = i;
-      printf("!!!!!!%s\n",keyname[i]);
+      // printf("!!!!!!%s\n",keyname[i]);
       keys[i] = ((ev->type == SDL_KEYDOWN) ? 1 : 0);
       return 1;
     }

@@ -10,35 +10,35 @@ static uint32_t last_callback = 0;
 static bool paused = false;
 
 void CallBackHelper() {
-  printf("!!!!?\n");
+  // printf("!!!!?\n");
   if(spec.callback == NULL || paused) return;
-  printf("samples=%d\n",spec.samples);
+  // printf("samples=%d\n",spec.samples);
   uint32_t interval = spec.samples*1000;
   if((NDL_GetTicks() - last_callback) * spec.freq + 50 >= interval/2) {
-    printf("CALLBACK\n");
+    // printf("CALLBACK\n");
     int sz = (spec.format == AUDIO_S16SYS) ? sizeof(uint16_t) : sizeof(uint32_t);
-        printf("CALLBACK sz=%d\n",sz);
+        // printf("CALLBACK sz=%d\n",sz);
 
     void* stream = malloc(spec.samples * spec.channels * sz);
-        printf("CALLBACK\n");
+        // printf("CALLBACK\n");
 
     spec.callback(NULL, stream, spec.samples * spec.channels * sz); 
 
     NDL_PlayAudio(stream, spec.samples * spec.channels * sz);
     free(stream);
-    printf("CALLBACK\n");
+    // printf("CALLBACK\n");
     last_callback = NDL_GetTicks();
   }
 }
 
 int SDL_OpenAudio(SDL_AudioSpec *desired, SDL_AudioSpec *obtained) {
   NDL_OpenAudio(desired->freq, desired->channels, desired->samples);
-  printf("OPENED\n");
+  // printf("OPENED\n");
   spec = *desired;
   if(obtained != NULL) {
     *obtained = *desired;
   }
-  printf("BeforeHelper\n");
+  // printf("BeforeHelper\n");
   last_callback = 0;
   // CallBackHelper();
   return 0;
