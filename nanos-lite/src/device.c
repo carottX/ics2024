@@ -67,11 +67,15 @@ size_t sbctl_write(const void* buf, size_t offset, size_t len){
 
 size_t sb_write(const void* buf, size_t offset, size_t len){
   printf("sb_write\n");
-  void* bufstart = io_read(AM_AUDIO_PLAY).buf.start;
-  printf("bufstart=%d\n buf=%d\n",(intptr_t)bufstart,(intptr_t)buf);
+  Area sbuf;
+  sbuf.start = (void*)buf;
+  sbuf.start = (void*)buf + len;
+  io_write(AM_AUDIO_PLAY, sbuf);
+  // void* bufstart = io_read(AM_AUDIO_PLAY).buf.start;
+  // printf("bufstart=%d\n buf=%d\n",(intptr_t)bufstart,(intptr_t)buf);
   // for(int i=0; i<len; ++i) printf("%d ",((uint8_t*)buf)[i]);
   // printf("\n");
-  memcpy(bufstart, buf, len);
+  // memcpy(bufstart, buf, len);
   printf("sb_write end\n");
   return len;
 }
