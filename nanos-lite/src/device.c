@@ -66,7 +66,7 @@ size_t sbctl_write(const void* buf, size_t offset, size_t len){
 }
 
 size_t sb_write(const void* buf, size_t offset, size_t len){
-  printf("sb_write\n");
+  printf("sb_write len=%d\n",len);
   Area sbuf;
   sbuf.start = (void*)buf;
   sbuf.end = (void*)buf + len;
