@@ -15,7 +15,7 @@ void CallBackHelper() {
   if(NDL_GetTicks() - last_callback >= interval) {
     printf("CALLBACK\n");
     int sz = (spec.format == AUDIO_S16SYS) ? sizeof(uint16_t) : sizeof(uint32_t);
-        printf("CALLBACK\n");
+        printf("CALLBACK sz=%d\n",sz);
 
     void* stream = malloc(spec.samples * spec.channels * sz);
         printf("CALLBACK\n");
