@@ -53,8 +53,10 @@ size_t fb_write(const void *buf, size_t offset, size_t len) {
 }
 
 size_t sbctl_read(void* buf, size_t offset, size_t len){
+  printf("bufsize=%d count=%d\n", io_read(AM_AUDIO_CONFIG).bufsize, io_read(AM_AUDIO_STATUS).count);
   size_t freebytes = io_read(AM_AUDIO_CONFIG).bufsize - io_read(AM_AUDIO_STATUS).count;
-  return freebytes;
+  *(int32_t*)buf = freebytes;
+  return len;
 }
 
 size_t sbctl_write(const void* buf, size_t offset, size_t len){
@@ -64,8 +66,12 @@ size_t sbctl_write(const void* buf, size_t offset, size_t len){
 }
 
 size_t sb_write(const void* buf, size_t offset, size_t len){
+  printf("sb_write\n");
   void* bufstart = io_read(AM_AUDIO_PLAY).buf.start;
-  return memcpy(bufstart, buf, len) - bufstart;
+  // printf("%d",(intptr_t)bufstart);
+  memcpy(bufstart, buf, len);
+  printf("sb_write end\n");
+  return len;
 }
 
 void init_device() {

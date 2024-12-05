@@ -82,10 +82,13 @@ void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h) {
 }
 
 void NDL_OpenAudio(int freq, int channels, int samples) {
+  printf("HELLO?\n");
   int fd = open("/dev/sbctl",0,0);
   int* to_write = malloc(sizeof(int) * 3);
   to_write[0] = freq; to_write[1] = channels; to_write[2] = samples;
+  printf("BEFORE WRITE\n");
   write(fd, to_write, sizeof(int)*3);
+  printf("HELLO?\n");
   close(fd);
 }
 
@@ -93,7 +96,9 @@ void NDL_CloseAudio() {
 }
 
 int NDL_PlayAudio(void *buf, int len) {
-  while(NDL_QueryAudio() < len);
+  while(NDL_QueryAudio() < len){
+    printf("NDL_QueryAudio() = %d\n", NDL_QueryAudio());
+  }
   int fd = open("/dev/sb",0,0);
   int ret = write(fd, buf, len);
   close(fd);
@@ -102,8 +107,9 @@ int NDL_PlayAudio(void *buf, int len) {
 
 int NDL_QueryAudio() {
   int fd = open("/dev/sbctl",0,0);
-  int buf[5];
-  read(fd, buf, 16);
+  int buf[0];
+  read(fd, buf, 4);
+  // printf("%d\n",buf[0]);
   close(fd);
   return buf[0];
 }

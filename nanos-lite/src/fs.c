@@ -55,7 +55,7 @@ int fs_open(const char *pathname, int flags, int mode){
   // printf("pathname=%s\n",pathname);
   int n = ARRLEN(file_table);
   for(int i=0; i<n; ++i){
-    if(strncmp(file_table[i].name, pathname, strlen(file_table[i].name)) == 0) {
+    if(strcmp(file_table[i].name, pathname) == 0) {
       if(i>7) printf("%s size=%d\n",pathname, file_table[i].size);
       file_table[i].p_offset = 0;
       return i;
@@ -81,6 +81,7 @@ size_t fs_read(int fd, void *buf, size_t len){
 
 size_t fs_write(int fd, const void *buf, size_t len){
   // if(fd == FD_STDOUT) panic("?");
+  // printf("FSWRITE fd=%d len=%d\n",fd,len);
   WriteFn WriteFunc = ramdisk_write;
   if(file_table[fd].write != NULL){ WriteFunc = file_table[fd].write;}
   else len = min(len, file_table[fd].size - file_table[fd].p_offset);

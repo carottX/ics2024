@@ -13,9 +13,15 @@ void CallBackHelper() {
   if(spec.callback == NULL || paused) return;
   uint32_t interval = spec.samples*1000 / spec.freq;
   if(NDL_GetTicks() - last_callback >= interval) {
+    printf("CALLBACK\n");
     int sz = (spec.format == AUDIO_S16SYS) ? sizeof(uint16_t) : sizeof(uint32_t);
+        printf("CALLBACK\n");
+
     void* stream = malloc(spec.samples * spec.channels * sz);
+        printf("CALLBACK\n");
+
     spec.callback(NULL, stream, spec.samples * spec.channels * sz); 
+
     NDL_PlayAudio(stream, spec.samples * spec.channels * sz);
     free(stream);
     last_callback = NDL_GetTicks();
@@ -24,11 +30,13 @@ void CallBackHelper() {
 
 int SDL_OpenAudio(SDL_AudioSpec *desired, SDL_AudioSpec *obtained) {
   NDL_OpenAudio(desired->freq, desired->channels, desired->samples);
+  printf("OPENED\n");
   spec = *desired;
   if(obtained != NULL) {
     *obtained = *desired;
   }
-  CallBackHelper();
+  printf("BeforeHelper\n");
+  //CallBackHelper();
   return 0;
 }
 

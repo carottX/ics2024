@@ -1,5 +1,7 @@
 #include <vorbis.h>
 #include <fixedptc.h>
+#include <math.h>
+#include <stdio.h>
 
 // global configuration settings (e.g. set these in the project/makefile),
 // or just set them in this file at the top (although ideally the first few
@@ -760,13 +762,24 @@ static int64_t powi(int x, int y) {
 // (formula implied by specification)
 static int lookup1_values(int entries, int dim)
 {
+   // long double tmp = (long double) entries;
+   // tmp = log(tmp);
+   // tmp = tmp / dim;
+   // tmp = exp(tmp);
+   // printf("tmp=%.20Lf\n", tmp);
+   // fixedpt ln = fixedpt_ln(fixedpt_fromint(entries));
+   // fixedpt divi = fixedpt_divi(ln, dim);
+   // fixedpt exp = fixedpt_exp(divi);
+   // printf("ln=%d divi=%d exp=%d\n", fixedpt_toint(ln), fixedpt_toint(divi), fixedpt_toint(exp));
    int r = fixedpt_toint(fixedpt_floor(fixedpt_exp(fixedpt_divi(fixedpt_ln(fixedpt_fromint(entries)), dim))));
+   if(dim == 2) r = fixedpt_toint(fixedpt_floor(fixedpt_sqrt(fixedpt_fromint(entries))));
+   // printf("r=%d entry=%d dim=%d\n", r, entries, dim);
    if ((int) powi(r+1, dim) <= entries)   // (int) cast for MinGW warning;
       ++r;                                // floor() to avoid _ftol() when non-CRT
-   if (powi(r+1, dim) <= entries)
+   if (powi(r+1, dim) <= entries){
       return -1;
-   if (powi(r, dim) > entries)
-      return -1;
+   }
+   if (powi(r, dim) > entries){return -1;}
    return r;
 }
 
@@ -3387,6 +3400,7 @@ static int start_decoder(vorb *f)
          c->sequence_p = get_bits(f,1);
          if (c->lookup_type == 1) {
             int values = lookup1_values(c->entries, c->dimensions);
+            // printf("%d\n",values);
             if (values < 0) return error(f, VORBIS_invalid_setup);
             c->lookup_values = (uint32) values;
          } else {
