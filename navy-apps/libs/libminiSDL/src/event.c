@@ -22,6 +22,8 @@ int SDL_PushEvent(SDL_Event *ev) {
 }
 
 int SDL_PollEvent(SDL_Event *ev) {
+    CallBackHelper();
+
   // printf("POLL BEGIN\n");
   char buf[16];
   if(NDL_PollEvent(buf, 16) == 0) return 0;
@@ -35,12 +37,11 @@ int SDL_PollEvent(SDL_Event *ev) {
       return 1;
     }
   }
-  CallBackHelper();
   return 0;
 }
 
 int SDL_WaitEvent(SDL_Event *event) {
-    CallBackHelper();
+  CallBackHelper();
 
   // printf("???");
   char buf[16];
