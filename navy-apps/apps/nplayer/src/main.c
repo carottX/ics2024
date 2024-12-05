@@ -116,6 +116,7 @@ int main(int argc, char *argv[]) {
   assert(stream_save);
   printf("Playing %s(freq = %d, channels = %d)...\n", MUSIC_PATH, info.sample_rate, info.channels);
   SDL_PauseAudio(0);
+  printf("?\n");
 
   while (!is_end) {
     SDL_Event ev;
