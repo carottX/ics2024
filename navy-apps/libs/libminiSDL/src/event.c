@@ -40,6 +40,8 @@ int SDL_PollEvent(SDL_Event *ev) {
 }
 
 int SDL_WaitEvent(SDL_Event *event) {
+    CallBackHelper();
+
   // printf("???");
   char buf[16];
   while(NDL_PollEvent(buf, 16) == 0);
@@ -55,7 +57,7 @@ int SDL_WaitEvent(SDL_Event *event) {
       return 1;
     }
   }
-    CallBackHelper();
+  CallBackHelper();
 
   return 0;
 }
