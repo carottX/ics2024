@@ -6,12 +6,14 @@
 static SDL_AudioSpec spec;
 
 static uint32_t last_callback = 0;
+static bool callback_locked = false;
 
 static bool paused = false;
 
 void CallBackHelper() {
   // printf("!!!!?\n");
-  if(spec.callback == NULL || paused) return;
+  if(spec.callback == NULL || paused || callback_locked) return;
+  callback_locked = true;
   // printf("samples=%d\n",spec.samples);
   uint32_t interval = spec.samples*1000;
   if((NDL_GetTicks() - last_callback) * spec.freq >= interval) {
@@ -29,6 +31,7 @@ void CallBackHelper() {
     // printf("CALLBACK\n");
     last_callback = NDL_GetTicks();
   }
+  callback_locked = false;
 }
 
 int SDL_OpenAudio(SDL_AudioSpec *desired, SDL_AudioSpec *obtained) {
