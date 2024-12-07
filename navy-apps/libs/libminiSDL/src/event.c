@@ -22,9 +22,7 @@ int SDL_PushEvent(SDL_Event *ev) {
 }
 
 int SDL_PollEvent(SDL_Event *ev) {
-    CallBackHelper();
-
-  // printf("POLL BEGIN\n");
+  CallBackHelper();
   char buf[16];
   if(NDL_PollEvent(buf, 16) == 0) return 0;
   if(strncmp(buf, "kd", 2) == 0) ev->type = SDL_KEYDOWN;
@@ -41,9 +39,6 @@ int SDL_PollEvent(SDL_Event *ev) {
 }
 
 int SDL_WaitEvent(SDL_Event *event) {
-  CallBackHelper();
-
-  // printf("???");
   char buf[16];
   while(NDL_PollEvent(buf, 16) == 0);
   buf[15] = '\0';

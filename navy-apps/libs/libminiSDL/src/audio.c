@@ -16,8 +16,8 @@ void CallBackHelper() {
   callback_locked = true;
   // printf("samples=%d\n",spec.samples);
   uint32_t interval = spec.samples*1000;
-  if((NDL_GetTicks() - last_callback) * spec.freq >= interval) {
-    // printf("CALLBACK\n");
+  while((NDL_GetTicks() - last_callback) * spec.freq < interval);
+
     int sz = (spec.format == AUDIO_S16SYS) ? sizeof(uint16_t) : sizeof(uint32_t);
         // printf("CALLBACK sz=%d\n",sz);
 
@@ -30,7 +30,7 @@ void CallBackHelper() {
     free(stream);
     // printf("CALLBACK\n");
     last_callback = NDL_GetTicks();
-  }
+  
   callback_locked = false;
 }
 
