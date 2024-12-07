@@ -1,5 +1,7 @@
 #include <proc.h>
 #include <elf.h>
+#include "/home/carottx/ics2024/navy-apps/libs/libc/src/misc/init.c"
+#define HAVE_INITFINI_ARRAY
 
 #ifdef __LP64__
 # define Elf_Ehdr Elf64_Ehdr
@@ -17,6 +19,7 @@ int fs_close(int fd);
 
 size_t GetFileSize(int fd);
 size_t ramdisk_read(void *buf, size_t offset, size_t len);
+void __libc_init_array (void);
 
 static uintptr_t loader(PCB *pcb, const char *filename) {
   printf("LOADER?\n");
@@ -59,6 +62,7 @@ void naive_uload(PCB *pcb, const char *filename) {
   // printf("0x1234=%x\n",0x1234);
   // printf("entry=%u\n",entry);
   Log("Jump to entry = %p", entry);
+  __libc_init_array();
   ((void(*)())entry) ();
   assert(0);
 }
