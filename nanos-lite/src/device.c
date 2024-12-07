@@ -53,7 +53,7 @@ size_t fb_write(const void *buf, size_t offset, size_t len) {
 }
 
 size_t sbctl_read(void* buf, size_t offset, size_t len){
-  printf("bufsize=%d count=%d\n", io_read(AM_AUDIO_CONFIG).bufsize, io_read(AM_AUDIO_STATUS).count);
+  // printf("bufsize=%d count=%d\n", io_read(AM_AUDIO_CONFIG).bufsize, io_read(AM_AUDIO_STATUS).count);
   size_t freebytes = io_read(AM_AUDIO_CONFIG).bufsize - io_read(AM_AUDIO_STATUS).count;
   *(int32_t*)buf = freebytes;
   return len;
@@ -66,7 +66,7 @@ size_t sbctl_write(const void* buf, size_t offset, size_t len){
 }
 
 size_t sb_write(const void* buf, size_t offset, size_t len){
-  printf("sb_write len=%d\n",len);
+  // printf("sb_write len=%d\n",len);
   Area sbuf;
   sbuf.start = (void*)buf;
   sbuf.end = (void*)buf + len;
@@ -76,7 +76,7 @@ size_t sb_write(const void* buf, size_t offset, size_t len){
   // for(int i=0; i<len; ++i) printf("%d ",((uint8_t*)buf)[i]);
   // printf("\n");
   // memcpy(bufstart, buf, len);
-  printf("sb_write end\n");
+  // printf("sb_write end\n");
   return len;
 }
 

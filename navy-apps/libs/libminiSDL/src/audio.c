@@ -40,7 +40,7 @@ int SDL_OpenAudio(SDL_AudioSpec *desired, SDL_AudioSpec *obtained) {
   }
   // printf("BeforeHelper\n");
   last_callback = 0;
-  CallBackHelper();
+  // CallBackHelper();
   return 0;
 }
 
