@@ -19,7 +19,7 @@ size_t GetFileSize(int fd);
 size_t ramdisk_read(void *buf, size_t offset, size_t len);
 
 static uintptr_t loader(PCB *pcb, const char *filename) {
-  printf("LOADER?\n");
+  // printf("LOADER?\n");
   int fd = fs_open(filename, 0, 0);
   // printf("fd=%d\n",fd);
   void* file = malloc(GetFileSize(fd));
