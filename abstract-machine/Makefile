@@ -62,7 +62,7 @@ LINKAGE   = $(OBJS) \
   $(addsuffix -$(ARCH).a, $(join \
     $(addsuffix /build/, $(addprefix $(AM_HOME)/, $(LIBS))), \
     $(LIBS) ))
-
+$(info Hello!)
 $(info $(LINKAGE))
 
 
