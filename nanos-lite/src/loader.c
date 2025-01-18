@@ -94,7 +94,7 @@ void context_uload(PCB* pcb, const char *filename, char* const argv[], char* con
   }
   stk[argc + 1] = 0;
   for(int i=0; i<envc; ++i){
-    stk[argc + 1 + i] = (uintptr_t)envp_pos[i];
+    stk[argc + 2 + i] = (uintptr_t)envp_pos[i];
   }
   stk[argc + envc + 2] = 0;
   uintptr_t entry = loader(pcb, filename);
