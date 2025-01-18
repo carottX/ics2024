@@ -20,7 +20,7 @@ void sys_execve(Context* c){
   #ifdef STRACE
   printf("SYSCALL NAME=execve\n" );
   #endif
-  context_uload(current, (char*)c->GPR2, (char**)c->GPR3, (char**)c->GPR4);
+  context_uload(current, (const char*)c->GPR2, (char*const *)c->GPR3, (char*const*)c->GPR4);
   switch_boot_pcb();
   yield();
   c->GPRx = 0;
