@@ -103,5 +103,5 @@ void context_uload(PCB* pcb, const char *filename, char* const argv[], char* con
   printf("argv[0]=%s\n",((uintptr_t*)stk)[1]);
   pcb->cp = ucontext(&pcb->as, (Area) { pcb->stack, pcb->stack + STACK_SIZE }, (void *)entry);  
   pcb->cp->GPRx = (uintptr_t)stk;
-
+  printf("?\n");
 }
