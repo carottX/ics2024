@@ -74,7 +74,7 @@ void context_uload(PCB* pcb, const char *filename, char* const argv[], char* con
   printf("argc=%d envc=%d\n",argc,envc);
   for(int i=0; i<argc; ++i) printf("argv[%d]=%s\n",i,argv[i]);
   char* argv_pos[argc], *envp_pos[envc];
-  char* stk = (char*)new_page(8);
+  char* stk = (char*)new_page(8) + PGSIZE * 8;
   for(int i = argc - 1; i>=0; i--){
     int len = strlen(argv[i]) + 1;
     stk -= len;
