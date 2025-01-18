@@ -5,19 +5,24 @@
 
 // #define STRACE
 
+extern PCB *current;
+
 int fs_open(const char *pathname, int flags, int mode);
 size_t fs_read(int fd, void *buf, size_t len);
 size_t fs_write(int fd, const void *buf, size_t len);
 size_t fs_lseek(int fd, size_t offset, int whence);
 int fs_close(int fd);
 void naive_uload(PCB *pcb, const char *filename);
+void context_uload(PCB* pcb, const char *filename, char* const argv[], char* const envp[]);
+void switch_boot_pcb();
 
 void sys_execve(Context* c){
   #ifdef STRACE
   printf("SYSCALL NAME=execve\n" );
   #endif
-  // printf("TRIED? name=%s\n",(const char*)c->GPR2);
-  naive_uload(NULL, (const char*)c->GPR2);
+  context_uload(current, (char*)c->GPR2, (char**)c->GPR3, (char**)c->GPR4);
+  switch_boot_pcb();
+  yield();
   c->GPRx = 0;
 }
 
