@@ -18,6 +18,8 @@ int fs_close(int fd);
 size_t GetFileSize(int fd);
 size_t ramdisk_read(void *buf, size_t offset, size_t len);
 
+
+
 static uintptr_t loader(PCB *pcb, const char *filename) {
   // printf("LOADER?\n");
   int fd = fs_open(filename, 0, 0);
@@ -64,3 +66,7 @@ void naive_uload(PCB *pcb, const char *filename) {
   assert(0);
 }
 
+void context_uload(PCB* pcb, const char *filename) {
+  uintptr_t entry = loader(pcb, filename);
+  pcb->cp = ucontext(&pcb->as, (Area) { pcb->stack, pcb->stack + STACK_SIZE }, (void *)entry);
+}

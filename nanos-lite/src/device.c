@@ -15,14 +15,17 @@ static const char *keyname[256] __attribute__((used)) = {
 };
 
 void putch(char c);
+void yield();
 
 size_t serial_write(const void *buf, size_t offset, size_t len) {
+  yield();
   for(int i=0; i<len; ++i) putch(*((uint8_t*)buf + i));
   return len;
 }
 
 size_t events_read(void *buf, size_t offset, size_t len) {
   // printf("READ\n");
+  yield();
   size_t bytes_written = 0;
   assert(len >= 3);
   AM_INPUT_KEYBRD_T kbd = io_read(AM_INPUT_KEYBRD);
@@ -45,6 +48,7 @@ size_t dispinfo_read(void *buf, size_t offset, size_t len) {
 }
 
 size_t fb_write(const void *buf, size_t offset, size_t len) {
+  yield();
   int m = io_read(AM_GPU_CONFIG).width;
   offset /= 4;
   int i = offset / m, j = offset % m;
