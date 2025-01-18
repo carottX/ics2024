@@ -81,10 +81,10 @@ void context_uload(PCB* pcb, const char *filename, char* const argv[], char* con
   }
   stk = (uintptr_t*)ROUNDDOWN((uintptr_t)stk, sizeof(uintptr_t));
   for(int i = envc - 1; i>=0; i--){
-    int len = strlen(argv[i]) + 1;
+    int len = strlen(envp[i]) + 1;
     stk -= len;
     envp_pos[i] = (char*)stk;
-    strncpy((char*)stk, argv[i], len);
+    strncpy((char*)stk, envp[i], len);
   }
   stk = (uintptr_t*)ROUNDDOWN((uintptr_t)stk, sizeof(uintptr_t));
   stk -= argc + envc + 3;
