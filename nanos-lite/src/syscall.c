@@ -42,6 +42,10 @@ void sys_exit(Context* c){
   if(c->GPR2)halt(c->GPR2);
   else{
     c->GPR2 = (uintptr_t)"/bin/nterm";
+    char* argv[] = {"/bin/nterm", NULL};
+    char* envp[] = {NULL};
+    c->GPR3 = (uintptr_t)argv;
+    c->GPR4 = (uintptr_t)envp;
     sys_execve(c);
   }
 }
