@@ -31,7 +31,7 @@ void init_proc() {
   context_kload(&pcb[0], hello_fun, (void *)0);
   char* const argv[] = {"/bin/exec-test", NULL};
   char* const envp[] = {NULL};
-  context_uload(&pcb[1], "/bin/exec-test", argv, envp);
+  context_uload(&pcb[1], "/bin/menu", argv, envp);
   switch_boot_pcb();
 
   yield();
