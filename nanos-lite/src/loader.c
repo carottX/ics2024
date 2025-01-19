@@ -40,7 +40,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
   size_t entry_size = elf->e_phentsize;
   size_t ph_num = elf->e_phnum;
   for(int i=0; i<ph_num; ++i){
-    Elf_Phdr *seg_header = malloc(sizeof(Elf_Phdr));
+    Elf_Phdr *seg_header = sys_malloc(sizeof(Elf_Phdr));
     memcpy(seg_header, file+ph_offset+entry_size*i, sizeof(Elf_Phdr));
     if(seg_header->p_type != PT_LOAD) continue;
     // printf("LOADED!\n");
