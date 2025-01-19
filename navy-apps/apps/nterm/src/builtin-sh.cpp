@@ -27,14 +27,14 @@ static void sh_handle_cmd(const char *cmd) {
   char command[128];
   strcpy(command, cmd);
   command[strlen(command)-1] = '\0';
-  char** argv = (char**)malloc(128);
+  char argv[16][128];
   int argc = 0;
   char *p = strtok(command, " ");
   while (p) {
-    argv[argc++] = p;
+    strcpy(argv[argc++], p);
     p = strtok(NULL, " ");
   }
-  execvp(command, argv);
+  execvp(command, (char* const*)argv);
 }
 
 void builtin_sh_run() {
