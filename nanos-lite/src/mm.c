@@ -2,6 +2,12 @@
 
 static void *pf = NULL;
 
+void* sys_malloc(size_t size) {
+  void *p = pf;
+  pf += ROUNDUP(size, PGSIZE);
+  return p;
+}
+
 void* new_page(size_t nr_page) {
   pf += PGSIZE * nr_page;
   return pf - PGSIZE * nr_page;

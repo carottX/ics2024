@@ -9,6 +9,8 @@
 # define Elf_Phdr Elf32_Phdr
 #endif
 
+void* sys_malloc(size_t size);
+
 int fs_open(const char *pathname, int flags, int mode);
 size_t fs_read(int fd, void *buf, size_t len);
 size_t fs_write(int fd, const void *buf, size_t len);
@@ -22,21 +24,21 @@ size_t ramdisk_read(void *buf, size_t offset, size_t len);
 
 static uintptr_t loader(PCB *pcb, const char *filename) {
   int fd = fs_open(filename, 0, 0);
-  char file[GetFileSize(fd) + 50]; 
-  Elf_Ehdr elf;
+  void* file = sys_malloc(GetFileSize(fd));
+  Elf_Ehdr* elf = sys_malloc(sizeof(Elf_Ehdr));
   fs_read(fd, file, GetFileSize(fd));
-  memcpy(&elf, file, sizeof(Elf_Ehdr));
+  memcpy(elf, file, sizeof(Elf_Ehdr));
 
-  if(elf.e_ident[EI_MAG0] != ELFMAG0 ||
-     elf.e_ident[EI_MAG1] != ELFMAG1 ||
-     elf.e_ident[EI_MAG2] != ELFMAG2 ||
-     elf.e_ident[EI_MAG3] != ELFMAG3){
+  if(elf->e_ident[EI_MAG0] != ELFMAG0 ||
+     elf->e_ident[EI_MAG1] != ELFMAG1 ||
+     elf->e_ident[EI_MAG2] != ELFMAG2 ||
+     elf->e_ident[EI_MAG3] != ELFMAG3){
     panic("Not a valid elf file!");
     return (uintptr_t)NULL;
   }
-  size_t ph_offset = elf.e_phoff;
-  size_t entry_size = elf.e_phentsize;
-  size_t ph_num = elf.e_phnum;
+  size_t ph_offset = elf->e_phoff;
+  size_t entry_size = elf->e_phentsize;
+  size_t ph_num = elf->e_phnum;
   for(int i=0; i<ph_num; ++i){
     Elf_Phdr *seg_header = malloc(sizeof(Elf_Phdr));
     memcpy(seg_header, file+ph_offset+entry_size*i, sizeof(Elf_Phdr));
@@ -51,7 +53,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
   }
   // printf("!!!\n");
   fs_close(fd);
-  return elf.e_entry;
+  return elf->e_entry;
 }
 
 void naive_uload(PCB *pcb, const char *filename) {
