@@ -75,6 +75,7 @@ void context_uload(PCB* pcb, const char *filename, char* const argv[], char* con
   for(int i=0; i<argc; ++i) printf("argv[%d]=%s\n",i,argv[i]);
   char* argv_pos[argc], *envp_pos[envc];
   char* stk = (char*)new_page(8) + PGSIZE * 8;
+  printf("BREAK\n");
   for(int i = argc - 1; i>=0; i--){
     int len = strlen(argv[i]) + 1;
     stk -= len;
@@ -88,6 +89,8 @@ void context_uload(PCB* pcb, const char *filename, char* const argv[], char* con
     envp_pos[i] = stk;
     strncpy(stk, envp[i], len);
   }
+    printf("BREAK\n");
+
   stk = (char*)ROUNDDOWN((uintptr_t)stk, sizeof(uintptr_t));
   stk -= sizeof(uintptr_t)*(argc + envc + 3);
   ((uintptr_t*)stk)[0] = argc;
@@ -100,7 +103,6 @@ void context_uload(PCB* pcb, const char *filename, char* const argv[], char* con
   }
   ((uintptr_t*)stk)[argc + envc + 2] = 0;
   uintptr_t entry = loader(pcb, filename);
-  printf("argv[0]=%s???????\n",((uintptr_t*)stk)[1]);
   pcb->cp = ucontext(&pcb->as, (Area) { pcb->stack, pcb->stack + STACK_SIZE }, (void *)entry);  
   pcb->cp->GPRx = (uintptr_t)stk;
   printf("?\n");
