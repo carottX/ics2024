@@ -22,7 +22,7 @@ size_t ramdisk_read(void *buf, size_t offset, size_t len);
 
 static uintptr_t loader(PCB *pcb, const char *filename) {
   int fd = fs_open(filename, 0, 0);
-  char file[GetFileSize(fd)]; 
+  char file[GetFileSize(fd) + 50]; 
   Elf_Ehdr elf;
   fs_read(fd, file, GetFileSize(fd));
   memcpy(&elf, file, sizeof(Elf_Ehdr));
