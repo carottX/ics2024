@@ -32,9 +32,9 @@ void init_proc() {
   char* const argv[] = {"/bin/pal","--skip", NULL};
   char* const envp[] = {NULL};
   context_uload(&pcb[0], "/bin/pal", argv, envp);
-  // switch_boot_pcb();
+  switch_boot_pcb();
 
-  // yield();
+  yield();
 
   Log("Initializing processes...");
 
