@@ -35,8 +35,9 @@ int mm_brk(uintptr_t brk) {
     for(uintptr_t i = current->max_brk/PGSIZE+1; i<=brk_pn; ++i){
       map(&current->as, (void*)(i*PGSIZE), new_page(1), 0);
     }
+    printf("prev brk: %x brk: %x\n", current->max_brk, brk);
+
     current->max_brk = (brk_pn) * PGSIZE;
-    printf("brk: %x\n", brk);
   }
   return 0;
 }
