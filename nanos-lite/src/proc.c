@@ -44,7 +44,7 @@ void init_proc() {
   Log("Initializing processes...");
 
   // load program here
-  naive_uload(&pcb[0], "/bin/nterm");
+  // naive_uload(&pcb[0], "/bin/nterm");
 }
 
 Context *schedule(Context *prev) {
