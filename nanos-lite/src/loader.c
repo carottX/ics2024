@@ -23,7 +23,7 @@ size_t ramdisk_read(void *buf, size_t offset, size_t len);
 static void* allocate(AddrSpace* as, uintptr_t vaddr, size_t p_memsz){
   vaddr = ROUNDDOWN(vaddr, PGSIZE);
   size_t new_page_num = ((vaddr + p_memsz - 1)/PGSIZE) - (vaddr/PGSIZE) + 1;
-  printf("Loaded sements from [%p, %p]",vaddr, vaddr + p_memsz);
+  printf("Loaded sements from [%p, %p]\n",vaddr, vaddr + p_memsz);
   void* ret = new_page(new_page_num);
   for(int i=0; i<=new_page_num; ++i){
     map(as, (void*)vaddr + i*PGSIZE, ret + i*PGSIZE, 0);
