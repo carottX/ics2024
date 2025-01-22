@@ -72,13 +72,14 @@ void map(AddrSpace *as, void *va, void *pa, int prot) {
   assert((uintptr_t)va % PGSIZE == 0 && (uintptr_t)pa % PGSIZE == 0);
   va = (void*)ROUNDDOWN((uintptr_t)va, PGSIZE);
   pa = (void*)ROUNDDOWN((uintptr_t)pa, PGSIZE);
+  printf("Mapping va = %p, pa = %p\n", va, pa);
   PTE* L1PageTable = as->ptr + VPN1((uintptr_t)va) * sizeof(PTE);
   if(*L1PageTable == 0 || (*L1PageTable & PTE_V) == 0) {
     *L1PageTable = (uintptr_t)pgalloc_usr(PGSIZE) | PTE_V;
   }
   PTE* L2PageTable = (PTE*)((uintptr_t)((*L1PageTable) & ~0xfff) + VPN0((uintptr_t)va) * sizeof(PTE));
   *L2PageTable = (uintptr_t)pa | PTE_V;
-  if((uintptr_t)va == 0x40068000)
+  // if((uintptr_t)va == 0x40068000)
   printf("Mapped va = %p, pa = %p\n at L1TableAddr=%p, L1Entry=%p, L2TableAddr=%p, entry=%p\n", va, pa, L1PageTable, *L1PageTable, L2PageTable, *L2PageTable);
 }
 
