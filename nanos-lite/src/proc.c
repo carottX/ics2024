@@ -51,7 +51,7 @@ void init_proc() {
 
 Context *schedule(Context *prev) {
   if(prev == NULL) printf("prev is NULL\n");
-  printf("SWITCHED!");
+  printf("SWITCHING TO %d!\n", current == &pcb[0] ? 1 : 0);
   current->cp = prev;
   current = (current == &pcb[0] ? &pcb[1] : &pcb[0]);
   return current->cp;
