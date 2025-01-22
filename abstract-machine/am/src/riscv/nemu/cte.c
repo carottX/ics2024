@@ -2,6 +2,8 @@
 #include <riscv/riscv.h>
 #include <klib.h>
 
+#define IRQ_TIMER 0x80000007
+
 static Context* (*user_handler)(Event, Context*) = NULL;
 
 void __am_get_cur_as(Context *c);
@@ -13,6 +15,7 @@ Context* __am_irq_handle(Context *c) {
     Event ev = {0};
     switch (c->mcause) {
       case 11:case 8: ev.event = EVENT_SYSCALL; c->mepc += 4;break;
+      case IRQ_TIMER: ev.event = EVENT_IRQ_TIMER; break;
       default: ev.event = EVENT_ERROR; break;
     } 
     if(ev.event == EVENT_SYSCALL && c -> GPR1 == -1) ev.event = EVENT_YIELD;
@@ -40,6 +43,7 @@ Context *kcontext(Area kstack, void (*entry)(void *), void *arg) {
   c->mepc = (intptr_t)entry;
   c->gpr[10] = (intptr_t)arg;
   c->pdir = NULL;
+  c->mstatus = 0x80; // MPIE
   return c;
 }
 

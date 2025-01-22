@@ -22,6 +22,8 @@
 #define R(i) gpr(i)
 #define Mr vaddr_read
 #define Mw vaddr_write
+#define MSTATUS_MIE 0x8
+#define MSTATUS_MPIE 0x80
 
 void trace_func_call(uint32_t pc, uint32_t target);
 void trace_func_ret(uint32_t pc, uint32_t target);
@@ -65,6 +67,12 @@ vaddr_t* read_csr(int imm){
   else if(imm == 0x180) return &cpu.satp;
   else assert(0);
 }
+
+#define mret() do { \
+  cpu.mstatus = (cpu.mstatus & ~MSTATUS_MIE) | ((cpu.mstatus & MSTATUS_MPIE) >> 4); \
+  cpu.mstatus = (cpu.mstatus & ~MSTATUS_MPIE) | MSTATUS_MPIE; \
+  cpu.pc = cpu.mepc; \
+} while(0)
 
 enum{
   EtraceR, EtraceW, EtraceRet, EtraceCall 
@@ -164,7 +172,7 @@ static int decode_exec(Decode *s) {
   INSTPAT("??????? ????? ????? 001 ????? 11100 11", csrrw  , I, if(rd) R(rd) = *read_csr(imm); *read_csr(imm) = src1; etrw(EtraceW););
   INSTPAT("??????? ????? ????? 010 ????? 11100 11", csrrs  , I, if(rd) R(rd) = *read_csr(imm); (*read_csr(imm)) |= src1; etrw(EtraceR););
   INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall  , N, s->dnpc=isa_raise_intr(8,s->pc); etcr(EtraceCall);); // R(10) is $a0
-  INSTPAT("0011000 00010 00000 000 00000 11100 11", mret   , I, s->dnpc=cpu.mepc; etcr(EtraceRet););
+  INSTPAT("0011000 00010 00000 000 00000 11100 11", mret   , I, mret();  etcr(EtraceRet););
 
   INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak , N, NEMUTRAP(s->pc, R(10))); // R(10) is $a0
   INSTPAT("??????? ????? ????? ??? ????? ????? ??", inv    , N, INV(s->pc));
