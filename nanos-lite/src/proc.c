@@ -31,6 +31,9 @@ void init_proc() {
   context_kload(&pcb[0], hello_fun, "ONE");
   char* const argv[] = {"/bin/pal","--skip", NULL};
   char* const envp[] = {NULL};
+  char* const argv2[] = {"/bin/hello", NULL};
+  char* const envp2[] = {NULL};
+  context_uload(&pcb[0], "/bin/hello", argv2, envp2);
   context_uload(&pcb[1], "/bin/pal", argv, envp);
   switch_boot_pcb();
 
