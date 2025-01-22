@@ -74,12 +74,13 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
       map(&pcb->as, 
           (void*)(vpage_start + (j << 12)), 
           (void*)(page_ptr    + (j << 12)), 
-          MMAP_READ|MMAP_WRITE);
+          0);
       // Log("map 0x%8lx -> 0x%8lx", vpage_start + (j << 12), page_ptr    + (j << 12));
     }
     void* page_off = (void *)(seg_header.p_vaddr & 0xfff); // we need the low 12 bit
     fs_lseek(fd, seg_header.p_offset, SEEK_SET);
     fs_read(fd, page_ptr + page_off, seg_header.p_filesz); 
+    memset(page_ptr + page_off + seg_header.p_filesz, 0, seg_header.p_memsz - seg_header.p_filesz);
     // at present, we are still at kernel mem map, so use page allocated instead of user virtual address
     // new_page already zeroed the mem
     pcb->max_brk = vpage_end + PGSIZE; 
