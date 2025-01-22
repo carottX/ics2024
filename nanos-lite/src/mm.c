@@ -28,21 +28,15 @@ void free_page(void *p) {
 
 /* The brk() system call handler. */
 int mm_brk(uintptr_t brk) {
-  uintptr_t max_page_end = current->max_brk; 
-  uintptr_t max_page_pn = max_page_end/PGSIZE - 1;
-  uintptr_t brk_pn = brk/PGSIZE;
-
-  if (brk >= max_page_end){
-    void *allocted_page =  new_page(brk_pn - max_page_pn + 1);
-    for (int i = 0; i < brk_pn - max_page_pn + 1; ++i){
-      map(&current->as, (void *)(max_page_end + i*PGSIZE),
-       (void *)(allocted_page + i * PGSIZE), 0);
+  current->max_brk = ROUNDUP(current->max_brk, PGSIZE);
+  if(brk > current->max_brk){
+    int new_page_num = ROUNDUP(brk - current->max_brk, PGSIZE)/PGSIZE;
+    void* new_page_start = new_page(new_page_num);
+    for(int i=0; i<new_page_num; ++i){
+      map(&current->as, (void*)(current->max_brk + i*PGSIZE), new_page_start + i*PGSIZE, 0);
     }
-
-    current->max_brk = (brk_pn + 1) << 12;
-    assert(current->max_brk > brk);
+    current->max_brk += new_page_num * PGSIZE;
   }
-
   return 0;
 }
 
