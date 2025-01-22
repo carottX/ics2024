@@ -33,7 +33,6 @@ word_t vaddr_read(vaddr_t addr, int len) {
 }
 
 void vaddr_write(vaddr_t addr, int len, word_t data) {
-  paddr_write(addr, len, data);
   int flag = isa_mmu_check(addr, len, 0);
   paddr_t paddr = addr;
   if(flag == MMU_TRANSLATE) paddr = isa_mmu_translate(addr, len, 0);
