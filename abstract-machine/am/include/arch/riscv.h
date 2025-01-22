@@ -7,11 +7,17 @@
 #define NR_REGS 32
 #endif
 
+enum PRIVILEGE {
+  KERNEL = 0,
+  USER = 1,
+};
+
 struct Context {
   // TODO: fix the order of these members to match trap.S
   uintptr_t gpr[NR_REGS];
   uintptr_t mcause, mstatus, mepc;
   void *pdir;
+  int np;
 };
 
 #ifdef __riscv_e

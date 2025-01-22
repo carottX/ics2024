@@ -75,17 +75,12 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
           (void*)(vpage_start + (j << 12)), 
           (void*)(page_ptr    + (j << 12)), 
           0);
-      // Log("map 0x%8lx -> 0x%8lx", vpage_start + (j << 12), page_ptr    + (j << 12));
     }
     void* page_off = (void *)(seg_header.p_vaddr & 0xfff); // we need the low 12 bit
     fs_lseek(fd, seg_header.p_offset, SEEK_SET);
     fs_read(fd, page_ptr + page_off, seg_header.p_filesz); 
     memset(page_ptr + page_off + seg_header.p_filesz, 0, seg_header.p_memsz - seg_header.p_filesz);
-    // at present, we are still at kernel mem map, so use page allocated instead of user virtual address
-    // new_page already zeroed the mem
     pcb->max_brk = vpage_end + PGSIZE; 
-    // update max_brk, here it is the end of the last page
-    // this is related to heap, so ustack is not in consideration here
     
   }
   // printf("!!!\n");
@@ -113,6 +108,7 @@ void context_uload(PCB* pcb, const char *filename, char* const argv[], char* con
   // for(int i=0; i<argc; ++i) printf("argv[%d]=%s\n",i,argv[i]);
   uintptr_t argv_pos[argc], envp_pos[envc];
   char* stk = (char*)new_page(8) + PGSIZE * 8;
+  char* tmp = stk;
   for(int i=1; i<=8; ++i){
     map(&pcb->as, pcb->as.area.end - PGSIZE * i, stk - PGSIZE * i, 0);
   }
@@ -146,7 +142,10 @@ void context_uload(PCB* pcb, const char *filename, char* const argv[], char* con
   // printf("argv[0]=%s\n",(char*)((uintptr_t*)stk)[1]);
   // printf("argv[1]=%s\n",(char*)((uintptr_t*)stk)[2]);
   uintptr_t entry = loader(pcb, filename);
+  stk -= sizeof(uintptr_t);
+  ((uintptr_t*)stk)[0] = 0;
   pcb->cp = ucontext(&pcb->as, (Area) { pcb->stack, pcb->stack + STACK_SIZE }, (void *)entry);  
-  pcb->cp->GPRx = (uintptr_t)stk;
+  pcb->cp->GPRx = (uintptr_t)stk - (uintptr_t)tmp + (uintptr_t)pcb->as.area.end;
+  pcb->cp->gpr[2] = (uintptr_t)stk - (uintptr_t)tmp + (uintptr_t)pcb->as.area.end;
   // printf("%d\n",((uintptr_t*)stk)[0]);
 }

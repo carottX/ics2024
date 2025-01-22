@@ -10,6 +10,11 @@ void __am_get_cur_as(Context *c);
 void __am_switch(Context *c);
 
 Context* __am_irq_handle(Context *c) {
+  uintptr_t mscratch;
+  uintptr_t kas = 0;
+  asm volatile("csrr %0, mscratch" : "=r"(mscratch));
+  c->np = (mscratch == 0 ? KERNEL : USER);
+  asm volatile("csrw mscratch, %0" :: "r"(kas));
   __am_get_cur_as(c);
   if (user_handler) {
     Event ev = {0};
@@ -39,11 +44,15 @@ bool cte_init(Context*(*handler)(Event, Context*)) {
 }
 
 Context *kcontext(Area kstack, void (*entry)(void *), void *arg) {
+  uintptr_t* t0 = kstack.end-4;
+  *t0 = 0;
   Context* c = (Context*)(kstack.end - sizeof(Context));
   c->mepc = (intptr_t)entry;
   c->gpr[10] = (intptr_t)arg;
   c->pdir = NULL;
   c->mstatus = 0x80; // MPIE
+  c->np = 3;
+  c->gpr[2] = (uintptr_t)kstack.end-4;
   return c;
 }
 
