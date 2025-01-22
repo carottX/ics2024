@@ -32,37 +32,37 @@ static void* allocate(AddrSpace* as, uintptr_t vaddr, size_t p_memsz){
 static uintptr_t loader(PCB *pcb, const char *filename) {
   assert(pcb != NULL);
   int fd = fs_open(filename, 0, 0);
-  void* file = sys_malloc(GetFileSize(fd));
-  Elf_Ehdr* elf = sys_malloc(sizeof(Elf_Ehdr));
-  fs_read(fd, file, GetFileSize(fd));
-  memcpy(elf, file, sizeof(Elf_Ehdr));
-  if(elf->e_ident[EI_MAG0] != ELFMAG0 ||
-     elf->e_ident[EI_MAG1] != ELFMAG1 ||
-     elf->e_ident[EI_MAG2] != ELFMAG2 ||
-     elf->e_ident[EI_MAG3] != ELFMAG3){
+  Elf_Ehdr elf;
+  fs_read(fd, &elf, sizeof(Elf_Ehdr));
+  if(elf.e_ident[EI_MAG0] != ELFMAG0 ||
+     elf.e_ident[EI_MAG1] != ELFMAG1 ||
+     elf.e_ident[EI_MAG2] != ELFMAG2 ||
+     elf.e_ident[EI_MAG3] != ELFMAG3){
     panic("Not a valid elf file!");
     return (uintptr_t)NULL;
   }
-  size_t ph_offset = elf->e_phoff;
-  size_t entry_size = elf->e_phentsize;
-  size_t ph_num = elf->e_phnum;
+  size_t ph_offset = elf.e_phoff;
+  size_t entry_size = elf.e_phentsize;
+  size_t ph_num = elf.e_phnum;
   for(int i=0; i<ph_num; ++i){
-    Elf_Phdr *seg_header = sys_malloc(sizeof(Elf_Phdr));
-    memcpy(seg_header, file+ph_offset+entry_size*i, sizeof(Elf_Phdr));
-    if(seg_header->p_type != PT_LOAD) continue;
+    Elf_Phdr seg_header;
+    fs_lseek(fd, ph_offset+entry_size*i, 0);
+    fs_read(fd, &seg_header, entry_size);
+    if(seg_header.p_type != PT_LOAD) continue;
     // printf("LOADED!\n");
-    size_t seg_offset = seg_header->p_offset;
-    uintptr_t seg_viraddr = seg_header->p_vaddr;
-    size_t seg_file_size = seg_header->p_filesz;
-    size_t seg_mem_size = seg_header->p_memsz;
+    size_t seg_offset = seg_header.p_offset;
+    uintptr_t seg_viraddr = seg_header.p_vaddr;
+    size_t seg_file_size = seg_header.p_filesz;
+    size_t seg_mem_size = seg_header.p_memsz;
     void* paddr = allocate(&pcb->as, seg_viraddr, seg_mem_size);
-    memcpy(paddr + (seg_viraddr & 0xfff), file+seg_offset, seg_file_size);
+    fs_lseek(fd, seg_offset, 0);
+    fs_read(fd, paddr + (seg_viraddr & 0xfff), seg_file_size);
     // memcpy((void*)seg_viraddr, file+seg_offset,seg_mem_size);
     memset(paddr + (seg_viraddr & 0xfff) + seg_file_size, 0, seg_mem_size-seg_file_size);
   }
   // printf("!!!\n");
   fs_close(fd);
-  return elf->e_entry;
+  return elf.e_entry;
 }
 
 void naive_uload(PCB *pcb, const char *filename) {
