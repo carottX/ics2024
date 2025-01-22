@@ -65,7 +65,7 @@ void naive_uload(PCB *pcb, const char *filename) {
 }
 
 void context_uload(PCB* pcb, const char *filename, char* const argv[], char* const envp[]) {
-  protect(&pcb->as);
+  // protect(&pcb->as);
   int argc = 0;
   while(argv[argc] != NULL) argc++;
   int envc = 0;

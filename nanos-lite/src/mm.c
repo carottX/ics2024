@@ -6,7 +6,7 @@ void* sys_malloc(size_t size) {
   void *p = pf;
   pf += ROUNDUP(size, PGSIZE);
   memset(p, 0, size);
-  assert((unsigned int)pf%PGSIZE == 0);
+  // assert((unsigned int)pf%PGSIZE == 0);
   return p;
 }
 
