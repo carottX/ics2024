@@ -27,10 +27,10 @@ typedef uint32_t PTE;
 #define PTE_D 0x80
 
 paddr_t isa_mmu_translate(vaddr_t vaddr, int len, int type) {
-  paddr_t L1PageTable = (PPN(cpu.satp) << 12) + VPN0(vaddr) * sizeof(PTE);
+  paddr_t L1PageTable = (PPN(cpu.satp) << 12) + VPN1(vaddr) * sizeof(PTE);
   PTE L2PageTable = paddr_read(L1PageTable, 4);
   Assert(L2PageTable & PTE_V, "vaddr = %x, L1PageTable = %x, L1Entry = %x", vaddr, L1PageTable, L2PageTable);
-  L2PageTable = (L2PageTable & ~0xfff) + VPN1(vaddr) * sizeof(PTE);
+  L2PageTable = (L2PageTable & ~0xfff) + VPN0(vaddr) * sizeof(PTE);
   PTE L2Entry = paddr_read(L2PageTable, 4);
   Assert(L2Entry & PTE_V, "vaddr = %x, L1PageTable = %x, L2PageTable = %x, L2Entry = %x", vaddr, L1PageTable, L2PageTable, L2Entry);
   paddr_t pa = (L2Entry & ~0xfff) | (vaddr & 0xfff);

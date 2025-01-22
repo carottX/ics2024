@@ -72,13 +72,13 @@ void __am_switch(Context *c) {
 void map(AddrSpace *as, void *va, void *pa, int prot) {
   va = (void*)ROUNDDOWN((uintptr_t)va, PGSIZE);
   pa = (void*)ROUNDDOWN((uintptr_t)pa, PGSIZE);
-  PTE* L1PageTable = as->ptr + VPN0((uintptr_t)va) * sizeof(PTE);
+  PTE* L1PageTable = as->ptr + VPN1((uintptr_t)va) * sizeof(PTE);
   if(*L1PageTable == 0 || (*L1PageTable & PTE_V) == 0) {
-    *L1PageTable = (uintptr_t)pgalloc_usr(PGSIZE) | PTE_V | PTE_R | PTE_W | PTE_X;
+    *L1PageTable = (uintptr_t)pgalloc_usr(PGSIZE) | PTE_V;
     // printf("Created 2nd PageTable! Addr = %p, entry= %p\n", L1PageTable, *L1PageTable);
   }
-  PTE* L2PageTable = (PTE*)(*L1PageTable & ~0xfff) + VPN1((uintptr_t)va) * sizeof(PTE);
-  *L2PageTable = (uintptr_t)pa | PTE_V | PTE_R | PTE_W | PTE_X;
+  PTE* L2PageTable = (PTE*)(*L1PageTable & ~0xfff) + VPN0((uintptr_t)va) * sizeof(PTE);
+  *L2PageTable = (uintptr_t)pa | PTE_V;
   if((uintptr_t)va/PGSIZE == 0x80001)
   printf("Mapped va = %p, pa = %p\n at L1TableAddr=%p, L2TableAddr=%p, entry=%p\n", va, pa, L1PageTable, L2PageTable, *L2PageTable);
 }
