@@ -15,6 +15,7 @@ int fs_close(int fd);
 void naive_uload(PCB *pcb, const char *filename);
 void context_uload(PCB* pcb, const char *filename, char* const argv[], char* const envp[]);
 void switch_boot_pcb();
+int mm_brk(uintptr_t brk);
 
 void sys_execve(Context* c){
   #ifdef STRACE
@@ -59,7 +60,7 @@ void sys_sbrk(Context* c){
   #ifdef STRACE
   printf("SYSCALL NAME=sbrk\n" );
   #endif
-  c->GPRx = 0;
+  c->GPRx = mm_brk(c->GPR2);
 }
 
 void sys_read(Context* c){
