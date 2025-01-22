@@ -41,7 +41,7 @@ void init_proc() {
   context_kload(&pcb[1], hello_fun, "ONE");
   switch_boot_pcb();
 
-  yield();
+  // yield();
 
   Log("Initializing processes...");
 
