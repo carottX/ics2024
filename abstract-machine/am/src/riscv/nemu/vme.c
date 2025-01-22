@@ -79,7 +79,8 @@ void map(AddrSpace *as, void *va, void *pa, int prot) {
   }
   PTE* L2PageTable = (PTE*)(*L1PageTable & ~0xfff) + VPN1((uintptr_t)va) * sizeof(PTE);
   *L2PageTable = (uintptr_t)pa | PTE_V | PTE_R | PTE_W | PTE_X;
-  if((uintptr_t)va/PGSIZE == 0x80001)printf("Mapped va = %p, pa = %p\n at L2TableAddr=%p, entry=%p\n", va, pa, L2PageTable, *L2PageTable);
+  if((uintptr_t)va/PGSIZE == 0x80001)
+  printf("Mapped va = %p, pa = %p\n at L1TableAddr=%p, L2TableAddr=%p, entry=%p\n", va, pa, L1PageTable, L2PageTable, *L2PageTable);
 }
 
 Context *ucontext(AddrSpace *as, Area kstack, void *entry) {
