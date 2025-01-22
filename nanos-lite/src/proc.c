@@ -30,12 +30,12 @@ void context_kload(PCB* pcb, void(*entry)(void *), void *arg) {
 #define PAL_NAME "/bin/pal"
 
 void init_proc() {
-  char* const argv[] = {PAL_NAME, NULL};
-  char* const envp[] = {NULL};
+  // char* const argv[] = {PAL_NAME, NULL};
+  // char* const envp[] = {NULL};
   // char* const argv2[] = {"/bin/hello", NULL};
   // char* const envp2[] = {NULL};
   // context_uload(&pcb[0], "/bin/hello", argv2, envp2);
-  context_uload(&pcb[1], PAL_NAME, argv, envp);
+  // context_uload(&pcb[1], PAL_NAME, argv, envp);
   context_kload(&pcb[0], hello_fun, "TWO");
   switch_boot_pcb();
 
@@ -50,6 +50,6 @@ void init_proc() {
 Context *schedule(Context *prev) {
   if(prev == NULL) printf("prev is NULL\n");
   current->cp = prev;
-  current = (current == &pcb[0] ? &pcb[1] : &pcb[0]);
+  // current = (current == &pcb[0] ? &pcb[1] : &pcb[0]);
   return current->cp;
 }
