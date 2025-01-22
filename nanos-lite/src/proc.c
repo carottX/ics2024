@@ -28,12 +28,12 @@ void context_kload(PCB* pcb, void(*entry)(void *), void *arg) {
 }
 
 void init_proc() {
-  char* const argv[] = {"/bin/pal","--skip", NULL};
+  char* const argv[] = {"/bin/nterm", NULL};
   char* const envp[] = {NULL};
   char* const argv2[] = {"/bin/hello", NULL};
   char* const envp2[] = {NULL};
   context_uload(&pcb[0], "/bin/hello", argv2, envp2);
-  context_uload(&pcb[1], "/bin/pal", argv, envp);
+  context_uload(&pcb[1], "/bin/nterm", argv, envp);
   // context_kload(&pcb[1], hello_fun, "TWO");
   switch_boot_pcb();
 
