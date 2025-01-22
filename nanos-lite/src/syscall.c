@@ -3,7 +3,7 @@
 #include <sys/time.h>
 #include <proc.h>
 
-#define STRACE
+// #define STRACE
 
 extern PCB *current;
 
