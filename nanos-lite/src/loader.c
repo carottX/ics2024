@@ -1,5 +1,6 @@
 #include <proc.h>
 #include <elf.h>
+#include <fs.h>
 
 #ifdef __LP64__
 # define Elf_Ehdr Elf64_Ehdr
@@ -20,15 +21,15 @@ int fs_close(int fd);
 size_t GetFileSize(int fd);
 size_t ramdisk_read(void *buf, size_t offset, size_t len);
 
-static void* allocate(AddrSpace* as, uintptr_t vaddr, size_t p_memsz){
-  size_t new_page_num = (ROUNDDOWN(vaddr+p_memsz-1, PGSIZE)-ROUNDDOWN(vaddr, PGSIZE))/PGSIZE;
-  // printf("!Loaded segments from [%p, %p]\n",vaddr, vaddr + p_memsz);
-  void* ret = new_page(new_page_num);
-  for(int i=0; i<=new_page_num; ++i){
-    map(as, (void*)vaddr + i*PGSIZE, ret + i*PGSIZE, 0);
-  }
-  return ret;
-}
+// static void* allocate(AddrSpace* as, uintptr_t vaddr, size_t p_memsz){
+//   size_t new_page_num = (ROUNDDOWN(vaddr+p_memsz-1, PGSIZE)-ROUNDDOWN(vaddr, PGSIZE))/PGSIZE;
+//   // printf("!Loaded segments from [%p, %p]\n",vaddr, vaddr + p_memsz);
+//   void* ret = new_page(new_page_num);
+//   for(int i=0; i<=new_page_num; ++i){
+//     map(as, (void*)vaddr + i*PGSIZE, ret + i*PGSIZE, 0);
+//   }
+//   return ret;
+// }
 
 #define max(a,b) ((a) > (b) ? (a) : (b))
 
@@ -53,18 +54,38 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
     fs_lseek(fd, ph_offset+entry_size*i, 0);
     fs_read(fd, &seg_header, entry_size);
     if(seg_header.p_type != PT_LOAD) continue;
-    size_t seg_offset = seg_header.p_offset;
-    uintptr_t seg_viraddr = seg_header.p_vaddr;
-    size_t seg_file_size = seg_header.p_filesz;
-    size_t seg_mem_size = seg_header.p_memsz;
-    void* paddr = allocate(&pcb->as, seg_viraddr, seg_mem_size);
-    fs_lseek(fd, seg_offset, 0);
-    fs_read(fd, paddr + (seg_viraddr & 0xfff), seg_file_size);
-    memset(paddr + (seg_viraddr & 0xfff) + seg_file_size, 0, seg_mem_size-seg_file_size);
-    printf("Loaded segments from [%p, %p]\n",seg_viraddr, seg_viraddr + seg_mem_size);
-    printf("To physical address %p\n",paddr);
-    pcb->max_brk = ROUNDUP(seg_viraddr + seg_mem_size, PGSIZE);
-    printf("max_brk=%p\n",pcb->max_brk);
+    // size_t seg_offset = seg_header.p_offset;
+    // uintptr_t seg_viraddr = seg_header.p_vaddr;
+    // size_t seg_file_size = seg_header.p_filesz;
+    // size_t seg_mem_size = seg_header.p_memsz;
+    // void* paddr = allocate(&pcb->as, seg_viraddr, seg_mem_size);
+    // fs_lseek(fd, seg_offset, 0);
+    // fs_read(fd, paddr + (seg_viraddr & 0xfff), seg_file_size);
+    // memset(paddr + (seg_viraddr & 0xfff) + seg_file_size, 0, seg_mem_size-seg_file_size);
+    // printf("Loaded segments from [%p, %p]\n",seg_viraddr, seg_viraddr + seg_mem_size);
+    // printf("To physical address %p\n",paddr);
+    // pcb->max_brk = ROUNDUP(seg_viraddr + seg_mem_size, PGSIZE);
+    // printf("max_brk=%p\n",pcb->max_brk);
+    uintptr_t vpage_start = seg_header.p_vaddr & (~0xfff); // clear low 12 bit, first page
+    uintptr_t vpage_end = (seg_header.p_vaddr + seg_header.p_memsz - 1) & (~0xfff); // last page start
+    int page_num = ((vpage_end - vpage_start) >> 12) + 1;
+    uintptr_t page_ptr = (uintptr_t)new_page(page_num);
+    for (int j = 0; j < page_num; ++ j) {
+      map(&pcb->as, 
+          (void*)(vpage_start + (j << 12)), 
+          (void*)(page_ptr    + (j << 12)), 
+          MMAP_READ|MMAP_WRITE);
+      // Log("map 0x%8lx -> 0x%8lx", vpage_start + (j << 12), page_ptr    + (j << 12));
+    }
+    void* page_off = (void *)(seg_header.p_vaddr & 0xfff); // we need the low 12 bit
+    fs_lseek(fd, seg_header.p_offset, SEEK_SET);
+    fs_read(fd, page_ptr + page_off, seg_header.p_filesz); 
+    // at present, we are still at kernel mem map, so use page allocated instead of user virtual address
+    // new_page already zeroed the mem
+    pcb->max_brk = vpage_end + PGSIZE; 
+    // update max_brk, here it is the end of the last page
+    // this is related to heap, so ustack is not in consideration here
+    
   }
   // printf("!!!\n");
   fs_close(fd);
