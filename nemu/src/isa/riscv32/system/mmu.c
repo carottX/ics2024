@@ -27,7 +27,7 @@ typedef uint32_t PTE;
 #define PTE_D 0x80
 
 paddr_t isa_mmu_translate(vaddr_t vaddr, int len, int type) {
-  printf("Reading virtual address %x\n", vaddr);
+  // printf("Reading virtual address %x\n", vaddr);
   paddr_t L1PageTable = (PPN((uintptr_t)cpu.satp) << 12) + VPN1((uintptr_t)vaddr) * sizeof(PTE);
   PTE L1Entry = paddr_read(L1PageTable, 4);
   Assert(L1Entry & PTE_V, "vaddr = %x, L1PageTable = %x, L1Entry = %x", vaddr, L1PageTable, L1Entry);
