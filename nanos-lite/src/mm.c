@@ -35,8 +35,8 @@ int mm_brk(uintptr_t brk) {
   if (brk >= max_page_end){
     void *allocted_page =  new_page(brk_pn - max_page_pn + 1);
     for (int i = 0; i < brk_pn - max_page_pn + 1; ++i){
-      map(&current->as, (void *)(max_page_end + i*PGSIZE),
-       (void *)(allocted_page + i * PGSIZE), 0);
+      map(&current->as, (void *)(max_page_end + i*0xfff),
+       (void *)(allocted_page + i * 0xfff), 0);
     }
 
     current->max_brk = (brk_pn + 1) << 12;
