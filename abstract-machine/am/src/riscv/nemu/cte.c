@@ -52,7 +52,7 @@ Context *kcontext(Area kstack, void (*entry)(void *), void *arg) {
   c->pdir = NULL;
   c->mstatus = 0x80; // MPIE
   c->np = 3;
-  c->gpr[2] = (uintptr_t)kstack.end;
+  c->gpr[2] = (uintptr_t)kstack.end - 4;
   return c;
 }
 
