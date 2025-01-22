@@ -31,7 +31,7 @@ int mm_brk(uintptr_t brk) {
   // brk = ROUNDDOWN(brk-1, PGSIZE);
   uintptr_t brk_pn = brk / PGSIZE;
   assert(current->max_brk % PGSIZE == 0);
-  if(brk >= current->max_brk){
+  if(brk > current->max_brk){
     for(uintptr_t i = current->max_brk/PGSIZE; i<=brk_pn; ++i){
       map(&current->as, (void*)(i*PGSIZE), new_page(1), 0);
     }
