@@ -7,9 +7,9 @@
 #define NR_REGS 32
 #endif
 
-enum PRIVILEGE {
+enum PRIVILAGE{
   KERNEL = 0,
-  USER = 1,
+  USER = 3
 };
 
 struct Context {

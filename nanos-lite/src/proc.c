@@ -28,9 +28,10 @@ void context_kload(PCB* pcb, void(*entry)(void *), void *arg) {
 }
 
 #define PAL_NAME "/bin/pal"
+#define TERM_NAME "/bin/nterm"
 
 void init_proc() {
-  char* const argv[] = {PAL_NAME, NULL};
+  char* const argv[] = {TERM_NAME, NULL};
   char* const envp[] = {NULL};
   // char* const argv2[] = {"/bin/hello", NULL};
   // char* const envp2[] = {NULL};
