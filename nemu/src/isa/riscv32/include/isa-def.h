@@ -34,6 +34,6 @@ typedef struct {
 
 extern MUXDEF(CONFIG_RV64, riscv64_CPU_state, riscv32_CPU_state) cpu;
 
-#define isa_mmu_check(vaddr, len, type) ((cpu.satp >> 31) ? MMU_TRANSLATE : MMU_DIRECT)
+#define isa_mmu_check(vaddr, len, type) ((vaddr >= 0 && vaddr < 0x80000000 && (cpu.satp >> 31)) ? MMU_TRANSLATE : MMU_DIRECT)
 
 #endif
