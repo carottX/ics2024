@@ -22,7 +22,7 @@ size_t ramdisk_read(void *buf, size_t offset, size_t len);
 
 static void* allocate(AddrSpace* as, uintptr_t vaddr, size_t p_memsz){
   size_t new_page_num = (ROUNDDOWN(vaddr+p_memsz-1, PGSIZE)-ROUNDDOWN(vaddr, PGSIZE))/PGSIZE;
-  printf("!Loaded segments from [%p, %p]\n",vaddr, vaddr + p_memsz);
+  // printf("!Loaded segments from [%p, %p]\n",vaddr, vaddr + p_memsz);
   void* ret = new_page(new_page_num);
   for(int i=0; i<=new_page_num; ++i){
     map(as, (void*)vaddr + i*PGSIZE, ret + i*PGSIZE, 0);
@@ -61,6 +61,8 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
     fs_lseek(fd, seg_offset, 0);
     fs_read(fd, paddr + (seg_viraddr & 0xfff), seg_file_size);
     memset(paddr + (seg_viraddr & 0xfff) + seg_file_size, 0, seg_mem_size-seg_file_size);
+    printf("Loaded segments from [%p, %p]\n",seg_viraddr, seg_viraddr + seg_mem_size);
+    printf("To physical address %p\n",paddr);
     current->max_brk = ROUNDUP(seg_viraddr + seg_mem_size, PGSIZE);
   }
   // printf("!!!\n");
