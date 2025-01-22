@@ -51,6 +51,8 @@ __am_asm_trap:
   save_content:
   addi sp, sp, -CONTEXT_SIZE
 
+  STORE t4, OFFSET_SP(sp)
+
   MAP(REGS, PUSH)
 
   csrr t0, mcause
