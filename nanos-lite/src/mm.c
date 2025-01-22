@@ -14,6 +14,8 @@ void* sys_malloc(size_t size) {
 
 void* new_page(size_t nr_page) {
   pf += PGSIZE * nr_page;
+    assert(pf < (void*) heap.end);
+
   return pf - PGSIZE * nr_page;
 }
 
