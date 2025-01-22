@@ -5,7 +5,7 @@
 static PCB pcb[MAX_NR_PROC] __attribute__((used)) = {};
 static PCB pcb_boot = {};
 PCB *current = NULL;
-int now_index;
+int now_index = 1;
 
 void naive_uload(PCB *pcb, const char *filename);
 
