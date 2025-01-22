@@ -77,7 +77,7 @@ void map(AddrSpace *as, void *va, void *pa, int prot) {
     *L1PageTable = (uintptr_t)pgalloc_usr(PGSIZE) | PTE_V;
     // printf("Created 2nd PageTable! Addr = %p, entry= %p\n", L1PageTable, *L1PageTable);
   }
-  PTE* L2PageTable = (PTE*)(*L1PageTable & ~0xfff) + VPN0((uintptr_t)va) * sizeof(PTE);
+  PTE* L2PageTable = (PTE*)((uintptr_t)(*L1PageTable & ~0xfff) + VPN0((uintptr_t)va) * sizeof(PTE));
   *L2PageTable = (uintptr_t)pa | PTE_V;
   if((uintptr_t)va/PGSIZE == 0x80001)
   printf("Mapped va = %p, pa = %p\n at L1TableAddr=%p, L1Entry=%p, L2TableAddr=%p, entry=%p\n", va, pa, L1PageTable, *L1PageTable, L2PageTable, *L2PageTable);
