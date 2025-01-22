@@ -61,7 +61,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
     fs_lseek(fd, seg_offset, 0);
     fs_read(fd, paddr + (seg_viraddr & 0xfff), seg_file_size);
     memset(paddr + (seg_viraddr & 0xfff) + seg_file_size, 0, seg_mem_size-seg_file_size);
-    if(seg_mem_size>seg_file_size)current->max_brk = ROUNDUP(seg_viraddr + seg_mem_size, 0xfff);
+    if(seg_mem_size>seg_file_size)current->max_brk = ROUNDUP(seg_viraddr + seg_mem_size, PGSIZE);
   }
   // printf("!!!\n");
   fs_close(fd);
