@@ -32,8 +32,6 @@ static void rtc_io_handler(uint32_t offset, int len, bool is_write) {
 static void timer_intr() {
   if (nemu_state.state == NEMU_RUNNING) {
     extern void dev_raise_intr();
-      printf("timer intr\n");
-
     dev_raise_intr();
   }
 }
