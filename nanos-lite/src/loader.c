@@ -64,6 +64,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
     printf("Loaded segments from [%p, %p]\n",seg_viraddr, seg_viraddr + seg_mem_size);
     printf("To physical address %p\n",paddr);
     current->max_brk = ROUNDUP(seg_viraddr + seg_mem_size, PGSIZE);
+    printf("max_brk=%p\n",current->max_brk);
   }
   // printf("!!!\n");
   fs_close(fd);
