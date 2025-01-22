@@ -32,7 +32,7 @@ int mm_brk(uintptr_t brk) {
   // printf("!!!!!!!!!!!!!!!1brk: %x\n", brk);
   assert(current->max_brk % PGSIZE == 0);
   if(brk >= current->max_brk){
-    for(uintptr_t i = current->max_brk/PGSIZE; i<=brk_pn; ++i){
+    for(uintptr_t i = current->max_brk/PGSIZE; i<brk_pn; ++i){
       map(&current->as, (void*)(i*PGSIZE), new_page(1), 0);
     }
     current->max_brk = (brk_pn+1) * PGSIZE;
