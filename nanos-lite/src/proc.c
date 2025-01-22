@@ -37,6 +37,7 @@ void init_proc() {
   // context_uload(&pcb[0], "/bin/hello", argv2, envp2);
   // context_uload(&pcb[1], PAL_NAME, argv, envp);
   context_kload(&pcb[0], hello_fun, "TWO");
+  context_kload(&pcb[1], hello_fun, "ONE");
   switch_boot_pcb();
 
   yield();
@@ -50,6 +51,6 @@ void init_proc() {
 Context *schedule(Context *prev) {
   if(prev == NULL) printf("prev is NULL\n");
   current->cp = prev;
-  // current = (current == &pcb[0] ? &pcb[1] : &pcb[0]);
+  current = (current == &pcb[0] ? &pcb[1] : &pcb[0]);
   return current->cp;
 }
