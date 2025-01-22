@@ -110,7 +110,7 @@ void context_uload(PCB* pcb, const char *filename, char* const argv[], char* con
   char* stk = (char*)new_page(8) + PGSIZE * 8 - 4;
   char* tmp = stk + 4;
   for(int i=1; i<=8; ++i){
-    map(&pcb->as, pcb->as.area.end - PGSIZE * i, stk - PGSIZE * i, 0);
+    map(&pcb->as, pcb->as.area.end - PGSIZE * i, tmp - PGSIZE * i, 0);
   }
   // printf("stk=%p\n",stk);
   for(int i = 0; i<argc; i++){
