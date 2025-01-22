@@ -29,9 +29,9 @@ void context_kload(PCB* pcb, void(*entry)(void *), void *arg) {
 
 void init_proc() {
   context_kload(&pcb[0], hello_fun, (void *)0);
-  char* const argv[] = {"/bin/nterm", NULL};
+  char* const argv[] = {"/bin/pal", "--skip", NULL};
   char* const envp[] = {NULL};
-  context_uload(&pcb[1], "/bin/nterm", argv, envp);
+  context_uload(&pcb[1], "/bin/pal", argv, envp);
   switch_boot_pcb();
 
   yield();
