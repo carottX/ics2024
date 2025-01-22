@@ -66,7 +66,18 @@ void __am_switch(Context *c) {
   }
 }
 
+#define VPN0(addr) ((addr >> 12) & 0x3ff)
+#define VPN1(addr) ((addr >> 22))
+
 void map(AddrSpace *as, void *va, void *pa, int prot) {
+  va = (void*)ROUNDDOWN((uintptr_t)va, PGSIZE);
+  pa = (void*)ROUNDDOWN((uintptr_t)pa, PGSIZE);
+  PTE* L1PageTable = as->ptr + VPN0((uintptr_t)va) * sizeof(PTE);
+  if(*L1PageTable == 0 || (*L1PageTable & PTE_V) == 0) {
+    *L1PageTable = (uintptr_t)pgalloc_usr(PGSIZE) | PTE_V | PTE_R | PTE_W | PTE_X;
+  }
+  PTE* L2PageTable = (PTE*)(*L1PageTable & ~0xfff) + VPN1((uintptr_t)va) * sizeof(PTE);
+  *L2PageTable = (uintptr_t)pa | PTE_V | PTE_R | PTE_W | PTE_X;
 }
 
 Context *ucontext(AddrSpace *as, Area kstack, void *entry) {

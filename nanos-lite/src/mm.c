@@ -5,6 +5,7 @@ static void *pf = NULL;
 void* sys_malloc(size_t size) {
   void *p = pf;
   pf += ROUNDUP(size, PGSIZE);
+  memset(p, 0, size);
   return p;
 }
 
@@ -15,7 +16,7 @@ void* new_page(size_t nr_page) {
 
 #ifdef HAS_VME
 static void* pg_alloc(int n) {
-  return NULL;
+  return sys_malloc(n);
 }
 #endif
 
