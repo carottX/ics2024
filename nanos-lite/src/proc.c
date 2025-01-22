@@ -39,7 +39,7 @@ void context_kload(PCB* pcb, void(*entry)(void *), void *arg) {
 #define PAL_NAME "/bin/pal"
 #define TERM_NAME "/bin/nterm"
 #define BIRD_NAME "/bin/bird"
-#define SLIDER_NAME "/bin/slider"
+#define SLIDER_NAME "/bin/nslider"
 
 void init_proc() {
   char* const argv[] = {TERM_NAME, NULL};
