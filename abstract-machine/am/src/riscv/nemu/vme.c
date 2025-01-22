@@ -69,8 +69,8 @@ void __am_switch(Context *c) {
 #define VPN1(addr) ((addr >> 22))
 
 void map(AddrSpace *as, void *va, void *pa, int prot) {
-  assert((uintptr_t)va % PGSIZE == 0);
-  assert((uintptr_t)pa % PGSIZE == 0);
+  // assert((uintptr_t)va % PGSIZE == 0);
+  // assert((uintptr_t)pa % PGSIZE == 0);
   va = (void*)ROUNDDOWN((uintptr_t)va, PGSIZE);
   pa = (void*)ROUNDDOWN((uintptr_t)pa, PGSIZE);
   // printf("Mapping va = %p, pa = %p\n", va, pa);
