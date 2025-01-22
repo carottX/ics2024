@@ -32,7 +32,7 @@ word_t isa_raise_intr(word_t NO, vaddr_t epc) {
 #define IRQ_TIMER 0x80000007
 
 word_t isa_query_intr() {
-  printf("cpu.mstatus = %x\n", cpu.mstatus);
+  if(cpu.mstatus) printf("cpu.mstatus = %x\n", cpu.mstatus);
   if((cpu.mstatus & MSTATUS_MIE) && cpu.INTR){
     cpu.INTR = false;
     return IRQ_TIMER;
