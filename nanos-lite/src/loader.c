@@ -145,7 +145,7 @@ void context_uload(PCB* pcb, const char *filename, char* const argv[], char* con
   stk -= sizeof(uintptr_t);
   ((uintptr_t*)stk)[0] = 0;
   pcb->cp = ucontext(&pcb->as, (Area) { pcb->stack, pcb->stack + STACK_SIZE }, (void *)entry);  
-  pcb->cp->GPRx = (uintptr_t)stk - (uintptr_t)tmp + (uintptr_t)pcb->as.area.end;
+  pcb->cp->GPRx = (uintptr_t)stk - (uintptr_t)tmp + (uintptr_t)pcb->as.area.end + 4;
   pcb->cp->gpr[2] = (uintptr_t)stk - (uintptr_t)tmp + (uintptr_t)pcb->as.area.end;
   // printf("%d\n",((uintptr_t*)stk)[0]);
 }
