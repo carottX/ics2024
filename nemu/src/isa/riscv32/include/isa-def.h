@@ -22,7 +22,7 @@ typedef struct {
   word_t gpr[MUXDEF(CONFIG_RVE, 16, 32)];
   vaddr_t pc;
   word_t mepc, mstatus, mcause, mtvec;
-  word_t satp;
+  word_t satp, mscratch;
   bool INTR;
 } MUXDEF(CONFIG_RV64, riscv64_CPU_state, riscv32_CPU_state);
 
