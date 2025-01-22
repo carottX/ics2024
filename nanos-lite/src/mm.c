@@ -30,7 +30,7 @@ void free_page(void *p) {
 
 /* The brk() system call handler. */
 int mm_brk(uintptr_t brk) {
-  printf("brk=%p\n",brk);
+  // printf("brk=%p\n",brk);
   current->max_brk = ROUNDUP(current->max_brk, PGSIZE);
   if(brk > current->max_brk){
     int new_page_num = ROUNDUP(brk - current->max_brk, PGSIZE)/PGSIZE;
