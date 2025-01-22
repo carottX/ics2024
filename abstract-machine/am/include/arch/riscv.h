@@ -8,8 +8,8 @@
 #endif
 
 enum PRIVILAGE{
-  KERNEL = 0,
-  USER = 3
+  KERNEL = 3,
+  USER = 0
 };
 
 struct Context {
