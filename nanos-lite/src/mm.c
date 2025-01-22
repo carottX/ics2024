@@ -29,13 +29,15 @@ void free_page(void *p) {
 /* The brk() system call handler. */
 int mm_brk(uintptr_t brk) {
   uintptr_t brk_pn = brk / PGSIZE;
+    printf("brk: %x\n", brk);
+
   assert(current->max_brk % PGSIZE == 0);
   if(brk >= current->max_brk){
     for(uintptr_t i = current->max_brk/PGSIZE+1; i<=brk_pn; ++i){
       map(&current->as, (void*)(i*PGSIZE), new_page(1), 0);
     }
     current->max_brk = brk_pn * PGSIZE;
-    printf("!!!!brk: %x\n", brk);
+    printf("brk: %x\n", brk);
   }
   return 0;
 }
