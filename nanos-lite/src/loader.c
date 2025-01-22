@@ -20,8 +20,6 @@ int fs_close(int fd);
 size_t GetFileSize(int fd);
 size_t ramdisk_read(void *buf, size_t offset, size_t len);
 
-
-
 static uintptr_t loader(PCB *pcb, const char *filename) {
   int fd = fs_open(filename, 0, 0);
   void* file = sys_malloc(GetFileSize(fd));
@@ -67,6 +65,7 @@ void naive_uload(PCB *pcb, const char *filename) {
 }
 
 void context_uload(PCB* pcb, const char *filename, char* const argv[], char* const envp[]) {
+  protect(&pcb->as);
   int argc = 0;
   while(argv[argc] != NULL) argc++;
   int envc = 0;
