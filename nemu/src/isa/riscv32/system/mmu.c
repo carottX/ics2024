@@ -32,7 +32,7 @@ paddr_t isa_mmu_translate(vaddr_t vaddr, int len, int type) {
   Assert(L2PageTable & PTE_V, "vaddr = %x, L1PageTable = %x, L1Entry = %x", vaddr, L1PageTable, L2PageTable);
   L2PageTable = (L2PageTable & ~0xfff) + VPN0(vaddr) * sizeof(PTE);
   PTE L2Entry = paddr_read(L2PageTable, 4);
-  Assert(L2Entry & PTE_V, "vaddr = %x, L1PageTable = %x, L2PageTable = %x, L2Entry = %x", vaddr, L1PageTable, L2PageTable, L2Entry);
+  Assert(L2Entry & PTE_V, "vaddr = %x, L1PageTable = %x, L2PageTable = %x, L2Entry = %x VPN0=%d", vaddr, L1PageTable, L2PageTable, L2Entry, VPN0(vaddr));
   paddr_t pa = (L2Entry & ~0xfff) | (vaddr & 0xfff);
   Assert(vaddr == pa , "Now only support identical map,vaddr = %x, pa = %x", vaddr, pa);
   return pa;
