@@ -36,7 +36,7 @@ void init_proc() {
   // char* const envp2[] = {NULL};
   // context_uload(&pcb[0], "/bin/hello", argv2, envp2);
   context_uload(&pcb[1], PAL_NAME, argv, envp);
-  context_kload(&pcb[1], hello_fun, "TWO");
+  context_kload(&pcb[0], hello_fun, "TWO");
   switch_boot_pcb();
 
   yield();
