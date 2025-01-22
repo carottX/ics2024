@@ -28,19 +28,24 @@ void free_page(void *p) {
 
 /* The brk() system call handler. */
 int mm_brk(uintptr_t brk) {
-  // brk = ROUNDDOWN(brk-1, PGSIZE);
-  uintptr_t brk_pn = brk / PGSIZE;
-  assert(current->max_brk % PGSIZE == 0);
-  if(brk > current->max_brk){
-    for(uintptr_t i = current->max_brk/PGSIZE; i<=brk_pn; ++i){
-      map(&current->as, (void*)(i*PGSIZE), new_page(1), 0);
-    }
-    printf("prev brk: %x brk: %x\n", current->max_brk, brk);
+  uintptr_t max_page_end = current->max_brk; 
+  uintptr_t max_page_pn = max_page_end/PGSIZE - 1;
+  uintptr_t brk_pn = brk/PGSIZE;
 
-    current->max_brk = (brk_pn+1) * PGSIZE;
+  if (brk >= max_page_end){
+    void *allocted_page =  new_page(brk_pn - max_page_pn + 1);
+    for (int i = 0; i < brk_pn - max_page_pn + 1; ++i){
+      map(&current->as, (void *)(max_page_end + i*PGSIZE),
+       (void *)(allocted_page + i * PGSIZE), 0);
+    }
+
+    current->max_brk = (brk_pn + 1) << 12;
+    assert(current->max_brk > brk);
   }
+
   return 0;
 }
+
 
 void init_mm() {
   pf = (void *)ROUNDUP(heap.start, PGSIZE);
