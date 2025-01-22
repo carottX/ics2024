@@ -16,6 +16,7 @@ static const char *keyname[256] __attribute__((used)) = {
 
 void putch(char c);
 void yield();
+void switch_pcb(int id);
 
 size_t serial_write(const void *buf, size_t offset, size_t len) {
   // yield();
@@ -31,6 +32,12 @@ size_t events_read(void *buf, size_t offset, size_t len) {
   AM_INPUT_KEYBRD_T kbd = io_read(AM_INPUT_KEYBRD);
   if(kbd.keycode == AM_KEY_NONE) return 0;
   // printf("SUCCESS\n");
+  switch (kbd.keycode){
+    case AM_KEY_F1:switch_pcb(1); return 0;
+    case AM_KEY_F2:switch_pcb(2); return 0;
+    case AM_KEY_F3:switch_pcb(3); return 0;
+    default: break;
+  }
   if(kbd.keydown) strcpy(buf, "kd ");
   else strcpy(buf,"ku ");
   buf += 3;

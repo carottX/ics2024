@@ -66,17 +66,17 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
     // printf("To physical address %p\n",paddr);
     // pcb->max_brk = ROUNDUP(seg_viraddr + seg_mem_size, PGSIZE);
     // printf("max_brk=%p\n",pcb->max_brk);
-    uintptr_t vpage_start = seg_header.p_vaddr & (~0xfff); // clear low 12 bit, first page
-    uintptr_t vpage_end = (seg_header.p_vaddr + seg_header.p_memsz - 1) & (~0xfff); // last page start
-    int page_num = ((vpage_end - vpage_start) >> 12) + 1;
+    uintptr_t vpage_start = seg_header.p_vaddr & (~0xfff); 
+    uintptr_t vpage_end = (seg_header.p_vaddr + seg_header.p_memsz - 1) & (~0xfff); 
+    int page_num = ((vpage_end - vpage_start)/PGSIZE) + 1;
     uintptr_t page_ptr = (uintptr_t)new_page(page_num);
     for (int j = 0; j < page_num; ++ j) {
       map(&pcb->as, 
-          (void*)(vpage_start + (j << 12)), 
-          (void*)(page_ptr    + (j << 12)), 
+          (void*)(vpage_start + (j*PGSIZE)), 
+          (void*)(page_ptr    + (j*PGSIZE)), 
           0);
     }
-    void* page_off = (void *)(seg_header.p_vaddr & 0xfff); // we need the low 12 bit
+    void* page_off = (void *)(seg_header.p_vaddr & 0xfff); 
     fs_lseek(fd, seg_header.p_offset, SEEK_SET);
     fs_read(fd, page_ptr + page_off, seg_header.p_filesz); 
     memset(page_ptr + page_off + seg_header.p_filesz, 0, seg_header.p_memsz - seg_header.p_filesz);
