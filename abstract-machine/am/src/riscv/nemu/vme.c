@@ -86,5 +86,6 @@ Context *ucontext(AddrSpace *as, Area kstack, void *entry) {
   Context* c = (Context*)(kstack.end - sizeof(Context));
   c->mepc = (intptr_t)entry;
   c->pdir = as->ptr;
+  c->mstatus = 0x80; // MPIE
   return c;
 }
