@@ -79,7 +79,7 @@ void map(AddrSpace *as, void *va, void *pa, int prot) {
   }
   PTE* L2PageTable = (PTE*)((uintptr_t)(*L1PageTable & ~0xfff) + VPN0((uintptr_t)va) * sizeof(PTE));
   *L2PageTable = (uintptr_t)pa | PTE_V;
-  if((uintptr_t)va/PGSIZE == 0x80001)
+  if((uintptr_t)va/PGSIZE == 0xa1200)
   printf("Mapped va = %p, pa = %p\n at L1TableAddr=%p, L1Entry=%p, L2TableAddr=%p, entry=%p\n", va, pa, L1PageTable, *L1PageTable, L2PageTable, *L2PageTable);
 }
 
