@@ -37,7 +37,7 @@ int mm_brk(uintptr_t brk) {
     }
     printf("prev brk: %x brk: %x\n", current->max_brk, brk);
 
-    current->max_brk = (brk_pn) * PGSIZE;
+    current->max_brk = (brk_pn+1) * PGSIZE;
   }
   return 0;
 }
