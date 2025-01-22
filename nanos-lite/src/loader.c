@@ -44,6 +44,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
     panic("Not a valid elf file!");
     return (uintptr_t)NULL;
   }
+  // if(elf.e_ident[EI_OSABI])
   size_t ph_offset = elf.e_phoff;
   size_t entry_size = elf.e_phentsize;
   size_t ph_num = elf.e_phnum;
