@@ -28,10 +28,10 @@ void context_kload(PCB* pcb, void(*entry)(void *), void *arg) {
 }
 
 void init_proc() {
-  // context_kload(&pcb[0], hello_fun, "ONE");
+  context_kload(&pcb[0], hello_fun, "ONE");
   char* const argv[] = {"/bin/pal","--skip", NULL};
   char* const envp[] = {NULL};
-  context_uload(&pcb[0], "/bin/pal", argv, envp);
+  context_uload(&pcb[1], "/bin/pal", argv, envp);
   switch_boot_pcb();
 
   yield();
@@ -45,6 +45,6 @@ void init_proc() {
 Context *schedule(Context *prev) {
   if(prev == NULL) printf("prev is NULL\n");
   current->cp = prev;
-  // current = (current == &pcb[0] ? &pcb[1] : &pcb[0]);
+  current = (current == &pcb[0] ? &pcb[1] : &pcb[0]);
   return current->cp;
 }
