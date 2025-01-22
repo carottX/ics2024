@@ -73,6 +73,8 @@ extern char end;
 
 void *_sbrk(intptr_t increment) {
   static void* brk_addr = &end;
+  int ret = _syscall_(SYS_brk, increment + brk_addr, 0, 0);
+  assert(ret == 0);
   brk_addr += increment;
   return brk_addr - increment; 
 }
