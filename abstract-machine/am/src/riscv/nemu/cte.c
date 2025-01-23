@@ -2,19 +2,32 @@
 #include <riscv/riscv.h>
 #include <klib.h>
 
+#define IRQ_TIMER 0x80000007
+
 static Context* (*user_handler)(Event, Context*) = NULL;
 
+void __am_get_cur_as(Context *c);
+void __am_switch(Context *c);
+
 Context* __am_irq_handle(Context *c) {
+  uintptr_t mscratch;
+  uintptr_t kas = 0;
+  asm volatile("csrr %0, mscratch" : "=r"(mscratch));
+  c->np = (mscratch == 0 ? KERNEL : USER);
+  asm volatile("csrw mscratch, %0" :: "r"(kas));
+  __am_get_cur_as(c);
   if (user_handler) {
     Event ev = {0};
     switch (c->mcause) {
+      case 11:case 8: ev.event = EVENT_SYSCALL; c->mepc += 4;break;
+      case IRQ_TIMER: ev.event = EVENT_IRQ_TIMER; break;
       default: ev.event = EVENT_ERROR; break;
-    }
-
+    } 
+    if(ev.event == EVENT_SYSCALL && c -> GPR1 == -1) ev.event = EVENT_YIELD;
     c = user_handler(ev, c);
     assert(c != NULL);
   }
-
+  __am_switch(c);
   return c;
 }
 
@@ -31,7 +44,16 @@ bool cte_init(Context*(*handler)(Event, Context*)) {
 }
 
 Context *kcontext(Area kstack, void (*entry)(void *), void *arg) {
-  return NULL;
+  uintptr_t* t0 = kstack.end-4;
+  *t0 = 0;
+  Context* c = (Context*)(kstack.end - sizeof(Context));
+  c->mepc = (intptr_t)entry;
+  c->gpr[10] = (intptr_t)arg;
+  c->pdir = NULL;
+  c->mstatus = 0x80; // MPIE
+  c->np = 3;
+  c->gpr[2] = (uintptr_t)kstack.end - 4;
+  return c;
 }
 
 void yield() {

@@ -15,14 +15,27 @@
 
 #include <isa.h>
 
+#define MSTATUS_MIE 0x8
+#define MSTATUS_MPIE 0x80
+
 word_t isa_raise_intr(word_t NO, vaddr_t epc) {
   /* TODO: Trigger an interrupt/exception with ``NO''.
    * Then return the address of the interrupt/exception vector.
    */
-
-  return 0;
+  cpu.mepc = epc;
+  cpu.mcause = NO;
+  cpu.mstatus = (cpu.mstatus & ~MSTATUS_MPIE) | ((cpu.mstatus & MSTATUS_MIE) << 4); //MPIE->MIE
+  cpu.mstatus = cpu.mstatus & ~MSTATUS_MIE; //Clear MIE
+  return cpu.mtvec;
 }
 
+#define IRQ_TIMER 0x80000007
+
 word_t isa_query_intr() {
+  // if(cpu.mstatus) printf("cpu.mstatus = %x\n", cpu.mstatus);
+  if((cpu.mstatus & MSTATUS_MIE) && cpu.INTR){
+    cpu.INTR = false;
+    return IRQ_TIMER;
+  }
   return INTR_EMPTY;
 }

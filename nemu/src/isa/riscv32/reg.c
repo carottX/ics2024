@@ -27,20 +27,36 @@ void isa_reg_display() {
 	for(int idx = 0; idx < 32; ++idx){
 		printf("%-20s%-20x%-20u\n", reg_name(idx), gpr(idx), gpr(idx)); 
 	}
-  printf("%-20s%-20x%-20u\n", "pc", cpu.pc, cpu.pc); 
+  printf("%-20s%-20x%-20u\n", "pc", cpu.pc, cpu.pc);
+  printf("%-20s%-20x%-20u\n", "mepc", cpu.mepc, cpu.mepc); 
+  printf("%-20s%-20x%-20u\n", "mstatus", cpu.mstatus, cpu.mstatus); 
+  printf("%-20s%-20x%-20u\n", "mcause", cpu.mcause, cpu.mcause); 
+
 }
 
 word_t isa_reg_str2val(const char *s, bool *success) {
   for(int idx = 0; idx < 32; ++idx){
     if(strcmp(reg_name(idx), s) == 0) {
-      *success = true;
+      if(success!=NULL)*success = true;
       return gpr(idx);
     }
   }
   if(strcmp("pc", s) == 0){
-    *success = true;
+    if(success!=NULL)*success = true;
     return cpu.pc;
   }
-  *success = false;
+  if(strcmp("mepc", s) == 0){
+    if(success!=NULL)*success = true;
+    return cpu.mepc;
+  }
+  if(strcmp("mstatus", s) == 0){
+    if(success!=NULL)*success = true;
+    return cpu.mstatus;
+  }
+  if(strcmp("mcause", s) == 0){
+    if(success!=NULL)*success = true;
+    return cpu.mcause;
+  }
+  if(success!=NULL)*success = false;
   return 0;
 }

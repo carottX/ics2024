@@ -22,6 +22,8 @@
 #define R(i) gpr(i)
 #define Mr vaddr_read
 #define Mw vaddr_write
+#define MSTATUS_MIE 0x8
+#define MSTATUS_MPIE 0x80
 
 void trace_func_call(uint32_t pc, uint32_t target);
 void trace_func_ret(uint32_t pc, uint32_t target);
@@ -56,6 +58,48 @@ static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_
     case TYPE_B: src1R(); src2R(); immB(); break;
   }
 }
+
+vaddr_t* read_csr(int imm){
+  if(imm == 0x300) return &cpu.mstatus;
+  else if(imm == 0x341) return &cpu.mepc; 
+  else if(imm == 0x342) return &cpu.mcause;
+  else if(imm == 0x305) return &cpu.mtvec;
+  else if(imm == 0x180) return &cpu.satp;
+  else if(imm == 0x340) return &cpu.mscratch;
+  else assert(0);
+}
+
+#define mret() do { \
+  cpu.mstatus = (cpu.mstatus & ~MSTATUS_MIE) | ((cpu.mstatus & MSTATUS_MPIE) >> 4); \
+  cpu.mstatus = (cpu.mstatus & ~MSTATUS_MPIE) | MSTATUS_MPIE; \
+  s->dnpc = cpu.mepc; \
+} while(0)
+
+enum{
+  EtraceR, EtraceW, EtraceRet, EtraceCall 
+}EtraceType;
+
+void PrintEtrace(int type, int imm, int src1){
+  static const char *type_name[] = {"csrrw", "csrrs", "ecall", "mret"};
+  static const char *csr_name[] = {"mstatus","mepc ","mcause","mtvec", "satp", "mscratch"};
+  int csr_id = 0;
+  if(imm == 0x300) csr_id = 0;
+  else if(imm == 0x341) csr_id = 1;
+  else if(imm == 0x342) csr_id = 2;
+  else if(imm == 0x305) csr_id = 3;
+  else if(imm == 0x180) csr_id = 4;
+  else if(imm == 0x340) csr_id = 5;
+  else csr_id = 6;
+  printf("Name\t\t\t | CSR\t\t\t | rs1\t\t\n%s\t\t\t | %s\t\t | %d\n",type_name[type],csr_name[csr_id],(type == EtraceRet || type == EtraceCall ? -1 : src1));
+}
+
+#ifdef CONFIG_ETRACE
+#define etrw(x) PrintEtrace(x, imm, src1)
+#define etcr(x) PrintEtrace(x, imm, -1)
+#else
+#define etrw(x) 
+#define etcr(x) 
+#endif
 
 static int decode_exec(Decode *s) {
   int rd = 0;
@@ -127,6 +171,10 @@ static int decode_exec(Decode *s) {
   INSTPAT("??????? ????? ????? 100 ????? 11000 11", BLT    , B, s->dnpc=(((int32_t)src1 < (int32_t)src2) ? (s->pc + imm) : s->dnpc));
   INSTPAT("??????? ????? ????? 110 ????? 11000 11", bltu   , B, s->dnpc=(((uint32_t)src1 < (uint32_t)src2) ? (s->pc + imm) : s->dnpc));
 
+  INSTPAT("??????? ????? ????? 001 ????? 11100 11", csrrw  , I, if(rd) R(rd) = *read_csr(imm); *read_csr(imm) = src1; etrw(EtraceW););
+  INSTPAT("??????? ????? ????? 010 ????? 11100 11", csrrs  , I, if(rd) R(rd) = *read_csr(imm); (*read_csr(imm)) |= src1; etrw(EtraceR););
+  INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall  , N, s->dnpc=isa_raise_intr(8,s->pc); etcr(EtraceCall);); // R(10) is $a0
+  INSTPAT("0011000 00010 00000 000 00000 11100 11", mret   , I, mret(); etcr(EtraceRet););
 
   INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak , N, NEMUTRAP(s->pc, R(10))); // R(10) is $a0
   INSTPAT("??????? ????? ????? ??? ????? ????? ??", inv    , N, INV(s->pc));

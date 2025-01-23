@@ -29,18 +29,17 @@ int atoi(const char* nptr) {
   return x;
 }
 
-static uint8_t* addr;
-static bool reset=false;
+
+size_t tot_size;
 
 void *malloc(size_t size) {
-  if(!reset){
-    reset = true;
-    addr = heap.start;
-  }
-  size = (size_t)ROUNDUP(size, 8);
-  addr += size;
-  assert((uintptr_t)addr>=(uintptr_t)heap.start && (uintptr_t)addr<(uintptr_t)heap.end);
-  return addr-size;
+    // printf("tot_size = %u\n", tot_size);
+    // printf("tot_size addr = %p\n", &tot_size);
+    // printf("0 should be= %u\n", 0);
+    void* tmp = heap.start + tot_size;
+    tot_size += size;
+    // printf("tot_size new= %u\n", tot_size);
+    return tmp;
 }
 
 void free(void *ptr) {

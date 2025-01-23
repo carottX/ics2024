@@ -63,8 +63,6 @@ LINKAGE   = $(OBJS) \
     $(addsuffix /build/, $(addprefix $(AM_HOME)/, $(LIBS))), \
     $(LIBS) ))
 
-$(info $(LINKAGE))
-
 
 ## 3. General Compilation Flags
 
@@ -129,6 +127,7 @@ $(LIBS): %:
 $(IMAGE).elf: $(LINKAGE) $(LDSCRIPTS)
 	@echo \# Creating image [$(ARCH)]
 	@echo + LD "->" $(IMAGE_REL).elf
+	@echo $(LINKAGE)
 ifneq ($(filter $(ARCH),native),)
 	@$(CXX) -o $@ -Wl,--whole-archive $(LINKAGE) -Wl,-no-whole-archive $(LDFLAGS_CXX)
 else

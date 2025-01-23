@@ -7,7 +7,7 @@
 
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 
-static char print_buf[1024];
+static char print_buf[65536];
 
 int printf(const char *fmt, ...) {
   va_list args;
@@ -36,12 +36,42 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
       if(!entered)c=*(fmt++);
       entered = true;
       switch(c){
+        case 'p':
+        out[i++] = '0';
+        out[i++] = 'x';
+        case 'x':
+          uintptr_t addr = va_arg(ap, uintptr_t);
+          int cntx = 0;
+          uintptr_t tmp_t=addr;
+          if(tmp_t == 0) cntx = 1;
+          while(tmp_t > 0) {
+            cntx++;
+            tmp_t /= 16;
+          }
+          tmp_t = addr;
+          int cnt2x = 0;
+          while(cnt2x < cntx) {
+            ++cnt2x;
+            if(tmp_t%16 < 10)out[i+cntx-cnt2x] = '0' + tmp_t%16;
+            else out[i+cntx-cnt2x] = 'a' + tmp_t%16 - 10;
+            tmp_t/=16;
+          }
+          i+=cntx;
+          entered = false;
+          padding = ' ';
+          width = -1;
+          break;
         case 'd':
           int tmp = va_arg(ap, int);
+          bool is_neg = false;
+          if(tmp < 0) tmp = -tmp, is_neg = true;
+          if(is_neg) out[i++] = '-';
           int cnt = 0, ttmp = tmp;
           while(ttmp){
+            // putch(ttmp%10);
             cnt++, ttmp/=10;
           }
+          // putch('\n');
           if(tmp==0) cnt=1;
           int cnt2 = 0;
           cnt = (width==-1?cnt:(cnt>width?cnt:width));
@@ -78,6 +108,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
           break;
         case 's':
           char* s = va_arg(ap, char*);
+          // putstr(s);
           int diff = width-strlen(s);
           for(int ii=0;ii<diff;++ii)out[i+ii] = padding;
           if(diff>0) i+=diff;
