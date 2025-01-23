@@ -21,16 +21,6 @@ int fs_close(int fd);
 size_t GetFileSize(int fd);
 size_t ramdisk_read(void *buf, size_t offset, size_t len);
 
-// static void* allocate(AddrSpace* as, uintptr_t vaddr, size_t p_memsz){
-//   size_t new_page_num = (ROUNDDOWN(vaddr+p_memsz-1, PGSIZE)-ROUNDDOWN(vaddr, PGSIZE))/PGSIZE;
-//   // printf("!Loaded segments from [%p, %p]\n",vaddr, vaddr + p_memsz);
-//   void* ret = new_page(new_page_num);
-//   for(int i=0; i<=new_page_num; ++i){
-//     map(as, (void*)vaddr + i*PGSIZE, ret + i*PGSIZE, 0);
-//   }
-//   return ret;
-// }
-
 #define max(a,b) ((a) > (b) ? (a) : (b))
 
 static uintptr_t loader(PCB *pcb, const char *filename) {
@@ -45,7 +35,6 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
     panic("Not a valid elf file!");
     return (uintptr_t)NULL;
   }
-  // if(elf.e_ident[EI_OSABI])
   size_t ph_offset = elf.e_phoff;
   size_t entry_size = elf.e_phentsize;
   size_t ph_num = elf.e_phnum;
@@ -83,15 +72,12 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
     pcb->max_brk = vpage_end + PGSIZE; 
     
   }
-  // printf("!!!\n");
   fs_close(fd);
   return elf.e_entry;
 }
 
 void naive_uload(PCB *pcb, const char *filename) {
   uintptr_t entry = loader(pcb, filename);
-  // printf("0x1234=%x\n",0x1234);
-  // printf("entry=%u\n",entry);
   Log("Jump to entry = %p", entry);
   // __libc_init_array();
   ((void(*)())entry) ();
@@ -147,5 +133,4 @@ void context_uload(PCB* pcb, const char *filename, char* const argv[], char* con
   pcb->cp = ucontext(&pcb->as, (Area) { pcb->stack, pcb->stack + STACK_SIZE }, (void *)entry);  
   pcb->cp->GPRx = (uintptr_t)stk - (uintptr_t)tmp + (uintptr_t)pcb->as.area.end + 4;
   pcb->cp->gpr[2] = (uintptr_t)stk - (uintptr_t)tmp + (uintptr_t)pcb->as.area.end;
-  // printf("%d\n",((uintptr_t*)stk)[0]);
 }
